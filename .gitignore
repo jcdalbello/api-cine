@@ -1,17 +1,46 @@
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
+# compiled output
+/dist
+/node_modules
+/build
 
-# Whether you use PnP or not, the node_modules folder is often used to store
-# build artifacts that should be gitignored
-node_modules
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
-# Swap the comments on the following lines if you wish to use zero-installs
-# In that case, don't forget to run `yarn config set enableGlobalCache false`!
-# Documentation here: https://yarnpkg.com/features/caching#zero-installs
+# OS
+.DS_Store
 
-#!.yarn/cache
-.pnp.*
+# Tests
+/coverage
+/result
+/.nyc_output
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+src/coverage
+
+#Prisma
+/prisma/migrations
+
+/.yarn
+
+.env*
