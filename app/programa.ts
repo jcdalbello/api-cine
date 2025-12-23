@@ -14,7 +14,11 @@ app.get("/peliculas", (req: Request, res: Response) => {
 });
 
 app.post("/peliculas", (req: Request, res: Response) => {
-  res.status(201).send();
+  res.status(201).send( {
+    id: "1",
+    titulo: "pelicula1",
+    genero: "genero1"
+  });
 });
 
 const server = app

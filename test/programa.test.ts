@@ -28,9 +28,34 @@ describe("GET /peliculas", () => {
 });
 
 describe("POST /peliculas", () => {
+  interface datosDePelicula {
+    id: string;
+    titulo: string;
+    genero: string;
+  }
+
   const urlPeliculas: string = "/peliculas";
   test("deberia devolver un codigo 201 si se crea correctamente una pelicula", async () => {
     const respuesta = await requestWithSupertest.post(urlPeliculas);
     expect(respuesta.status).toEqual(CODIGO_CREACION_EXITOSA);
+  });
+
+  test("deberia devolver los datos de la pelicula creada", async () => {
+    const id: string = "1";
+    const titulo: string = "pelicula1";
+    const genero: string = "genero1";
+
+    const datosPelicula: datosDePelicula = {
+      id: id,
+      titulo: titulo,
+      genero: genero,
+    }
+
+    const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosPelicula);
+    const peliculaCreada: datosDePelicula = respuesta.body;
+
+    expect(peliculaCreada.id).toEqual(id);
+    expect(peliculaCreada.titulo).toEqual(titulo);
+    expect(peliculaCreada.genero).toEqual(genero);
   });
 });

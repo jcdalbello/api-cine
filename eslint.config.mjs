@@ -15,7 +15,9 @@ export default tseslint.config(
     },
   },
   {
-    rules: {},
+    rules: {
+      "@typescript-eslint/no-unsafe-assignment": "off",
+    },
     languageOptions: {
       parserOptions: {
         projectService: true,
