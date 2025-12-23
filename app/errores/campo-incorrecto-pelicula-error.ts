@@ -1,8 +1,4 @@
-interface MensajesDeErrorDePelicula {
-  id?: string;
-  titulo?: string;
-  genero?: string;
-}
+import MensajesDeErrorDePelicula from "./i-mensajes-de-error-de-pelicula";
 
 export default class CampoIncorrectoPeliculaError extends Error {
   public readonly id: string | undefined;
