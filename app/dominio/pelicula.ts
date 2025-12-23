@@ -13,7 +13,7 @@ export default class Pelicula {
     genero: string
   ) {
     this.establecerId(id);
-    this.titulo = titulo;
+    this.establecerTitulo(titulo);
     this.genero = genero;
   }
 
@@ -37,5 +37,15 @@ export default class Pelicula {
     }
 
     this.id = id;
+  }
+
+  public establecerTitulo(titulo: string): void {
+    if (titulo.length < LONGITUD_MINIMA_CARACTERES) {
+      throw new CampoIncorrectoPeliculaError({
+        titulo: "El titulo no puede estar vacio",
+      });
+    }
+
+    this.titulo = titulo;
   }
 }

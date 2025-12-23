@@ -17,4 +17,8 @@ describe("Pelicula", () => {
   test("deberia devolver un error al intentar crear una pelicula con un id vacio", () => {
     expect(() => new Pelicula("", "pelicula1", "genero1")).toThrow(CampoIncorrectoPeliculaError);
   });
+
+  test("deberia devolver un error al intentar crear una pelicula con un titulo vacio", () => {
+    expect(() => new Pelicula("1", "", "genero1")).toThrow(CampoIncorrectoPeliculaError);
+  });
 });

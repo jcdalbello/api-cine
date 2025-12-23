@@ -36,7 +36,10 @@ describe("POST /peliculas", () => {
 
   const urlPeliculas: string = "/peliculas";
   test("deberia devolver un codigo 201 si se crea correctamente una pelicula", async () => {
-    const respuesta = await requestWithSupertest.post(urlPeliculas).send({});
+    const respuesta = await requestWithSupertest.post(urlPeliculas).send({
+      titulo: "pelicula1",
+      genero: "genero1",
+    });
     expect(respuesta.status).toEqual(CODIGO_CREACION_EXITOSA);
   });
 
