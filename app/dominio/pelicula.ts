@@ -97,7 +97,7 @@ export default class Pelicula {
 
     if (genero.length > LONGITUD_MAXIMA_CARACTERES) {
       throw new CampoIncorrectoPeliculaError({
-        titulo: "El genero no puede superar el limite de caracteres",
+        genero: "El genero no puede superar el limite de caracteres",
       });
     }
   }

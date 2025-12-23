@@ -49,4 +49,19 @@ describe("Pelicula", () => {
       }
     }
   });
+  
+  test("deberia devolver todos los mensajes de error al intentar crear una pelicula con todos los datos vacios", () => {
+    const longitudMaximaCaracteres: number = 70;
+    const tituloDemasiadoLargo: string = "a".repeat(longitudMaximaCaracteres + 1);
+    const generoDemasiadoLargo: string = "a".repeat(longitudMaximaCaracteres + 1);
+
+    try {
+      new Pelicula("1", tituloDemasiadoLargo, generoDemasiadoLargo);
+    } catch (error) {
+      if (error instanceof CampoIncorrectoPeliculaError) {
+        expect(error.titulo).toEqual("El titulo no puede superar el limite de caracteres");
+        expect(error.genero).toEqual("El genero no puede superar el limite de caracteres");
+      }
+    }
+  });
 });
