@@ -4,6 +4,7 @@ import supertest from "supertest";
 const requestWithSupertest = supertest(app);
 
 const CODIGO_OPERACION_EXITOSA: number = 200;
+const CODIGO_CREACION_EXITOSA: number = 201;
 
 afterAll(() => {
   server.close();
@@ -28,8 +29,8 @@ describe("GET /peliculas", () => {
 
 describe("POST /peliculas", () => {
   const urlPeliculas: string = "/peliculas";
-  test("deberia devolver un codigo 200", async () => {
+  test("deberia devolver un codigo 201 si se crea correctamente una pelicula", async () => {
     const respuesta = await requestWithSupertest.post(urlPeliculas);
-    expect(respuesta.status).toEqual(CODIGO_OPERACION_EXITOSA);
+    expect(respuesta.status).toEqual(CODIGO_CREACION_EXITOSA);
   });
 });
