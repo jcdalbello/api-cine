@@ -1,6 +1,7 @@
 import CampoIncorrectoPeliculaError from "../errores/campo-incorrecto-pelicula-error";
 
 const LONGITUD_MINIMA_CARACTERES: number = 1;
+const LONGITUD_MAXIMA_CARACTERES: number = 70;
 
 export default class Pelicula {
   private id: string;
@@ -43,6 +44,12 @@ export default class Pelicula {
     if (titulo.length < LONGITUD_MINIMA_CARACTERES) {
       throw new CampoIncorrectoPeliculaError({
         titulo: "El titulo no puede estar vacio",
+      });
+    }
+
+    if (titulo.length > LONGITUD_MAXIMA_CARACTERES) {
+      throw new CampoIncorrectoPeliculaError({
+        titulo: "El titulo no puede superar el limite de caracteres",
       });
     }
 
