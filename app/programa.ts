@@ -1,7 +1,10 @@
 import express, { Express, Request, Response } from 'express';
+import AgregarPeliculaComando from './comandos/agregar-pelicula-comando';
 
 const app: Express = express();
 const puerto: number = 3000;
+
+app.use(express.json());
 
 app.get("/", (req: Request, res: Response) => {
   res
@@ -14,10 +17,14 @@ app.get("/peliculas", (req: Request, res: Response) => {
 });
 
 app.post("/peliculas", (req: Request, res: Response) => {
-  res.status(201).send( {
-    id: "1",
-    titulo: "pelicula1",
-    genero: "genero1"
+  const titulo: string = req.body.titulo;
+  const genero: string = req.body.genero;
+  const agregarPeliculaComando: AgregarPeliculaComando = new AgregarPeliculaComando();
+  const pelicula = agregarPeliculaComando.ejecutar(titulo, genero);
+  res.status(201).send({
+    id: pelicula.obtenerId(),
+    titulo: pelicula.obtenerTitulo(),
+    genero: pelicula.obtenerGenero(),
   });
 });
 
