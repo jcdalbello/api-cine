@@ -25,3 +25,11 @@ describe("GET /peliculas", () => {
     expect(respuesta.status).toEqual(CODIGO_OPERACION_EXITOSA);
   });
 });
+
+describe("POST /peliculas", () => {
+  const urlPeliculas: string = "/peliculas";
+  test("deberia devolver un codigo 200", async () => {
+    const respuesta = await requestWithSupertest.post(urlPeliculas);
+    expect(respuesta.status).toEqual(CODIGO_OPERACION_EXITOSA);
+  });
+});

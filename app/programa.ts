@@ -13,6 +13,10 @@ app.get("/peliculas", (req: Request, res: Response) => {
   res.status(200).send();
 });
 
+app.post("/peliculas", (req: Request, res: Response) => {
+  res.status(200).send();
+});
+
 const server = app
   .listen(puerto, (): void => {
     console.log(`Servidor corriendo en http://localhost:${puerto}`);
