@@ -40,5 +40,7 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     "esModuleInterop": true,
+
+    "strictPropertyInitialization": false,
   }
 }
