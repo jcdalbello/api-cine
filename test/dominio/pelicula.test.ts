@@ -22,13 +22,13 @@ describe("Pelicula", () => {
     expect(() => new Pelicula("1", "", "genero1")).toThrow(CampoIncorrectoPeliculaError);
   });
 
-  test("deberia devolver un error CampoIncorrectoPeliculaError al intentar crear una pelicula con un titulo vacio", () => {
-    expect(() => new Pelicula("1", "", "genero1")).toThrow(CampoIncorrectoPeliculaError);
-  });
-
   test("deberia devolver un error CampoIncorrectoPeliculaError al intentar crear una pelicula con un titulo mas largo de lo permitido", () => {
     const longitudMaximaCaracteres: number = 70;
     const tituloDemasiadoLargo: string = "a".repeat(longitudMaximaCaracteres + 1);
     expect(() => new Pelicula("1", tituloDemasiadoLargo, "genero1")).toThrow(CampoIncorrectoPeliculaError);
+  });
+
+  test("deberia devolver un error CampoIncorrectoPeliculaError al intentar crear una pelicula con un genero vacio", () => {
+    expect(() => new Pelicula("1", "pelicula1", "")).toThrow(CampoIncorrectoPeliculaError);
   });
 });
