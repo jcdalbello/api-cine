@@ -4,7 +4,7 @@ import Pelicula from "../../app/dominio/pelicula";
 const agregarPeliculaComando: AgregarPeliculaComando = new AgregarPeliculaComando();
 
 describe("AgregarPeliculaComando", () => {
-  const id: string = "1";
+  const id: number = 1;
   const titulo: string = "pelicula1";
   const genero: string = "genero1";
 
@@ -25,7 +25,7 @@ describe("AgregarPeliculaComando", () => {
     expect(pelicula.obtenerTitulo()).toEqual(titulo);
     expect(pelicula.obtenerGenero()).toEqual(genero);
 
-    const id2: string = "2";
+    const id2: number = 2;
     const titulo2: string = "pelicula2";
     const genero2: string = "genero2";
     const pelicula2: Pelicula = agregarPeliculaComando.ejecutar(titulo2, genero2);

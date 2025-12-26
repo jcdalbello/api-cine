@@ -29,7 +29,7 @@ describe("GET /peliculas", () => {
 
 describe("POST /peliculas", () => {
   interface datosDePelicula {
-    id: string;
+    id: number;
     titulo: string;
     genero: string;
   }
@@ -44,7 +44,7 @@ describe("POST /peliculas", () => {
   });
 
   test("deberia devolver los datos de la pelicula creada", async () => {
-    const id: string = "1";
+    const id: number = 1;
     const titulo: string = "pelicula1";
     const genero: string = "genero1";
 
@@ -63,11 +63,11 @@ describe("POST /peliculas", () => {
   });
 
   test.skip("deberia devolver los datos de cada pelicula al crear mas de una", async () => {
-    const id1: string = "1";
+    const id1: number = 1;
     const titulo1: string = "pelicula1";
     const genero1: string = "genero1";
 
-    const id2: string = "2";
+    const id2: number = 2;
     const titulo2: string = "pelicula2";
     const genero2: string = "genero2";
 

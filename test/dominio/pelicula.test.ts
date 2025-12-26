@@ -2,7 +2,7 @@ import Pelicula from "../../app/dominio/pelicula";
 import CampoIncorrectoPeliculaError from "../../app/errores/campo-incorrecto-pelicula-error";
 
 describe("Pelicula", () => {
-  const id: string = "1";
+  const id: number = 1;
   const titulo: string = "pelicula1";
   const genero: string = "genero1";
   const longitudMaximaCaracteres: number = 70;
@@ -22,8 +22,8 @@ describe("Pelicula", () => {
     expect(pelicula.obtenerGenero()).toEqual(genero);
   });
 
-  test("deberia devolver un error CampoIncorrectoPeliculaError al intentar crear una pelicula con un id vacio", () => {
-    expect(() => new Pelicula("", titulo, genero)).toThrow(CampoIncorrectoPeliculaError);
+  test("deberia devolver un error CampoIncorrectoPeliculaError al intentar crear una pelicula con un id invalido", () => {
+    expect(() => new Pelicula(-1, titulo, genero)).toThrow(CampoIncorrectoPeliculaError);
   });
 
   test("deberia devolver un error CampoIncorrectoPeliculaError al intentar crear una pelicula con un titulo vacio", () => {
@@ -45,10 +45,10 @@ describe("Pelicula", () => {
 
   test("deberia devolver todos los mensajes de error al intentar crear una pelicula con todos los datos vacios", () => {
     try {
-      new Pelicula("", "", "");
+      new Pelicula(-1, "", "");
     } catch (error) {
       if (error instanceof CampoIncorrectoPeliculaError) {
-        expect(error.id).toEqual("El id no puede estar vacio");
+        expect(error.id).toEqual("El id no puede ser menor que 0");
         expect(error.titulo).toEqual("El titulo no puede estar vacio");
         expect(error.genero).toEqual("El genero no puede estar vacio");
       }

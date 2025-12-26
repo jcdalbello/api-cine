@@ -1,17 +1,17 @@
 import CampoIncorrectoPeliculaError from "../errores/campo-incorrecto-pelicula-error";
 import MensajesDeErrorDePelicula from "../errores/i-mensajes-de-error-de-pelicula";
 
-
+const MINIMO_ID_VALIDO: number = 0;
 const LONGITUD_MINIMA_CARACTERES: number = 1;
 const LONGITUD_MAXIMA_CARACTERES: number = 70;
 
 export default class Pelicula {
-  private id: string;
+  private id: number;
   private titulo: string;
   private genero: string;
 
   constructor(
-    id: string,
+    id: number,
     titulo: string,
     genero: string
   ) {
@@ -39,7 +39,7 @@ export default class Pelicula {
     }
   }
 
-  public obtenerId(): string {
+  public obtenerId(): number {
     return this.id;
   }
 
@@ -51,7 +51,7 @@ export default class Pelicula {
     return this.genero;
   }
 
-  public establecerId(id: string): void {
+  public establecerId(id: number): void {
     this.validarId(id);
     this.id = id;
   }
@@ -66,10 +66,10 @@ export default class Pelicula {
     this.genero = genero;
   }
 
-  private validarId(id: string): void {
-    if (id.length < LONGITUD_MINIMA_CARACTERES) {
+  private validarId(id: number): void {
+    if (id < MINIMO_ID_VALIDO) {
       throw new CampoIncorrectoPeliculaError({
-        id: "El id no puede estar vacio",
+        id: "El id no puede ser menor que 0",
       });
     }
   }
