@@ -118,5 +118,24 @@ describe("POST /peliculas", () => {
     const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosPelicula);
 
     expect(respuesta.status).toEqual(CODIGO_DATOS_INCORRECTOS);
+    expect(respuesta.body.titulo).toEqual("El titulo no puede superar el limite de caracteres");
+  });
+  
+  test("deberia devolver un codigo 400 cuando se usa un genero demasiado largo", async () => {
+    const cantidadMaximaDeCaracteres: number = 70;
+    const id: number = 1;
+    const titulo: string = "pelicula1";
+    const genero: string = "a".repeat(cantidadMaximaDeCaracteres + 1);
+
+    const datosPelicula: datosDePelicula = {
+      id: id,
+      titulo: titulo,
+      genero: genero,
+    }
+
+    const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosPelicula);
+
+    expect(respuesta.status).toEqual(CODIGO_DATOS_INCORRECTOS);
+    expect(respuesta.body.genero).toEqual("El genero no puede superar el limite de caracteres");
   });
 });
