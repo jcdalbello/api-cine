@@ -25,7 +25,7 @@ jobs:
 
       - name: docker
         run: |
-          docker compose up
+          docker compose up -d
           echo "Inicializando base de datos con docker..."
           sleep 10
 
