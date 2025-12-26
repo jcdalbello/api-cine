@@ -23,9 +23,9 @@ app.get("/", (req: Request, res: Response) => {
     .send("El servidor esta funcionando");
 });
 
-app.get("/peliculas", (req: Request, res: Response) => {
-  const obtenerPeliculas: ObtenerPeliculasComando = new ObtenerPeliculasComando();
-  const peliculas: Pelicula[] = obtenerPeliculas.ejecutar();
+app.get("/peliculas", async (req: Request, res: Response) => {
+  const obtenerPeliculas: ObtenerPeliculasComando = new ObtenerPeliculasComando(repositorioPelicula);
+  const peliculas: Pelicula[] = await obtenerPeliculas.ejecutar();
   res.status(200).send(peliculas);
 });
 

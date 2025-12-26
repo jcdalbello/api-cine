@@ -122,6 +122,7 @@ describe("GET /peliculas", () => {
   }
 
   const urlPeliculas: string = "/peliculas";
+  const id: number = 1;
   const titulo: string = "pelicula1";
   const genero: string = "genero1";
 
@@ -136,8 +137,16 @@ describe("GET /peliculas", () => {
   });
 
   test("deberia recuperar una lista vacia si no se guardo ninguna pelicula", async () => {
-    await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula);
     const respuesta = await requestWithSupertest.get(urlPeliculas);
     expect(respuesta.body.length).toEqual(0);
+  });
+
+  test("deberia recuperar una lista con una sola pelicula si solo se agrego una", async () => {
+    await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula);
+    const respuesta = await requestWithSupertest.get(urlPeliculas);
+    expect(respuesta.body.length).toEqual(1);
+    expect(respuesta.body[0].id).toEqual(id);
+    expect(respuesta.body[0].titulo).toEqual(titulo);
+    expect(respuesta.body[0].genero).toEqual(genero);
   });
 });

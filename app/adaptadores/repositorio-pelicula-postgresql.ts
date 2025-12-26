@@ -31,4 +31,18 @@ export default class RepositorioPeliculaPostgreSQL implements RepositorioPelicul
       pelicula.obtenerGenero()
     );
   }
+
+  public async listarPeliculas(): Promise<Pelicula[]> {
+    const query: string = `
+      SELECT * FROM peliculas;    
+    `;
+
+    const resultado = await this.pool.query(query);
+    return resultado.rows.map((row) => {
+      const id: number = row.id;
+      const titulo: string = row.titulo;
+      const genero: string = row.genero;
+      return new Pelicula(id, titulo, genero);
+    });
+  }
 }
