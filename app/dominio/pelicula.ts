@@ -66,7 +66,7 @@ export default class Pelicula {
     this.genero = genero;
   }
 
-  public esPersistida(): boolean {
+  public tieneIdAsignado(): boolean {
     return this.id !== MINIMO_ID_VALIDO;
   }
 

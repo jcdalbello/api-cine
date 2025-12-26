@@ -12,7 +12,7 @@ export default class RepositorioPeliculaPostgreSQL implements RepositorioPelicul
   }
 
   public async guardar(pelicula: Pelicula): Promise<Pelicula> {
-    if (pelicula.esPersistida()) {
+    if (pelicula.tieneIdAsignado()) {
       throw new PeliculaYaPersistidaError();
     }
 

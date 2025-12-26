@@ -67,11 +67,11 @@ describe("Pelicula", () => {
 
   test("deberia devolver false con esPersistida si el id es 0", () => {
     const pelicula: Pelicula = new Pelicula(0, titulo, genero);
-    expect(pelicula.esPersistida()).toBeFalsy();
+    expect(pelicula.tieneIdAsignado()).toBeFalsy();
   });
 
   test("deberia devolver true con esPersistida si el id es distinto de 0", () => {
     const pelicula: Pelicula = new Pelicula(0, titulo, genero);
-    expect(pelicula.esPersistida()).toBeFalsy();
+    expect(pelicula.tieneIdAsignado()).toBeFalsy();
   });
 });
