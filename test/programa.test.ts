@@ -25,15 +25,6 @@ describe("GET /", () => {
   });
 });
 
-describe("GET /peliculas", () => {
-  const urlPeliculas: string = "/peliculas";
-  
-  test("deberia devolver un codigo 200", async () => {
-    const respuesta = await requestWithSupertest.get(urlPeliculas);
-    expect(respuesta.status).toEqual(CODIGO_OPERACION_EXITOSA);
-  });
-});
-
 describe("POST /peliculas", () => {
   interface DatosCreacionPelicula {
     titulo: string;
@@ -121,5 +112,38 @@ describe("POST /peliculas", () => {
 
     expect(respuesta.status).toEqual(CODIGO_DATOS_INCORRECTOS);
     expect(respuesta.body.genero).toEqual("El genero no puede superar el limite de caracteres");
+  });
+});
+
+describe("GET /peliculas", () => {
+  interface DatosCreacionPelicula {
+    titulo: string;
+    genero: string;
+  }
+
+  interface DatosDePelicula {
+    id: number;
+    titulo: string;
+    genero: string;
+  }
+
+  const urlPeliculas: string = "/peliculas";
+  const titulo: string = "pelicula1";
+  const genero: string = "genero1";
+
+  const datosCreacionPelicula: DatosCreacionPelicula = {
+    titulo: titulo,
+    genero: genero,
+  }
+  
+  test("deberia devolver un codigo 200", async () => {
+    const respuesta = await requestWithSupertest.get(urlPeliculas);
+    expect(respuesta.status).toEqual(CODIGO_OPERACION_EXITOSA);
+  });
+
+  test.skip("deberia recuperar una lista vacia si no se guardo ninguna pelicula", async () => {
+    await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula);
+    const peliculasRecuperadas: DatosDePelicula[] = await requestWithSupertest.get(urlPeliculas);
+    expect(peliculasRecuperadas.length).toEqual(0);
   });
 });

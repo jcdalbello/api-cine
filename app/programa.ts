@@ -3,6 +3,8 @@ import AgregarPeliculaComando from './comandos/agregar-pelicula-comando';
 import RepositorioPelicula from './dominio/puerto-repositorio-pelicula';
 import RepositorioPeliculaPostgreSQL from './adaptadores/repositorio-pelicula-postgresql';
 import CampoIncorrectoPeliculaError from './errores/campo-incorrecto-pelicula-error';
+import Pelicula from './dominio/pelicula';
+import ObtenerPeliculasComando from './comandos/obtener-peliculas-comando';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -22,7 +24,9 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.get("/peliculas", (req: Request, res: Response) => {
-  res.status(200).send();
+  const obtenerPeliculas: ObtenerPeliculasComando = new ObtenerPeliculasComando();
+  const peliculas: Pelicula[] = obtenerPeliculas.ejecutar();
+  res.status(200).send(peliculas);
 });
 
 app.post("/peliculas", async (req: Request, res: Response) => {
