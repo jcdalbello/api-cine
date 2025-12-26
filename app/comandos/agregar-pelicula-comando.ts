@@ -1,11 +1,14 @@
 import Pelicula from "../dominio/pelicula";
+import RepositorioPelicula from "../dominio/puerto-repositorio-pelicula";
 
 export default class AgregarPeliculaComando {
-  constructor() {}
+  constructor(
+    private readonly repositorioPelicula: RepositorioPelicula,
+  ) {}
 
-  public ejecutar(titulo: string, genero: string): Pelicula {
-    const id: number = parseInt(titulo.charAt(titulo.length - 1));
-    const pelicula: Pelicula = new Pelicula(id, titulo, genero);
-    return pelicula;
+  public async ejecutar(titulo: string, genero: string): Promise<Pelicula> {
+    const peliculaSinGuardar: Pelicula = new Pelicula(0, titulo, genero);
+    const peliculaGuardada: Pelicula = await this.repositorioPelicula.guardar(peliculaSinGuardar);
+    return peliculaGuardada;
   }
 }

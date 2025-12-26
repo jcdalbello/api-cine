@@ -1,10 +1,18 @@
 import express, { Express, Request, Response } from 'express';
 import AgregarPeliculaComando from './comandos/agregar-pelicula-comando';
+import RepositorioPelicula from './dominio/puerto-repositorio-pelicula';
+import RepositorioPeliculaPostgreSQL from './adaptadores/repositorio-pelicula-postgresql';
 
 const app: Express = express();
 const puerto: number = 3000;
 
 app.use(express.json());
+
+function crearRepositorioPelicula(): RepositorioPelicula {
+  return new RepositorioPeliculaPostgreSQL();
+}
+
+const repositorioPelicula: RepositorioPelicula = crearRepositorioPelicula();
 
 app.get("/", (req: Request, res: Response) => {
   res
@@ -16,11 +24,11 @@ app.get("/peliculas", (req: Request, res: Response) => {
   res.status(200).send();
 });
 
-app.post("/peliculas", (req: Request, res: Response) => {
+app.post("/peliculas", async (req: Request, res: Response) => {
   const titulo: string = req.body.titulo;
   const genero: string = req.body.genero;
-  const agregarPeliculaComando: AgregarPeliculaComando = new AgregarPeliculaComando();
-  const pelicula = agregarPeliculaComando.ejecutar(titulo, genero);
+  const agregarPeliculaComando: AgregarPeliculaComando = new AgregarPeliculaComando(repositorioPelicula);
+  const pelicula = await agregarPeliculaComando.ejecutar(titulo, genero);
   res.status(201).send({
     id: pelicula.obtenerId(),
     titulo: pelicula.obtenerTitulo(),
