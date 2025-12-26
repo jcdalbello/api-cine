@@ -2,6 +2,7 @@ import { Pool } from "pg";
 import { pool } from "./pool-postgresql";
 import RepositorioPelicula from "../dominio/puerto-repositorio-pelicula";
 import Pelicula from "../dominio/pelicula";
+import PeliculaYaPersistidaError from "../errores/pelicula-ya-pesistida-error";
 
 export default class RepositorioPeliculaPostgreSQL implements RepositorioPelicula {
   private pool: Pool;
@@ -11,6 +12,10 @@ export default class RepositorioPeliculaPostgreSQL implements RepositorioPelicul
   }
 
   public async guardar(pelicula: Pelicula): Promise<Pelicula> {
+    if (pelicula.esPersistida()) {
+      throw new PeliculaYaPersistidaError();
+    }
+
     const query: string = `
       INSERT INTO peliculas (titulo, genero)
       VALUES ($1, $2)

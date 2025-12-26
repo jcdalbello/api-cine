@@ -66,6 +66,10 @@ export default class Pelicula {
     this.genero = genero;
   }
 
+  public esPersistida(): boolean {
+    return this.id !== MINIMO_ID_VALIDO;
+  }
+
   private validarId(id: number): void {
     if (id < MINIMO_ID_VALIDO) {
       throw new CampoIncorrectoPeliculaError({

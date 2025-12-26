@@ -8,7 +8,6 @@ describe("Pelicula", () => {
   const longitudMaximaCaracteres: number = 70;
   const tituloDemasiadoLargo: string = "a".repeat(longitudMaximaCaracteres + 1);
   const generoDemasiadoLargo: string = "a".repeat(longitudMaximaCaracteres + 1);
-  
 
   test("deberia crear un objeto Pelicula", () => {
     const pelicula: Pelicula = new Pelicula(id, titulo, genero);
@@ -64,5 +63,15 @@ describe("Pelicula", () => {
         expect(error.genero).toEqual("El genero no puede superar el limite de caracteres");
       }
     }
+  });
+
+  test("deberia devolver false con esPersistida si el id es 0", () => {
+    const pelicula: Pelicula = new Pelicula(0, titulo, genero);
+    expect(pelicula.esPersistida()).toBeFalsy();
+  });
+
+  test("deberia devolver true con esPersistida si el id es distinto de 0", () => {
+    const pelicula: Pelicula = new Pelicula(0, titulo, genero);
+    expect(pelicula.esPersistida()).toBeFalsy();
   });
 });
