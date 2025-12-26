@@ -21,12 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: docker
-        run: |
-          docker compose up
-          sleep 3
-
-      - name: node.js
+      - name: node
         uses: actions/setup-node@v4
         with:
           node-version: "22.18.0"
