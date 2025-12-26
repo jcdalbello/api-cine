@@ -8,11 +8,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      DB_HOST: localhost
-      DB_PORT: 5432
-      DB_USER: usuario       
-      DB_PASSWORD: password
-      DB_NAME: api_cine_cd
+      DB_HOST: ${{ vars.DB_HOST }}
+      DB_PORT: ${{ vars.DB_PUERTO }}
+      DB_USER: ${{ secrets.DB_USUARIO }}       
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }} 
+      DB_NAME: ${{ vars.DB_NOMBRE }}
 
     steps:
       - uses: actions/checkout@v4
