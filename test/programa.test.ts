@@ -35,34 +35,41 @@ describe("GET /peliculas", () => {
 });
 
 describe("POST /peliculas", () => {
-  interface datosDePelicula {
+  interface DatosCreacionPelicula {
+    titulo: string;
+    genero: string;
+  }
+
+  interface DatosDePelicula {
     id: number;
     titulo: string;
     genero: string;
   }
 
   const urlPeliculas: string = "/peliculas";
+  const id: number = 1;
+  const titulo: string = "pelicula1";
+  const genero: string = "genero1";
+
+  const datosCreacionPelicula: DatosCreacionPelicula = {
+    titulo: titulo,
+    genero: genero,
+  }
+
+  const datosDePelicula: DatosDePelicula = {
+    id: 1,
+    titulo: titulo,
+    genero: genero,
+  }
+
   test("deberia devolver un codigo 201 si se crea correctamente una pelicula", async () => {
-    const respuesta = await requestWithSupertest.post(urlPeliculas).send({
-      titulo: "pelicula1",
-      genero: "genero1",
-    });
+    const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula);
     expect(respuesta.status).toEqual(CODIGO_CREACION_EXITOSA);
   });
 
   test("deberia devolver los datos de la pelicula creada", async () => {
-    const id: number = 1;
-    const titulo: string = "pelicula1";
-    const genero: string = "genero1";
-
-    const datosPelicula: datosDePelicula = {
-      id: id,
-      titulo: titulo,
-      genero: genero,
-    }
-
-    const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosPelicula);
-    const peliculaCreada: datosDePelicula = respuesta.body;
+    const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosDePelicula);
+    const peliculaCreada: DatosDePelicula = respuesta.body;
 
     expect(peliculaCreada.id).toEqual(id);
     expect(peliculaCreada.titulo).toEqual(titulo);
@@ -70,34 +77,24 @@ describe("POST /peliculas", () => {
   });
 
   test("deberia devolver los datos de cada pelicula al crear mas de una", async () => {
-    const id1: number = 1;
-    const titulo1: string = "pelicula1";
-    const genero1: string = "genero1";
-
     const id2: number = 2;
     const titulo2: string = "pelicula2";
     const genero2: string = "genero2";
 
-    const datosPelicula1: datosDePelicula = {
-      id: id1,
-      titulo: titulo1,
-      genero: genero1,
-    }
-
-    const datosPelicula2: datosDePelicula = {
+    const datosPelicula2: DatosDePelicula = {
       id: id2,
       titulo: titulo2,
       genero: genero2,
     }
 
-    const respuesta1 = await requestWithSupertest.post(urlPeliculas).send(datosPelicula1);
-    const peliculaCreada1: datosDePelicula = respuesta1.body;
-    expect(peliculaCreada1.id).toEqual(id1);
-    expect(peliculaCreada1.titulo).toEqual(titulo1);
-    expect(peliculaCreada1.genero).toEqual(genero1);
+    const respuesta1 = await requestWithSupertest.post(urlPeliculas).send(datosDePelicula);
+    const peliculaCreada1: DatosDePelicula = respuesta1.body;
+    expect(peliculaCreada1.id).toEqual(id);
+    expect(peliculaCreada1.titulo).toEqual(titulo);
+    expect(peliculaCreada1.genero).toEqual(genero);
 
     const respuesta2 = await requestWithSupertest.post(urlPeliculas).send(datosPelicula2);
-    const peliculaCreada2: datosDePelicula = respuesta2.body;
+    const peliculaCreada2: DatosDePelicula = respuesta2.body;
     expect(peliculaCreada2.id).toEqual(id2);
     expect(peliculaCreada2.titulo).toEqual(titulo2);
     expect(peliculaCreada2.genero).toEqual(genero2);
@@ -105,17 +102,10 @@ describe("POST /peliculas", () => {
 
   test("deberia devolver un codigo 400 cuando se usa un titulo demasiado largo", async () => {
     const cantidadMaximaDeCaracteres: number = 70;
-    const id: number = 1;
-    const titulo: string = "a".repeat(cantidadMaximaDeCaracteres + 1);
-    const genero: string = "genero1";
+    const tituloDemasiadoLargo: string = "a".repeat(cantidadMaximaDeCaracteres + 1);
+    const datosDePeliculaTituloLargo: DatosDePelicula = { ...datosDePelicula, titulo: tituloDemasiadoLargo }
 
-    const datosPelicula: datosDePelicula = {
-      id: id,
-      titulo: titulo,
-      genero: genero,
-    }
-
-    const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosPelicula);
+    const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosDePeliculaTituloLargo);
 
     expect(respuesta.status).toEqual(CODIGO_DATOS_INCORRECTOS);
     expect(respuesta.body.titulo).toEqual("El titulo no puede superar el limite de caracteres");
@@ -123,17 +113,11 @@ describe("POST /peliculas", () => {
   
   test("deberia devolver un codigo 400 cuando se usa un genero demasiado largo", async () => {
     const cantidadMaximaDeCaracteres: number = 70;
-    const id: number = 1;
-    const titulo: string = "pelicula1";
-    const genero: string = "a".repeat(cantidadMaximaDeCaracteres + 1);
+    const generoDemasiadoLargo: string = "a".repeat(cantidadMaximaDeCaracteres + 1);
 
-    const datosPelicula: datosDePelicula = {
-      id: id,
-      titulo: titulo,
-      genero: genero,
-    }
+    const datosPeliculaGeneroLargo: DatosDePelicula = { ...datosDePelicula, genero: generoDemasiadoLargo };
 
-    const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosPelicula);
+    const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosPeliculaGeneroLargo);
 
     expect(respuesta.status).toEqual(CODIGO_DATOS_INCORRECTOS);
     expect(respuesta.body.genero).toEqual("El genero no puede superar el limite de caracteres");
