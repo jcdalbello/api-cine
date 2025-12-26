@@ -121,12 +121,6 @@ describe("GET /peliculas", () => {
     genero: string;
   }
 
-  interface DatosDePelicula {
-    id: number;
-    titulo: string;
-    genero: string;
-  }
-
   const urlPeliculas: string = "/peliculas";
   const titulo: string = "pelicula1";
   const genero: string = "genero1";
@@ -141,9 +135,9 @@ describe("GET /peliculas", () => {
     expect(respuesta.status).toEqual(CODIGO_OPERACION_EXITOSA);
   });
 
-  test.skip("deberia recuperar una lista vacia si no se guardo ninguna pelicula", async () => {
+  test("deberia recuperar una lista vacia si no se guardo ninguna pelicula", async () => {
     await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula);
-    const peliculasRecuperadas: DatosDePelicula[] = await requestWithSupertest.get(urlPeliculas);
-    expect(peliculasRecuperadas.length).toEqual(0);
+    const respuesta = await requestWithSupertest.get(urlPeliculas);
+    expect(respuesta.body.length).toEqual(0);
   });
 });
