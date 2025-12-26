@@ -1,13 +1,19 @@
 import { app, server } from "../app/programa";
 import supertest from "supertest";
+import { pool } from "../app/adaptadores/pool-postgresql";
 
 const requestWithSupertest = supertest(app);
 
 const CODIGO_OPERACION_EXITOSA: number = 200;
 const CODIGO_CREACION_EXITOSA: number = 201;
 
-afterAll(() => {
+afterEach(async () => {
+  await pool.query("TRUNCATE TABLE peliculas RESTART IDENTITY CASCADE");
+});
+
+afterAll(async () => {
   server.close();
+  await pool.end();
 });
 
 describe("GET /", () => {
