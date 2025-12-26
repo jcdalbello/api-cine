@@ -68,7 +68,7 @@ describe("POST /peliculas", () => {
     expect(peliculaCreada.genero).toEqual(genero);
   });
 
-  test.skip("deberia devolver los datos de cada pelicula al crear mas de una", async () => {
+  test("deberia devolver los datos de cada pelicula al crear mas de una", async () => {
     const id1: number = 1;
     const titulo1: string = "pelicula1";
     const genero1: string = "genero1";
@@ -83,13 +83,19 @@ describe("POST /peliculas", () => {
       genero: genero1,
     }
 
+    const datosPelicula2: datosDePelicula = {
+      id: id2,
+      titulo: titulo2,
+      genero: genero2,
+    }
+
     const respuesta1 = await requestWithSupertest.post(urlPeliculas).send(datosPelicula1);
     const peliculaCreada1: datosDePelicula = respuesta1.body;
     expect(peliculaCreada1.id).toEqual(id1);
     expect(peliculaCreada1.titulo).toEqual(titulo1);
     expect(peliculaCreada1.genero).toEqual(genero1);
 
-    const respuesta2 = await requestWithSupertest.post(urlPeliculas).send(datosPelicula1);
+    const respuesta2 = await requestWithSupertest.post(urlPeliculas).send(datosPelicula2);
     const peliculaCreada2: datosDePelicula = respuesta2.body;
     expect(peliculaCreada2.id).toEqual(id2);
     expect(peliculaCreada2.titulo).toEqual(titulo2);
