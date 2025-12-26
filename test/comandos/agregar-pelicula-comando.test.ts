@@ -2,6 +2,7 @@ import AgregarPeliculaComando from "../../app/comandos/agregar-pelicula-comando"
 import Pelicula from "../../app/dominio/pelicula";
 import { Mock, mock } from "ts-jest-mocker";
 import RepositorioPelicula from "../../app/dominio/puerto-repositorio-pelicula";
+import CampoIncorrectoPeliculaError from "../../app/errores/campo-incorrecto-pelicula-error";
 
 let mockRepositorioPelicula: Mock<RepositorioPelicula>;
 let agregarPeliculaComando: AgregarPeliculaComando;
@@ -41,5 +42,17 @@ describe("AgregarPeliculaComando", () => {
     expect(pelicula2.obtenerId()).toEqual(id2);
     expect(pelicula2.obtenerTitulo()).toEqual(titulo2);
     expect(pelicula2.obtenerGenero()).toEqual(genero2);
+  });
+
+  test("deberia devolver un error al pasar un titulo demasiado largo", async () => {
+    const longitudMaximaTitulo: number = 70;
+    const tituloDemasiadoLargo: string = "a".repeat(longitudMaximaTitulo + 1);
+    await expect(agregarPeliculaComando.ejecutar(tituloDemasiadoLargo, genero)).rejects.toThrow(CampoIncorrectoPeliculaError);
+  });
+  
+  test("deberia devolver un error al pasar un genero demasiado largo", async () => {
+    const longitudMaximaTitulo: number = 70;
+    const generoDemasiadoLargo: string = "a".repeat(longitudMaximaTitulo + 1);
+    await expect(agregarPeliculaComando.ejecutar(titulo, generoDemasiadoLargo)).rejects.toThrow(CampoIncorrectoPeliculaError);
   });
 });
