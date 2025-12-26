@@ -6,6 +6,7 @@ const requestWithSupertest = supertest(app);
 
 const CODIGO_OPERACION_EXITOSA: number = 200;
 const CODIGO_CREACION_EXITOSA: number = 201;
+const CODIGO_DATOS_INCORRECTOS: number = 400;
 
 afterEach(async () => {
   await pool.query("TRUNCATE TABLE peliculas RESTART IDENTITY CASCADE");
@@ -100,5 +101,22 @@ describe("POST /peliculas", () => {
     expect(peliculaCreada2.id).toEqual(id2);
     expect(peliculaCreada2.titulo).toEqual(titulo2);
     expect(peliculaCreada2.genero).toEqual(genero2);
+  });
+
+  test("deberia devolver un codigo 400 cuando se usa un titulo demasiado largo", async () => {
+    const cantidadMaximaDeCaracteres: number = 70;
+    const id: number = 1;
+    const titulo: string = "a".repeat(cantidadMaximaDeCaracteres + 1);
+    const genero: string = "genero1";
+
+    const datosPelicula: datosDePelicula = {
+      id: id,
+      titulo: titulo,
+      genero: genero,
+    }
+
+    const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosPelicula);
+
+    expect(respuesta.status).toEqual(CODIGO_DATOS_INCORRECTOS);
   });
 });
