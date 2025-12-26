@@ -5,12 +5,12 @@ services:
     restart: always
     
     environment:
-      POSTGRES_USER: usuario
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: api_cine_db
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:${DB_PORT}"
     
     volumes:      
     # mapear el script local a la carpeta de docker
