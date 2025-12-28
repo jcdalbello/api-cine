@@ -1,0 +1,155 @@
+openapi: 3.0.0
+info:
+  title: API de Películas
+  description: Documentación generada basada en tests de Supertest
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Servidor Local
+
+paths:
+  /:
+    get:
+      summary: Health check
+      description: Verifica que el servidor esté respondiendo.
+      responses:
+        '200':
+          description: Operación exitosa.
+
+  /peliculas:
+    get:
+      summary: Obtener lista de películas
+      description: Devuelve un array con todas las películas. Permite filtrar por título y género (búsqueda parcial/fuzzy).
+      parameters:
+        - in: query
+          name: titulo
+          schema:
+            type: string
+          description: Filtra las películas por título (coincidencia parcial).
+        - in: query
+          name: genero
+          schema:
+            type: string
+          description: Filtra las películas por género (coincidencia parcial).
+      responses:
+        '200':
+          description: Lista de películas obtenida exitosamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pelicula'
+    
+    post:
+      summary: Crear una nueva película
+      description: Crea una película con título y género. Valida longitud (max 70) y campos obligatorios.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PeliculaInput'
+      responses:
+        '201':
+          description: Película creada exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pelicula'
+        '400':
+          description: Datos incorrectos (Validación fallida).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampoIncorrectoPeliculaError'
+              examples:
+                faltanDatos:
+                  summary: Errores en los campos de Pelicula
+                  value:
+                    titulo: "El titulo es un campo obligatorio"
+                    genero: "El genero es un campo obligatorio"
+                excesoCaracteres:
+                  summary: Exceso de caracteres
+                  value:
+                    titulo: "El titulo no puede superar el limite de caracteres"
+
+  /peliculas/{id}:
+    get:
+      summary: Obtener una película por ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID numérico de la película.
+      responses:
+        '200':
+          description: Película encontrada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pelicula'
+        '404':
+          description: Recurso no encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PeliculaNoEncontradaError'
+              example:
+                id: "no se encontro ninguna pelicula con el id indicado"
+
+components:
+  schemas:
+    # Objeto completo de Película (Salida)
+    Pelicula:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        titulo:
+          type: string
+          example: "pelicula1"
+        genero:
+          type: string
+          example: "genero1"
+    
+    # Objeto para crear Película (Entrada)
+    PeliculaInput:
+      type: object
+      required:
+        - titulo
+        - genero
+      properties:
+        titulo:
+          type: string
+          maxLength: 70
+          example: "pelicula1"
+        genero:
+          type: string
+          maxLength: 70
+          example: "genero1"
+    
+    # Estructura de error 400 (Basado en tus tests)
+    CampoIncorrectoPeliculaError:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Mensaje de error relacionado con el id
+        titulo:
+          type: string
+          description: Mensaje de error relacionado con el titulo
+        genero:
+          type: string
+          description: Mensaje de error relacionado con el genero
+    
+    # Estructura de error 404 (Basado en tus tests)
+    PeliculaNoEncontradaError:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Mensaje explicando que el ID no existe
