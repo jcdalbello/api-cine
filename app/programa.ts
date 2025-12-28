@@ -28,8 +28,9 @@ app.get("/", (req: Request, res: Response) => {
 
 app.get("/peliculas", async (req: Request, res: Response) => {
   const titulo = req.query.titulo as string | undefined;
+  const genero = req.query.genero as string | undefined;
   const obtenerPeliculas: ObtenerPeliculasComando = new ObtenerPeliculasComando(repositorioPelicula);
-  const peliculas: Pelicula[] = await obtenerPeliculas.ejecutar(titulo);
+  const peliculas: Pelicula[] = await obtenerPeliculas.ejecutar(titulo, genero);
   res.status(200).send(peliculas);
 });
 

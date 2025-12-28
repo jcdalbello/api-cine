@@ -6,7 +6,7 @@ export default class ObtenerPeliculasComando {
     private readonly repositorioPelicula: RepositorioPelicula,
   ) {}
   
-  public async ejecutar(titulo?: string): Promise<Pelicula[]> {
-    return this.repositorioPelicula.listarPeliculas(titulo);
+  public async ejecutar(titulo?: string, genero?: string): Promise<Pelicula[]> {
+    return this.repositorioPelicula.listarPeliculas(titulo, genero);
   }
 }

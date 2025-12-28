@@ -33,7 +33,7 @@ export default class RepositorioPeliculaPostgreSQL implements RepositorioPelicul
     );
   }
 
-  public async listarPeliculas(titulo?: string): Promise<Pelicula[]> {
+  public async listarPeliculas(titulo?: string, genero?: string): Promise<Pelicula[]> {
     let query: string = `
       SELECT * FROM peliculas WHERE 1=1
     `;
@@ -44,6 +44,13 @@ export default class RepositorioPeliculaPostgreSQL implements RepositorioPelicul
       const condicionTitulo: string = ` AND titulo LIKE $${contadorParametros}`;
       query += condicionTitulo;
       valores.push(titulo);
+      contadorParametros++;
+    }
+
+    if (genero) {
+      const condicionGenero: string = ` AND genero LIKE $${contadorParametros}`;
+      query += condicionGenero;
+      valores.push(genero);
       contadorParametros++;
     }
 

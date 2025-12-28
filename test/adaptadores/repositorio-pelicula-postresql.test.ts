@@ -128,5 +128,18 @@ describe("RepositorioPeliculaPostgreSQL", () => {
       expect(peliculas[0]!.obtenerTitulo()).toEqual(pelicula.obtenerTitulo());
       expect(peliculas[0]!.obtenerGenero()).toEqual(pelicula.obtenerGenero());
     });
+
+    test("deberia devolver las peliculas que coincidan con el genero", async () => {
+      const genero: string = "genero1";
+      const pelicula: Pelicula = new Pelicula(0, "pelicula1", genero);
+      await repositorioPeliculaPostgreSQL.guardar(pelicula);
+      const pelicula2: Pelicula = new Pelicula(0, "pelicula2", "genero2");
+      await repositorioPeliculaPostgreSQL.guardar(pelicula2);
+
+      const peliculas: Pelicula[] = await repositorioPeliculaPostgreSQL.listarPeliculas(undefined, genero);
+      expect(peliculas.length).toEqual(1);
+      expect(peliculas[0]!.obtenerTitulo()).toEqual(pelicula.obtenerTitulo());
+      expect(peliculas[0]!.obtenerGenero()).toEqual(pelicula.obtenerGenero());
+    });
   });
 });
