@@ -79,3 +79,12 @@ GET {{host}}/peliculas/1
 ### Obtener película por ID inexistente (404)
 # Esto probará el bloque catch con 'PeliculaNoEncontradaError'
 GET {{host}}/peliculas/9999
+
+### Obtener una pelicula usando el titulo como filtro (200)
+GET {{host}}/peliculas?titulo=Inception
+
+### Obtener una pelicula usando el titulo como filtro (200)
+GET {{host}}/peliculas?titulo=El%20Padrino
+
+### Obtener una lista de peliculas con un titulo que no existe (200)
+GET {{host}}/peliculas?titulo=tituloQueNoExiste

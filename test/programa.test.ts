@@ -175,7 +175,7 @@ describe("GET /peliculas", () => {
     expect(respuesta.body[0].genero).toEqual(genero);
   });
 
-  test.skip("deberia recuperar una lista con las peliculas que coincidan con el parametro de titulo", async () => {
+  test("deberia recuperar una lista con las peliculas que coincidan con el parametro de titulo", async () => {
     const titulo2: string = "pelicula2";
     const genero2: string = "genero2";
     const datosCreacionPelicula2: DatosCreacionPelicula = {
