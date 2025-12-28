@@ -1,0 +1,59 @@
+@host = http://localhost:3000
+
+### 1. Verificar estado del servidor (Root)
+GET {{host}}/
+
+### 2. Obtener todas las películas (Lista vacía al inicio)
+GET {{host}}/peliculas
+
+### 3. Crear una nueva película (Caso Exitoso)
+POST {{host}}/peliculas
+Content-Type: application/json
+
+{
+  "titulo": "Inception",
+  "genero": "Ciencia Ficción"
+}
+
+### 4. Crear otra película (Caso Exitoso)
+POST {{host}}/peliculas
+Content-Type: application/json
+
+{
+  "titulo": "El Padrino",
+  "genero": "Drama"
+}
+
+### Intentar crear película con titulo vacio (400)
+POST {{host}}/peliculas
+Content-Type: application/json
+
+{
+  "titulo": "", 
+  "genero": "Desconocido"
+}
+
+### Intentar crear película con genero vacio (400)
+POST {{host}}/peliculas
+Content-Type: application/json
+
+{
+  "titulo": "Star Wars", 
+  "genero": ""
+}
+
+### Intentar crear película con titulo y genero vacios (400)
+POST {{host}}/peliculas
+Content-Type: application/json
+
+{
+  "titulo": "", 
+  "genero": ""
+}
+
+### 6. Obtener película por ID existente (Asumiendo que la primera creada es ID 1)
+GET {{host}}/peliculas/1
+
+### 7. Obtener película por ID inexistente (Prueba de Error 404)
+# Esto probará el bloque catch con 'PeliculaNoEncontradaError'
+GET {{host}}/peliculas/9999
