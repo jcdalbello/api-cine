@@ -39,6 +39,11 @@ app.post("/peliculas", async (req: Request, res: Response) => {
       titulo: "El titulo es un campo obligatorio",
     });
   }
+  if (genero === undefined) {
+    res.status(400).json({
+      genero: "El genero es un campo obligatorio",
+    });
+  }
   try { 
     const agregarPeliculaComando: AgregarPeliculaComando = new AgregarPeliculaComando(repositorioPelicula);
     const pelicula = await agregarPeliculaComando.ejecutar(titulo, genero);
