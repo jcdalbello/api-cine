@@ -15,6 +15,7 @@ describe("ObtenerPeliculasComando", () => {
   });
 
   test("deberia devolver una lista vacia cuando no hay peliculas", async () => {
+    mockRepositorioPelicula.listarPeliculas.mockResolvedValue([]);
     const peliculas: Pelicula[] = await obtenerPeliculasComando.ejecutar();
     expect(peliculas.length).toEqual(0);
   });
