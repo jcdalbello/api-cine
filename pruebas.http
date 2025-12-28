@@ -12,7 +12,7 @@ Content-Type: application/json
 
 {
   "titulo": "Inception",
-  "genero": "Ciencia Ficción"
+  "genero": "Ciencia Ficcion"
 }
 
 ### Crear otra película (201)
@@ -83,8 +83,11 @@ GET {{host}}/peliculas/9999
 ### Obtener una pelicula usando el titulo como filtro (200)
 GET {{host}}/peliculas?titulo=Inception
 
-### Obtener una pelicula usando el titulo como filtro (200)
-GET {{host}}/peliculas?titulo=El%20Padrino
-
 ### Obtener una lista de peliculas con un titulo que no existe (200)
 GET {{host}}/peliculas?titulo=tituloQueNoExiste
+
+### Obtener una pelicula usando el genero como filtro (200)
+GET {{host}}/peliculas?genero=Ciencia%20Ficcion
+
+### Obtener una lista de peliculas con un genero que no existe (200)
+GET {{host}}/peliculas?genero=generoQueNoExiste
