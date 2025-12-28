@@ -150,3 +150,30 @@ describe("GET /peliculas", () => {
     expect(respuesta.body[0].genero).toEqual(genero);
   });
 });
+
+describe("GET /peliculas/{id}", () => {
+  const urlPeliculasPorId: string = "/peliculas/";
+
+  const id: number = 1;
+  const titulo: string = "pelicula1";
+  const genero: string = "genero1";
+  
+  interface DatosCreacionPelicula {
+    titulo: string;
+    genero: string;
+  }
+
+  const datosCreacionPelicula: DatosCreacionPelicula = {
+    titulo: titulo,
+    genero: genero,
+  }
+
+  test("deberia devolver un codigo 200 y una pelicula si existe una pelicula con ese id", async () => {
+    await requestWithSupertest.post("/peliculas").send(datosCreacionPelicula);
+    const respuesta = await requestWithSupertest.get(urlPeliculasPorId + id);
+    expect(respuesta.status).toEqual(CODIGO_OPERACION_EXITOSA);
+    expect(respuesta.body.id).toEqual(id);
+    expect(respuesta.body.titulo).toEqual(titulo);
+    expect(respuesta.body.genero).toEqual(genero);
+  });
+});
