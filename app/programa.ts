@@ -34,6 +34,11 @@ app.get("/peliculas", async (req: Request, res: Response) => {
 app.post("/peliculas", async (req: Request, res: Response) => {
   const titulo: string = req.body.titulo;
   const genero: string = req.body.genero;
+  if (titulo === undefined) {
+    res.status(400).json({
+      titulo: "El titulo es un campo obligatorio",
+    });
+  }
   try { 
     const agregarPeliculaComando: AgregarPeliculaComando = new AgregarPeliculaComando(repositorioPelicula);
     const pelicula = await agregarPeliculaComando.ejecutar(titulo, genero);
