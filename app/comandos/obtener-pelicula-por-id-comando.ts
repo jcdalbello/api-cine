@@ -1,16 +1,12 @@
 import Pelicula from "../dominio/pelicula";
+import RepositorioPelicula from "../dominio/puerto-repositorio-pelicula";
 
 export default class ObtenerPeliculaPorIdComando {
-  constructor() {}
+  constructor(
+    private readonly repositorioPelicula: RepositorioPelicula,
+  ) {}
 
   public ejecutar(id: number): Pelicula {
-    let pelicula: Pelicula;
-    if (id == 1) {
-      pelicula = new Pelicula(1, "pelicula1", "genero1");
-    } else {
-      pelicula = new Pelicula(2, "pelicula2", "genero2");
-    }
-    
-    return pelicula
+    return this.repositorioPelicula.recuperar(id);
   }
 }

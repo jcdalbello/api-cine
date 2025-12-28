@@ -1,11 +1,28 @@
 import ObtenerPeliculaPorIdComando from "../../app/comandos/obtener-pelicula-por-id-comando";
+import Pelicula from "../../app/dominio/pelicula";
+import RepositorioPelicula from "../../app/dominio/puerto-repositorio-pelicula";
+import { mock, Mock } from "ts-jest-mocker";
 
+let mockRepositorioPeliculas: Mock<RepositorioPelicula>;
 let obtenerPeliculaPorIdComando: ObtenerPeliculaPorIdComando;
 
 describe("ObtenerPeliculaPorIdComando", () => {
-  obtenerPeliculaPorIdComando = new ObtenerPeliculaPorIdComando();
+  mockRepositorioPeliculas = mock<RepositorioPelicula>();
+  obtenerPeliculaPorIdComando = new ObtenerPeliculaPorIdComando(mockRepositorioPeliculas);
 
-  test("debe crear un objeto ObtenerPeliculaPorIdComando", () => {
+  test("deberia crear un objeto ObtenerPeliculaPorIdComando", () => {
     expect(obtenerPeliculaPorIdComando).toBeInstanceOf(ObtenerPeliculaPorIdComando);
+  });
+
+  test("deberia crear un devolver la unica pelicula guardada en la base de datos", () => {
+    const id: number = 1;
+    const titulo: string = "pelicula1";
+    const genero: string = "genero1";
+    const pelicula: Pelicula = new Pelicula(id, titulo, genero);
+    mockRepositorioPeliculas.recuperar.mockReturnValue(pelicula);
+    const peliculaRecuperada: Pelicula = obtenerPeliculaPorIdComando.ejecutar(id);
+    expect(peliculaRecuperada.obtenerId()).toEqual(id);
+    expect(peliculaRecuperada.obtenerTitulo()).toEqual(titulo);
+    expect(peliculaRecuperada.obtenerGenero()).toEqual(genero);
   });
 });
