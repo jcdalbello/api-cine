@@ -52,10 +52,10 @@ app.post("/peliculas", async (req: Request, res: Response) => {
   }
 });
 
-app.get("/peliculas/:id", (req: Request, res: Response) => {
+app.get("/peliculas/:id", async (req: Request, res: Response) => {
   const id: number = parseInt(req.params.id!);
   const obtenerPeliculaPorIdComando: ObtenerPeliculaPorIdComando = new ObtenerPeliculaPorIdComando(repositorioPelicula);
-  const pelicula: Pelicula = obtenerPeliculaPorIdComando.ejecutar(id);
+  const pelicula: Pelicula = await obtenerPeliculaPorIdComando.ejecutar(id);
   res.status(200).send(pelicula);
 });
 

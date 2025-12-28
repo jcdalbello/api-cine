@@ -172,6 +172,7 @@ describe("GET /peliculas/{id}", () => {
     await requestWithSupertest.post("/peliculas").send(datosCreacionPelicula);
     const respuesta = await requestWithSupertest.get(urlPeliculasPorId + id);
     expect(respuesta.status).toEqual(CODIGO_OPERACION_EXITOSA);
+    console.log("GET /peliculas/{id} -> respuesta.body: ", respuesta.body);
     expect(respuesta.body.id).toEqual(id);
     expect(respuesta.body.titulo).toEqual(titulo);
     expect(respuesta.body.genero).toEqual(genero);
@@ -202,7 +203,7 @@ describe("GET /peliculas/{id}", () => {
     expect(respuesta2.body.genero).toEqual(genero2);
   });
 
-  test.skip("deberia devolver multiples peliculas existentes", async () => {
+  test("deberia devolver multiples peliculas existentes", async () => {
     for (let i = 1; i <= 10; i++) {
       const idActual: number = i;
       const tituloActual: string = "pelicula" + i;

@@ -47,4 +47,38 @@ describe("RepositorioPeliculaPostgreSQL", () => {
     const pelicula: Pelicula = new Pelicula(1, "pelicula1", "genero1");
     await expect(repositorioPeliculaPostgreSQL.guardar(pelicula)).rejects.toThrow(PeliculaYaPersistidaError);
   });
+
+  test("deberia devolver una pelicula pasando su id con una sola pelicula guardada", async () => {
+    const id: number = 1;
+    const titulo: string = "pelicula1";
+    const genero: string = "genero1";
+
+    const pelicula: Pelicula = new Pelicula(0, titulo, genero);
+    await repositorioPeliculaPostgreSQL.guardar(pelicula);
+    const peliculaRecuperada: Pelicula = await repositorioPeliculaPostgreSQL.recuperar(id);
+    expect(peliculaRecuperada.obtenerId()).toEqual(id);
+    expect(peliculaRecuperada.obtenerTitulo()).toEqual(titulo);
+    expect(peliculaRecuperada.obtenerGenero()).toEqual(genero);
+  });
+
+  test("deberia devolver una pelicula pasando su id con varias peliculas guardadas", async () => {
+    for (let i = 1; i <= 10; i++) {
+      const titulo: string = "pelicula" + i;
+      const genero: string = "genero" + i;
+
+      const pelicula: Pelicula = new Pelicula(0, titulo, genero);
+      await repositorioPeliculaPostgreSQL.guardar(pelicula);
+    }
+
+    for (let i = 1; i <= 10; i++) {
+      const id: number = i;
+      const titulo: string = "pelicula" + i;
+      const genero: string = "genero" + i;
+
+      const peliculaRecuperada: Pelicula = await repositorioPeliculaPostgreSQL.recuperar(id);
+      expect(peliculaRecuperada.obtenerId()).toEqual(id);
+      expect(peliculaRecuperada.obtenerTitulo()).toEqual(titulo);
+      expect(peliculaRecuperada.obtenerGenero()).toEqual(genero);
+    }
+  });
 });

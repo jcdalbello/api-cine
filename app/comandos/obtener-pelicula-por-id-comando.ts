@@ -6,7 +6,7 @@ export default class ObtenerPeliculaPorIdComando {
     private readonly repositorioPelicula: RepositorioPelicula,
   ) {}
 
-  public ejecutar(id: number): Pelicula {
+  public async ejecutar(id: number): Promise<Pelicula> {
     return this.repositorioPelicula.recuperar(id);
   }
 }

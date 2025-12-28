@@ -46,14 +46,21 @@ export default class RepositorioPeliculaPostgreSQL implements RepositorioPelicul
     });
   }
 
-  public recuperar(id: number): Pelicula {
-    let pelicula: Pelicula;
-    if (id == 1) {
-      pelicula = new Pelicula(1, "pelicula1", "genero1");
-    } else {
-      pelicula = new Pelicula(2, "pelicula2", "genero2");
-    }
+  public async recuperar(id: number): Promise<Pelicula> {
+    const query: string = `
+      SELECT * FROM peliculas
+      WHERE id = $1;    
+    `;
+    const values: number[] = [id];
 
-    return pelicula
+    const resultado = await this.pool.query(query, values);
+    const idRecuperado: number = resultado.rows[0].id;
+    const tituloRecuperado: string = resultado.rows[0].titulo;
+    const generoRecuperado: string = resultado.rows[0].genero;
+    return new Pelicula(
+      idRecuperado,
+      tituloRecuperado,
+      generoRecuperado,
+    );
   }
 }

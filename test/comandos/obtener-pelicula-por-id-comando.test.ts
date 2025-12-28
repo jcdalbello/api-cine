@@ -14,15 +14,29 @@ describe("ObtenerPeliculaPorIdComando", () => {
     expect(obtenerPeliculaPorIdComando).toBeInstanceOf(ObtenerPeliculaPorIdComando);
   });
 
-  test("deberia crear un devolver la unica pelicula guardada en la base de datos", () => {
+  test("deberia devolver la unica pelicula guardada en la base de datos", async () => {
     const id: number = 1;
     const titulo: string = "pelicula1";
     const genero: string = "genero1";
     const pelicula: Pelicula = new Pelicula(id, titulo, genero);
-    mockRepositorioPeliculas.recuperar.mockReturnValue(pelicula);
-    const peliculaRecuperada: Pelicula = obtenerPeliculaPorIdComando.ejecutar(id);
+    mockRepositorioPeliculas.recuperar.mockResolvedValue(pelicula);
+    const peliculaRecuperada: Pelicula = await obtenerPeliculaPorIdComando.ejecutar(id);
     expect(peliculaRecuperada.obtenerId()).toEqual(id);
     expect(peliculaRecuperada.obtenerTitulo()).toEqual(titulo);
     expect(peliculaRecuperada.obtenerGenero()).toEqual(genero);
+  });
+
+  test("deberia devolver cada pelicula correspondiente al id", async () => {
+    for (let i = 1; i <= 10; i++) {
+      const idActual: number = i;
+      const tituloActual: string = "pelicula" + i;
+      const generoActual: string = "genero" + i;
+      const pelicula: Pelicula = new Pelicula(idActual, tituloActual, generoActual);
+      mockRepositorioPeliculas.recuperar.mockResolvedValue(pelicula);
+      const peliculaRecuperada: Pelicula = await obtenerPeliculaPorIdComando.ejecutar(idActual);
+      expect(peliculaRecuperada.obtenerId()).toEqual(idActual);
+      expect(peliculaRecuperada.obtenerTitulo()).toEqual(tituloActual);
+      expect(peliculaRecuperada.obtenerGenero()).toEqual(generoActual);
+    }
   });
 });
