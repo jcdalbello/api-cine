@@ -5,6 +5,7 @@ import RepositorioPeliculaPostgreSQL from './adaptadores/repositorio-pelicula-po
 import CampoIncorrectoPeliculaError from './errores/campo-incorrecto-pelicula-error';
 import Pelicula from './dominio/pelicula';
 import ObtenerPeliculasComando from './comandos/obtener-peliculas-comando';
+import ObtenerPeliculaPorIdComando from './comandos/obtener-pelicula-por-id-comando';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -52,7 +53,9 @@ app.post("/peliculas", async (req: Request, res: Response) => {
 });
 
 app.get("/peliculas/:id", (req: Request, res: Response) => {
-  const pelicula: Pelicula = new Pelicula(1, "pelicula1", "genero1");
+  const id: number = parseInt(req.params.id!);
+  const obtenerPeliculaPorIdComando: ObtenerPeliculaPorIdComando = new ObtenerPeliculaPorIdComando();
+  const pelicula: Pelicula = obtenerPeliculaPorIdComando.ejecutar(id);
   res.status(200).send(pelicula);
 });
 

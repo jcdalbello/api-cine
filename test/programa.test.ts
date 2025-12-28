@@ -176,4 +176,49 @@ describe("GET /peliculas/{id}", () => {
     expect(respuesta.body.titulo).toEqual(titulo);
     expect(respuesta.body.genero).toEqual(genero);
   });
+
+  test("deberia devolver mas de una pelicula existente", async () => {
+    await requestWithSupertest.post("/peliculas").send(datosCreacionPelicula);
+    const respuesta = await requestWithSupertest.get(urlPeliculasPorId + id.toString());
+    expect(respuesta.status).toEqual(CODIGO_OPERACION_EXITOSA);
+    expect(respuesta.body.id).toEqual(id);
+    expect(respuesta.body.titulo).toEqual(titulo);
+    expect(respuesta.body.genero).toEqual(genero);
+
+    const id2: number = 2;
+    const titulo2: string = "pelicula2";
+    const genero2: string = "genero2";
+
+    const datosCreacionPelicula2: DatosCreacionPelicula = {
+      titulo: titulo2,
+      genero: genero2,
+    }
+    
+    await requestWithSupertest.post("/peliculas").send(datosCreacionPelicula2);
+    const respuesta2 = await requestWithSupertest.get(urlPeliculasPorId + id2.toString());
+    expect(respuesta2.status).toEqual(CODIGO_OPERACION_EXITOSA);
+    expect(respuesta2.body.id).toEqual(id2);
+    expect(respuesta2.body.titulo).toEqual(titulo2);
+    expect(respuesta2.body.genero).toEqual(genero2);
+  });
+
+  test.skip("deberia devolver multiples peliculas existentes", async () => {
+    for (let i = 1; i <= 10; i++) {
+      const idActual: number = i;
+      const tituloActual: string = "pelicula" + i;
+      const generoActual: string = "genero" + i;
+
+      const datosCreacionPeliculaActual: DatosCreacionPelicula = {
+        titulo: tituloActual,
+        genero: generoActual,
+      }
+
+      await requestWithSupertest.post(urlPeliculasPorId).send(datosCreacionPeliculaActual);
+      const respuesta = await requestWithSupertest.get(urlPeliculasPorId + idActual.toString());
+      expect(respuesta.status).toEqual(CODIGO_OPERACION_EXITOSA);
+      expect(respuesta.body.id).toEqual(idActual);
+      expect(respuesta.body.titulo).toEqual(tituloActual);
+      expect(respuesta.body.genero).toEqual(generoActual);
+    }
+  });
 });
