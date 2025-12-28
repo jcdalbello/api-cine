@@ -236,6 +236,25 @@ describe("GET /peliculas", () => {
     expect(respuesta.body[0].titulo).toEqual(titulo);
     expect(respuesta.body[0].genero).toEqual(genero);
   });
+
+  test("deberia recuperar una lista con las peliculas que que tenga un titulo similar al parametro de titulo (fuzzy search)", async () => {
+    const tituloSimilar: string = "pelicula";
+    const titulo2: string = "corto1";
+    const genero2: string = "genero2";
+    const datosCreacionPelicula2: DatosCreacionPelicula = {
+      titulo: titulo2,
+      genero: genero2,
+    }
+    
+    await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula);
+    await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula2);
+    
+    const respuesta = await requestWithSupertest.get(urlPeliculas + "?" + "titulo=" + tituloSimilar);
+    expect(respuesta.body.length).toEqual(1);
+    expect(respuesta.body[0].id).toEqual(id);
+    expect(respuesta.body[0].titulo).toEqual(titulo);
+    expect(respuesta.body[0].genero).toEqual(genero);
+  });
 });
 
 describe("GET /peliculas/{id}", () => {

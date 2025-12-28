@@ -43,7 +43,7 @@ export default class RepositorioPeliculaPostgreSQL implements RepositorioPelicul
     if (titulo) {
       const condicionTitulo: string = ` AND titulo LIKE $${contadorParametros}`;
       query += condicionTitulo;
-      valores.push(titulo);
+      valores.push("%" + titulo + "%");
       contadorParametros++;
     }
 
