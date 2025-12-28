@@ -248,7 +248,15 @@ describe("GET /peliculas/{id}", () => {
   });
 
   test("deberia devolver un error y un codigo 404 si no existe ninguna pelicula con el id indicado cuando todavia no se cargaron peliculas", async () => {
-    const id: number = 1;
+    const id: number = 999;
+    const respuesta = await requestWithSupertest.get(urlPeliculasPorId + id.toString());
+    expect(respuesta.status).toEqual(CodigosHTTP.RecursoNoEncontrado);
+    expect(respuesta.body.id).toEqual("no se encontro ninguna pelicula con el id indicado");
+  });
+
+  test("deberia devolver un error y un codigo 404 si no existe ninguna pelicula con el id indicado con peliculas cargadas", async () => {
+    await requestWithSupertest.post("/peliculas").send(datosCreacionPelicula);
+    const id: number = 999;
     const respuesta = await requestWithSupertest.get(urlPeliculasPorId + id.toString());
     expect(respuesta.status).toEqual(CodigosHTTP.RecursoNoEncontrado);
     expect(respuesta.body.id).toEqual("no se encontro ninguna pelicula con el id indicado");
