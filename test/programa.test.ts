@@ -174,6 +174,24 @@ describe("GET /peliculas", () => {
     expect(respuesta.body[0].titulo).toEqual(titulo);
     expect(respuesta.body[0].genero).toEqual(genero);
   });
+
+  test.skip("deberia recuperar una lista con las peliculas que coincidan con el parametro de titulo", async () => {
+    const titulo2: string = "pelicula2";
+    const genero2: string = "genero2";
+    const datosCreacionPelicula2: DatosCreacionPelicula = {
+      titulo: titulo2,
+      genero: genero2,
+    }
+    
+    await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula);
+    await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula2);
+    
+    const respuesta = await requestWithSupertest.get(urlPeliculas + "?" + "titulo=" + datosCreacionPelicula.titulo);
+    expect(respuesta.body.length).toEqual(1);
+    expect(respuesta.body[0].id).toEqual(id);
+    expect(respuesta.body[0].titulo).toEqual(titulo);
+    expect(respuesta.body[0].genero).toEqual(genero);
+  });
 });
 
 describe("GET /peliculas/{id}", () => {

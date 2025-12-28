@@ -33,12 +33,23 @@ export default class RepositorioPeliculaPostgreSQL implements RepositorioPelicul
     );
   }
 
-  public async listarPeliculas(): Promise<Pelicula[]> {
-    const query: string = `
-      SELECT * FROM peliculas;    
+  public async listarPeliculas(titulo?: string): Promise<Pelicula[]> {
+    let query: string = `
+      SELECT * FROM peliculas WHERE 1=1
     `;
+    const valores: string[] = [];
+    let contadorParametros: number = 1;
 
-    const resultado = await this.pool.query(query);
+    if (titulo) {
+      const condicionTitulo: string = ` AND titulo LIKE $${contadorParametros}`;
+      query += condicionTitulo;
+      valores.push(titulo);
+      contadorParametros++;
+    }
+
+    query += ";";
+
+    const resultado = await this.pool.query(query, valores);
     return resultado.rows.map((row) => {
       const id: number = row.id;
       const titulo: string = row.titulo;
