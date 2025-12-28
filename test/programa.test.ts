@@ -210,6 +210,32 @@ describe("GET /peliculas", () => {
     expect(respuesta.body[0].titulo).toEqual(titulo);
     expect(respuesta.body[0].genero).toEqual(genero);
   });
+
+  test("deberia recuperar una lista con las peliculas que coincidan con el parametro de titulo y genero al mismo tiempo", async () => {
+    const titulo2: string = "pelicula2";
+    const genero2: string = "genero2";
+    const datosCreacionPelicula2: DatosCreacionPelicula = {
+      titulo: titulo2,
+      genero: genero2,
+    }
+
+    const titulo3: string = "pelicula3";
+    const genero3: string = "genero3";
+    const datosCreacionPelicula3: DatosCreacionPelicula = {
+      titulo: titulo3,
+      genero: genero3,
+    }
+    
+    await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula);
+    await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula2);
+    await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula3);
+    
+    const respuesta = await requestWithSupertest.get(urlPeliculas + "?" + "titulo=" + datosCreacionPelicula.titulo + "&" + "genero=" + datosCreacionPelicula.genero);
+    expect(respuesta.body.length).toEqual(1);
+    expect(respuesta.body[0].id).toEqual(id);
+    expect(respuesta.body[0].titulo).toEqual(titulo);
+    expect(respuesta.body[0].genero).toEqual(genero);
+  });
 });
 
 describe("GET /peliculas/{id}", () => {

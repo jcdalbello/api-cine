@@ -11,8 +11,8 @@ POST {{host}}/peliculas
 Content-Type: application/json
 
 {
-  "titulo": "Inception",
-  "genero": "Ciencia Ficcion"
+  "titulo": "Terminator",
+  "genero": "Accion"
 }
 
 ### Crear otra película (201)
@@ -22,6 +22,15 @@ Content-Type: application/json
 {
   "titulo": "El Padrino",
   "genero": "Drama"
+}
+
+### Crear otra película (201)
+POST {{host}}/peliculas
+Content-Type: application/json
+
+{
+  "titulo": "Star Wars",
+  "genero": "Ciencia ficcion"
 }
 
 ### Intentar crear película con titulo vacio (400)
@@ -81,13 +90,16 @@ GET {{host}}/peliculas/1
 GET {{host}}/peliculas/9999
 
 ### Obtener una pelicula usando el titulo como filtro (200)
-GET {{host}}/peliculas?titulo=Inception
+GET {{host}}/peliculas?titulo=Terminator
 
 ### Obtener una lista de peliculas con un titulo que no existe (200)
 GET {{host}}/peliculas?titulo=tituloQueNoExiste
 
 ### Obtener una pelicula usando el genero como filtro (200)
-GET {{host}}/peliculas?genero=Ciencia%20Ficcion
+GET {{host}}/peliculas?genero=Accion
 
 ### Obtener una lista de peliculas con un genero que no existe (200)
 GET {{host}}/peliculas?genero=generoQueNoExiste
+
+### Obtener una lista de peliculas buscando por titulo y genero (200)
+GET {{host}}/peliculas?titulo=Terminator&genero=Accion
