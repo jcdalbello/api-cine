@@ -54,4 +54,13 @@ describe("ObtenerPeliculasComando", () => {
     expect(peliculas.length).toEqual(1);
     expect(peliculas).toContain(pelicula);
   });
+
+  test("deberia devolver una lista con las peliculas que tengan un titulo similar al indicado", async () => {
+    const genero: string = "genero";
+    const pelicula: Pelicula = new Pelicula(1, "pelicula1", genero);
+    mockRepositorioPelicula.listarPeliculas.mockResolvedValue([pelicula]);
+    const peliculas: Pelicula[] = await obtenerPeliculasComando.ejecutar(genero);
+    expect(peliculas.length).toEqual(1);
+    expect(peliculas).toContain(pelicula);
+  });
 });
