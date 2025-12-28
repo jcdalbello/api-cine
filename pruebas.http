@@ -103,3 +103,9 @@ GET {{host}}/peliculas?genero=generoQueNoExiste
 
 ### Obtener una lista de peliculas buscando por titulo y genero (200)
 GET {{host}}/peliculas?titulo=Terminator&genero=Accion
+
+### Obtener una lista de peliculas con un titulo similar al filtro (fuzzy search) (200)
+GET {{host}}/peliculas?titulo=Termi
+
+### Obtener una lista de peliculas con un genero similar al filtro (fuzzy search) (200)
+GET {{host}}/peliculas?genero=Acc
