@@ -117,7 +117,7 @@ describe("POST /peliculas", () => {
     expect(respuesta.body.genero).toEqual("El genero no puede superar el limite de caracteres");
   });
 
-  test("deberia devolver un codigo 400 si no se pasa ningun valor como titulo al momento de crear una pelicula", async () => {
+  test("deberia devolver un codigo 400 y el error correspondiente si no se pasa ningun valor como titulo al momento de crear una pelicula", async () => {
     const datosPeliculaSinTitulo = { genero: "genero1" };
     const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosPeliculaSinTitulo);
     expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
@@ -125,10 +125,17 @@ describe("POST /peliculas", () => {
   });
 
 
-  test("deberia devolver un codigo 400 si no se pasa ningun valor como genero al momento de crear una pelicula", async () => {
+  test("deberia devolver un codigo 400 y el error correspondiente si no se pasa ningun valor como genero al momento de crear una pelicula", async () => {
     const datosPeliculaSinGenero = { titulo: "pelicula1" };
     const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosPeliculaSinGenero);
     expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
+    expect(respuesta.body.genero).toEqual("El genero es un campo obligatorio");
+  });
+
+  test("deberia devolver un codigo 400 y todos los mensajes correspondientes cuando no se pasa ningun dato al querer crear una pelicula", async () => {
+    const respuesta = await requestWithSupertest.post(urlPeliculas).send({});
+    expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
+    expect(respuesta.body.titulo).toEqual("El titulo es un campo obligatorio");
     expect(respuesta.body.genero).toEqual("El genero es un campo obligatorio");
   });
 });

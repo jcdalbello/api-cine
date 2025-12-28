@@ -2,11 +2,12 @@ import express, { Express, Request, Response } from 'express';
 import AgregarPeliculaComando from './comandos/agregar-pelicula-comando';
 import RepositorioPelicula from './dominio/puerto-repositorio-pelicula';
 import RepositorioPeliculaPostgreSQL from './adaptadores/repositorio-pelicula-postgresql';
-import CampoIncorrectoPeliculaError from './errores/campo-incorrecto-pelicula-error';
+import CamposIncorrectosDePeliculaError from './errores/campo-incorrecto-pelicula-error';
 import Pelicula from './dominio/pelicula';
 import ObtenerPeliculasComando from './comandos/obtener-peliculas-comando';
 import ObtenerPeliculaPorIdComando from './comandos/obtener-pelicula-por-id-comando';
 import PeliculaNoEncontradaError from './errores/pelicula-no-encontrada-error';
+import MensajesDeErrorDePelicula from './errores/i-mensajes-de-error-de-pelicula';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -31,34 +32,40 @@ app.get("/peliculas", async (req: Request, res: Response) => {
   res.status(200).send(peliculas);
 });
 
-app.post("/peliculas", async (req: Request, res: Response) => {
-  const titulo: string = req.body.titulo;
-  const genero: string = req.body.genero;
+function validarDatosVaciosDePelicula(titulo: string | undefined, genero: string | undefined): void {
+  const mensajes: MensajesDeErrorDePelicula = {};
   if (titulo === undefined) {
-    res.status(400).json({
-      titulo: "El titulo es un campo obligatorio",
-    });
+    mensajes.titulo = "El titulo es un campo obligatorio";
   }
   if (genero === undefined) {
-    res.status(400).json({
-      genero: "El genero es un campo obligatorio",
-    });
+    mensajes.genero = "El genero es un campo obligatorio";
   }
+
+  if (Object.keys(mensajes).length > 0) {
+    throw new CamposIncorrectosDePeliculaError(mensajes);
+  }
+}
+
+app.post("/peliculas", async (req: Request, res: Response) => {
+  const titulo: string | undefined = req.body.titulo;
+  const genero: string | undefined = req.body.genero;
   try { 
+    validarDatosVaciosDePelicula(titulo, genero);
     const agregarPeliculaComando: AgregarPeliculaComando = new AgregarPeliculaComando(repositorioPelicula);
-    const pelicula = await agregarPeliculaComando.ejecutar(titulo, genero);
+    const pelicula = await agregarPeliculaComando.ejecutar(titulo!, genero!);
     res.status(201).send({
       id: pelicula.obtenerId(),
       titulo: pelicula.obtenerTitulo(),
       genero: pelicula.obtenerGenero(),
     });
   } catch (error) {
-    if (error instanceof CampoIncorrectoPeliculaError) {
-      res.status(400).send({
-        id: error.id,
-        titulo: error.titulo,
-        genero: error.genero,
-      });
+    if (error instanceof CamposIncorrectosDePeliculaError) {
+      const mensajesDeError: MensajesDeErrorDePelicula = {
+        id: error.id!,
+        titulo: error.titulo!,
+        genero: error.genero!,
+      }
+      res.status(400).send(mensajesDeError);
     }
   }
 });
