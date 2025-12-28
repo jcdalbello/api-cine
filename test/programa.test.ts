@@ -4,10 +4,12 @@ import { pool } from "../app/adaptadores/pool-postgresql";
 
 const requestWithSupertest = supertest(app);
 
-const CODIGO_OPERACION_EXITOSA: number = 200;
-const CODIGO_CREACION_EXITOSA: number = 201;
-const CODIGO_DATOS_INCORRECTOS: number = 400;
-const CODIGO_RECURSO_NO_ENCONTRADO: number = 404;
+enum CodigosHTTP {
+  OperacionExitosa = 200,
+  CreacionExitosa = 201,
+  DatosIncorrectos = 400,
+  RecursoNoEncontrado = 404,
+}
 
 afterEach(async () => {
   await pool.query("TRUNCATE TABLE peliculas RESTART IDENTITY CASCADE");
@@ -22,7 +24,7 @@ describe("GET /", () => {
   const url: string = "/";
   test("deberia devolver un codigo 200", async () => {
     const respuesta = await requestWithSupertest.get(url);
-    expect(respuesta.status).toEqual(CODIGO_OPERACION_EXITOSA);
+    expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
   });
 });
 
@@ -56,7 +58,7 @@ describe("POST /peliculas", () => {
 
   test("deberia devolver un codigo 201 si se crea correctamente una pelicula", async () => {
     const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula);
-    expect(respuesta.status).toEqual(CODIGO_CREACION_EXITOSA);
+    expect(respuesta.status).toEqual(CodigosHTTP.CreacionExitosa);
   });
 
   test("deberia devolver los datos de la pelicula creada", async () => {
@@ -99,7 +101,7 @@ describe("POST /peliculas", () => {
 
     const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosDePeliculaTituloLargo);
 
-    expect(respuesta.status).toEqual(CODIGO_DATOS_INCORRECTOS);
+    expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
     expect(respuesta.body.titulo).toEqual("El titulo no puede superar el limite de caracteres");
   });
   
@@ -111,7 +113,7 @@ describe("POST /peliculas", () => {
 
     const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosPeliculaGeneroLargo);
 
-    expect(respuesta.status).toEqual(CODIGO_DATOS_INCORRECTOS);
+    expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
     expect(respuesta.body.genero).toEqual("El genero no puede superar el limite de caracteres");
   });
 });
@@ -134,7 +136,7 @@ describe("GET /peliculas", () => {
   
   test("deberia devolver un codigo 200", async () => {
     const respuesta = await requestWithSupertest.get(urlPeliculas);
-    expect(respuesta.status).toEqual(CODIGO_OPERACION_EXITOSA);
+    expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
   });
 
   test("deberia recuperar una lista vacia si no se guardo ninguna pelicula", async () => {
@@ -172,7 +174,7 @@ describe("GET /peliculas/{id}", () => {
   test("deberia devolver un codigo 200 y una pelicula si existe una pelicula con ese id", async () => {
     await requestWithSupertest.post("/peliculas").send(datosCreacionPelicula);
     const respuesta = await requestWithSupertest.get(urlPeliculasPorId + id);
-    expect(respuesta.status).toEqual(CODIGO_OPERACION_EXITOSA);
+    expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
     expect(respuesta.body.id).toEqual(id);
     expect(respuesta.body.titulo).toEqual(titulo);
     expect(respuesta.body.genero).toEqual(genero);
@@ -181,7 +183,7 @@ describe("GET /peliculas/{id}", () => {
   test("deberia devolver mas de una pelicula existente", async () => {
     await requestWithSupertest.post("/peliculas").send(datosCreacionPelicula);
     const respuesta = await requestWithSupertest.get(urlPeliculasPorId + id.toString());
-    expect(respuesta.status).toEqual(CODIGO_OPERACION_EXITOSA);
+    expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
     expect(respuesta.body.id).toEqual(id);
     expect(respuesta.body.titulo).toEqual(titulo);
     expect(respuesta.body.genero).toEqual(genero);
@@ -197,7 +199,7 @@ describe("GET /peliculas/{id}", () => {
     
     await requestWithSupertest.post("/peliculas").send(datosCreacionPelicula2);
     const respuesta2 = await requestWithSupertest.get(urlPeliculasPorId + id2.toString());
-    expect(respuesta2.status).toEqual(CODIGO_OPERACION_EXITOSA);
+    expect(respuesta2.status).toEqual(CodigosHTTP.OperacionExitosa);
     expect(respuesta2.body.id).toEqual(id2);
     expect(respuesta2.body.titulo).toEqual(titulo2);
     expect(respuesta2.body.genero).toEqual(genero2);
@@ -216,7 +218,7 @@ describe("GET /peliculas/{id}", () => {
 
       await requestWithSupertest.post(urlPeliculasPorId).send(datosCreacionPeliculaActual);
       const respuesta = await requestWithSupertest.get(urlPeliculasPorId + idActual.toString());
-      expect(respuesta.status).toEqual(CODIGO_OPERACION_EXITOSA);
+      expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
       expect(respuesta.body.id).toEqual(idActual);
       expect(respuesta.body.titulo).toEqual(tituloActual);
       expect(respuesta.body.genero).toEqual(generoActual);
@@ -226,7 +228,7 @@ describe("GET /peliculas/{id}", () => {
   test("deberia devolver un error y un codigo 404 si no existe ninguna pelicula con el id indicado cuando todavia no se cargaron peliculas", async () => {
     const id: number = 1;
     const respuesta = await requestWithSupertest.get(urlPeliculasPorId + id.toString());
-    expect(respuesta.status).toEqual(CODIGO_RECURSO_NO_ENCONTRADO);
+    expect(respuesta.status).toEqual(CodigosHTTP.RecursoNoEncontrado);
     expect(respuesta.body.id).toEqual("no se encontro ninguna pelicula con el id indicado");
   });
 });
