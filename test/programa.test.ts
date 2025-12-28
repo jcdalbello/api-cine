@@ -7,6 +7,7 @@ const requestWithSupertest = supertest(app);
 const CODIGO_OPERACION_EXITOSA: number = 200;
 const CODIGO_CREACION_EXITOSA: number = 201;
 const CODIGO_DATOS_INCORRECTOS: number = 400;
+const CODIGO_RECURSO_NO_ENCONTRADO: number = 404;
 
 afterEach(async () => {
   await pool.query("TRUNCATE TABLE peliculas RESTART IDENTITY CASCADE");
@@ -222,11 +223,12 @@ describe("GET /peliculas/{id}", () => {
     }
   });
 
-  test.skip("deberia devolver un error y un codigo 400 si no existe ninguna pelicula con el id indicado cuando todavia no se cargaron peliculas", async () => {
+  test("deberia devolver un error y un codigo 404 si no existe ninguna pelicula con el id indicado cuando todavia no se cargaron peliculas", async () => {
     const id: number = 1;
     const respuesta = await requestWithSupertest.get(urlPeliculasPorId + id.toString());
 
-    expect(respuesta.status).toEqual(CODIGO_DATOS_INCORRECTOS);
-    expect(respuesta.body).toEqual("no se encontro ninguna pelicula con el id indicado");
+    console.log("TESTS PROGRAMA -> respuesta: ", respuesta.body);
+    expect(respuesta.status).toEqual(CODIGO_RECURSO_NO_ENCONTRADO);
+    expect(respuesta.body.id).toEqual("no se encontro ninguna pelicula con el id indicado");
   });
 });
