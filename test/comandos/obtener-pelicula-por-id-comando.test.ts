@@ -2,6 +2,7 @@ import ObtenerPeliculaPorIdComando from "../../app/comandos/obtener-pelicula-por
 import Pelicula from "../../app/dominio/pelicula";
 import RepositorioPelicula from "../../app/dominio/puerto-repositorio-pelicula";
 import { mock, Mock } from "ts-jest-mocker";
+import PeliculaNoEncontradaError from "../../app/errores/pelicula-no-encontrada-error";
 
 let mockRepositorioPeliculas: Mock<RepositorioPelicula>;
 let obtenerPeliculaPorIdComando: ObtenerPeliculaPorIdComando;
@@ -38,5 +39,11 @@ describe("ObtenerPeliculaPorIdComando", () => {
       expect(peliculaRecuperada.obtenerTitulo()).toEqual(tituloActual);
       expect(peliculaRecuperada.obtenerGenero()).toEqual(generoActual);
     }
+  });
+
+  test("deberia devolver un error PeliculaNoEncontradaError al no encontrar ninguna pelicula con el id indicado cuando no hay peliculas", async () => {
+    const id: number = 1;
+    mockRepositorioPeliculas.recuperar.mockRejectedValue(new PeliculaNoEncontradaError());
+    await expect(obtenerPeliculaPorIdComando.ejecutar(id)).rejects.toThrow(PeliculaNoEncontradaError);
   });
 });

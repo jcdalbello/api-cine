@@ -172,7 +172,6 @@ describe("GET /peliculas/{id}", () => {
     await requestWithSupertest.post("/peliculas").send(datosCreacionPelicula);
     const respuesta = await requestWithSupertest.get(urlPeliculasPorId + id);
     expect(respuesta.status).toEqual(CODIGO_OPERACION_EXITOSA);
-    console.log("GET /peliculas/{id} -> respuesta.body: ", respuesta.body);
     expect(respuesta.body.id).toEqual(id);
     expect(respuesta.body.titulo).toEqual(titulo);
     expect(respuesta.body.genero).toEqual(genero);
@@ -221,5 +220,13 @@ describe("GET /peliculas/{id}", () => {
       expect(respuesta.body.titulo).toEqual(tituloActual);
       expect(respuesta.body.genero).toEqual(generoActual);
     }
+  });
+
+  test.skip("deberia devolver un error y un codigo 400 si no existe ninguna pelicula con el id indicado cuando todavia no se cargaron peliculas", async () => {
+    const id: number = 1;
+    const respuesta = await requestWithSupertest.get(urlPeliculasPorId + id.toString());
+
+    expect(respuesta.status).toEqual(CODIGO_DATOS_INCORRECTOS);
+    expect(respuesta.body).toEqual("no se encontro ninguna pelicula con el id indicado");
   });
 });

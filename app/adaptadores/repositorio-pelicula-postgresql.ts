@@ -3,6 +3,7 @@ import { pool } from "./pool-postgresql";
 import RepositorioPelicula from "../dominio/puerto-repositorio-pelicula";
 import Pelicula from "../dominio/pelicula";
 import PeliculaYaPersistidaError from "../errores/pelicula-ya-pesistida-error";
+import PeliculaNoEncontradaError from "../errores/pelicula-no-encontrada-error";
 
 export default class RepositorioPeliculaPostgreSQL implements RepositorioPelicula {
   private pool: Pool;
@@ -54,6 +55,10 @@ export default class RepositorioPeliculaPostgreSQL implements RepositorioPelicul
     const values: number[] = [id];
 
     const resultado = await this.pool.query(query, values);
+    if (resultado.rowCount === 0) {
+      throw new PeliculaNoEncontradaError;
+    }
+
     const idRecuperado: number = resultado.rows[0].id;
     const tituloRecuperado: string = resultado.rows[0].titulo;
     const generoRecuperado: string = resultado.rows[0].genero;

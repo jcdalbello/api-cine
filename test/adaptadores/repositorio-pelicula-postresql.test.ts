@@ -1,6 +1,7 @@
 import { pool } from "../../app/adaptadores/pool-postgresql";
 import RepositorioPeliculaPostgreSQL from "../../app/adaptadores/repositorio-pelicula-postgresql";
 import Pelicula from "../../app/dominio/pelicula";
+import PeliculaNoEncontradaError from "../../app/errores/pelicula-no-encontrada-error";
 import PeliculaYaPersistidaError from "../../app/errores/pelicula-ya-pesistida-error";
 
 
@@ -80,5 +81,10 @@ describe("RepositorioPeliculaPostgreSQL", () => {
       expect(peliculaRecuperada.obtenerTitulo()).toEqual(titulo);
       expect(peliculaRecuperada.obtenerGenero()).toEqual(genero);
     }
+  });
+
+  test("deberia devolver un error PeliculaNoEncontradaError al no encontrar ninguna pelicula con el id indicado cuando no hay peliculas", async () => {
+    const id: number = 1;
+    await expect(repositorioPeliculaPostgreSQL.recuperar(id)).rejects.toThrow(PeliculaNoEncontradaError);
   });
 });
