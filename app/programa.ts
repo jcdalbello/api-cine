@@ -118,7 +118,7 @@ app.post("/salas", (req: Request, res: Response) => {
 });
 
 app.get("/salas", (req: Request, res: Response) => {
-  res.status(200).json();
+  res.status(200).json([]);
 });
 
 const server = app

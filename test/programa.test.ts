@@ -401,4 +401,9 @@ describe("GET /salas", () => {
     const respuesta = await requestWithSupertest.get(urlSalas);
     expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
   });
+
+  test("deberia devolver una lista vacia si no hay salas", async () => {
+    const respuesta = await requestWithSupertest.get(urlSalas);
+    expect(respuesta.body).toEqual([]);
+  });
 });
