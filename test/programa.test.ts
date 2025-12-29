@@ -44,6 +44,7 @@ describe("POST /peliculas", () => {
   const id: number = 1;
   const titulo: string = "pelicula1";
   const genero: string = "genero1";
+  const cantidadMaximaDeCaracteres: number = 70;
 
   const datosCreacionPelicula: DatosCreacionPelicula = {
     titulo: titulo,
@@ -51,7 +52,7 @@ describe("POST /peliculas", () => {
   }
 
   const datosDePelicula: DatosDePelicula = {
-    id: 1,
+    id: id,
     titulo: titulo,
     genero: genero,
   }
@@ -95,7 +96,6 @@ describe("POST /peliculas", () => {
   });
 
   test("deberia devolver un codigo 400 cuando se usa un titulo demasiado largo", async () => {
-    const cantidadMaximaDeCaracteres: number = 70;
     const tituloDemasiadoLargo: string = "a".repeat(cantidadMaximaDeCaracteres + 1);
     const datosDePeliculaTituloLargo: DatosDePelicula = { ...datosDePelicula, titulo: tituloDemasiadoLargo }
 
@@ -106,7 +106,6 @@ describe("POST /peliculas", () => {
   });
   
   test("deberia devolver un codigo 400 cuando se usa un genero demasiado largo", async () => {
-    const cantidadMaximaDeCaracteres: number = 70;
     const generoDemasiadoLargo: string = "a".repeat(cantidadMaximaDeCaracteres + 1);
 
     const datosPeliculaGeneroLargo: DatosDePelicula = { ...datosDePelicula, genero: generoDemasiadoLargo };
@@ -118,7 +117,7 @@ describe("POST /peliculas", () => {
   });
 
   test("deberia devolver un codigo 400 y el error correspondiente si no se pasa ningun valor como titulo al momento de crear una pelicula", async () => {
-    const datosPeliculaSinTitulo = { genero: "genero1" };
+    const datosPeliculaSinTitulo = { genero: genero };
     const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosPeliculaSinTitulo);
     expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
     expect(respuesta.body.titulo).toEqual("El titulo es un campo obligatorio");
@@ -126,7 +125,7 @@ describe("POST /peliculas", () => {
 
 
   test("deberia devolver un codigo 400 y el error correspondiente si no se pasa ningun valor como genero al momento de crear una pelicula", async () => {
-    const datosPeliculaSinGenero = { titulo: "pelicula1" };
+    const datosPeliculaSinGenero = { titulo: titulo };
     const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosPeliculaSinGenero);
     expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
     expect(respuesta.body.genero).toEqual("El genero es un campo obligatorio");
@@ -151,11 +150,19 @@ describe("GET /peliculas", () => {
   const titulo: string = "pelicula1";
   const genero: string = "genero1";
 
+  const titulo2: string = "pelicula2";
+  const genero2: string = "genero2";
+
   const datosCreacionPelicula: DatosCreacionPelicula = {
     titulo: titulo,
     genero: genero,
   }
-  
+
+  const datosCreacionPelicula2: DatosCreacionPelicula = {
+    titulo: titulo2,
+    genero: genero2,
+  }
+
   test("deberia devolver un codigo 200", async () => {
     const respuesta = await requestWithSupertest.get(urlPeliculas);
     expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
@@ -175,14 +182,7 @@ describe("GET /peliculas", () => {
     expect(respuesta.body[0].genero).toEqual(genero);
   });
 
-  test("deberia recuperar una lista con las peliculas que coincidan con el parametro de titulo", async () => {
-    const titulo2: string = "pelicula2";
-    const genero2: string = "genero2";
-    const datosCreacionPelicula2: DatosCreacionPelicula = {
-      titulo: titulo2,
-      genero: genero2,
-    }
-    
+  test("deberia recuperar una lista con las peliculas que coincidan con el parametro de titulo", async () => {    
     await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula);
     await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula2);
     
@@ -193,14 +193,7 @@ describe("GET /peliculas", () => {
     expect(respuesta.body[0].genero).toEqual(genero);
   });
 
-  test("deberia recuperar una lista con las peliculas que coincidan con el parametro de titulo", async () => {
-    const titulo2: string = "pelicula2";
-    const genero2: string = "genero2";
-    const datosCreacionPelicula2: DatosCreacionPelicula = {
-      titulo: titulo2,
-      genero: genero2,
-    }
-    
+  test("deberia recuperar una lista con las peliculas que coincidan con el parametro de titulo", async () => {    
     await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula);
     await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula2);
     
@@ -212,13 +205,6 @@ describe("GET /peliculas", () => {
   });
 
   test("deberia recuperar una lista con las peliculas que coincidan con el parametro de titulo y genero al mismo tiempo", async () => {
-    const titulo2: string = "pelicula2";
-    const genero2: string = "genero2";
-    const datosCreacionPelicula2: DatosCreacionPelicula = {
-      titulo: titulo2,
-      genero: genero2,
-    }
-
     const titulo3: string = "pelicula3";
     const genero3: string = "genero3";
     const datosCreacionPelicula3: DatosCreacionPelicula = {
@@ -238,13 +224,7 @@ describe("GET /peliculas", () => {
   });
 
   test("deberia recuperar una lista con las peliculas que que tenga un titulo similar al parametro de titulo (fuzzy search)", async () => {
-    const tituloSimilar: string = "pelicula";
-    const titulo2: string = "corto1";
-    const genero2: string = "genero2";
-    const datosCreacionPelicula2: DatosCreacionPelicula = {
-      titulo: titulo2,
-      genero: genero2,
-    }
+    const tituloSimilar: string = "1";
     
     await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula);
     await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula2);
@@ -257,14 +237,8 @@ describe("GET /peliculas", () => {
   });
 
   test("deberia recuperar una lista con las peliculas que que tenga un genero similar al parametro de genero (fuzzy search)", async () => {
-    const generoSimilar: string = "genero";
-    const titulo2: string = "pelicula1";
-    const genero2: string = "tipo1";
-    const datosCreacionPelicula2: DatosCreacionPelicula = {
-      titulo: titulo2,
-      genero: genero2,
-    }
-    
+    const generoSimilar: string = "1";
+
     await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula);
     await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula2);
     
@@ -348,16 +322,16 @@ describe("GET /peliculas/{id}", () => {
   });
 
   test("deberia devolver un error y un codigo 404 si no existe ninguna pelicula con el id indicado cuando todavia no se cargaron peliculas", async () => {
-    const id: number = 999;
-    const respuesta = await requestWithSupertest.get(urlPeliculasPorId + id.toString());
+    const idDesconocido: number = 999;
+    const respuesta = await requestWithSupertest.get(urlPeliculasPorId + idDesconocido.toString());
     expect(respuesta.status).toEqual(CodigosHTTP.RecursoNoEncontrado);
     expect(respuesta.body.id).toEqual("no se encontro ninguna pelicula con el id indicado");
   });
 
   test("deberia devolver un error y un codigo 404 si no existe ninguna pelicula con el id indicado con peliculas cargadas", async () => {
     await requestWithSupertest.post("/peliculas").send(datosCreacionPelicula);
-    const id: number = 999;
-    const respuesta = await requestWithSupertest.get(urlPeliculasPorId + id.toString());
+    const idDesconocido: number = 999;
+    const respuesta = await requestWithSupertest.get(urlPeliculasPorId + idDesconocido.toString());
     expect(respuesta.status).toEqual(CodigosHTTP.RecursoNoEncontrado);
     expect(respuesta.body.id).toEqual("no se encontro ninguna pelicula con el id indicado");
   });
