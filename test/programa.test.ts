@@ -397,6 +397,17 @@ describe("POST /salas", () => {
 describe("GET /salas", () => {
   const urlSalas: string = "/salas";
 
+  interface DatosCreacionDeSala {
+    capacidad: number;
+  }
+
+  const id: number = 1;
+  const capacidad: number = 50;
+
+  const datosCreacionDeSala: DatosCreacionDeSala = {
+    capacidad: capacidad,
+  }
+
   test("deberia devolver un codigo 200", async () => {
     const respuesta = await requestWithSupertest.get(urlSalas);
     expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
@@ -406,4 +417,12 @@ describe("GET /salas", () => {
     const respuesta = await requestWithSupertest.get(urlSalas);
     expect(respuesta.body).toEqual([]);
   });
+
+  test.skip("deberia devolver una la unica sala creada si no se pasan parametros de busqueda", async () => {
+    await requestWithSupertest.post(urlSalas).send(datosCreacionDeSala);
+    const respuesta = await requestWithSupertest.get(urlSalas);
+    expect(respuesta.body.length).toEqual(1);
+    expect(respuesta.body[0].id).toEqual(id);
+    expect(respuesta.body[0].capacidad).toEqual(datosCreacionDeSala.capacidad);
+  }); 
 });
