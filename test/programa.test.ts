@@ -344,6 +344,7 @@ describe("POST /salas", () => {
     capacidad: number;
   }
 
+  const id: number = 1;
   const capacidad: number = 50;
 
   const datosCreacionSala: DatosCreacionDeSala = {
@@ -353,5 +354,11 @@ describe("POST /salas", () => {
   test("deberia devolver un codigo 201 si se crea correctamente una sala", async () => {
     const respuesta = await requestWithSupertest.post(urlSalas).send(datosCreacionSala);
     expect(respuesta.status).toEqual(CodigosHTTP.CreacionExitosa);
+  });
+
+  test("deberia devolver los datos de la sala creada", async () => {
+    const respuesta = await requestWithSupertest.post(urlSalas).send(datosCreacionSala);
+    expect(respuesta.body.id).toEqual(id);
+    expect(respuesta.body.capacidad).toEqual(capacidad);
   });
 });
