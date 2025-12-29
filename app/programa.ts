@@ -85,6 +85,10 @@ app.get("/peliculas/:id", async (req: Request, res: Response) => {
   }
 });
 
+app.post("/salas", (req: Request, res: Response) => {
+  res.status(201).send();
+});
+
 const server = app
   .listen(puerto, (): void => {
     console.log(`Servidor corriendo en http://localhost:${puerto}`);

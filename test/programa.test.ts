@@ -336,3 +336,22 @@ describe("GET /peliculas/{id}", () => {
     expect(respuesta.body.id).toEqual("no se encontro ninguna pelicula con el id indicado");
   });
 });
+
+describe("POST /salas", () => {
+  const urlSalas: string = "/salas";
+
+  interface DatosCreacionDeSala {
+    capacidad: number;
+  }
+
+  const capacidad: number = 50;
+
+  const datosCreacionSala: DatosCreacionDeSala = {
+    capacidad: capacidad,
+  }
+
+  test("deberia devolver un codigo 201 si se crea correctamente una sala", async () => {
+    const respuesta = await requestWithSupertest.post(urlSalas).send(datosCreacionSala);
+    expect(respuesta.status).toEqual(CodigosHTTP.CreacionExitosa);
+  });
+});
