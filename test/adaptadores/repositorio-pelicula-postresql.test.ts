@@ -17,25 +17,28 @@ describe("RepositorioPeliculaPostgreSQL", () => {
   afterAll(async () => {
     await pool.end();
   });
+  
+  const titulo: string = "pelicula1";
+  const genero: string = "genero1";
+  const peliculaParaGuardar: Pelicula = new Pelicula(0, titulo, genero);
 
   test("deberia crear un objeto RepositorioPeliculaPostgreSQL", () => {
     expect(repositorioPeliculaPostgreSQL).toBeInstanceOf(RepositorioPeliculaPostgreSQL);
   });
 
   test("deberia guardar una pelicula en la base de datos y devolver los datos correctos", async () => {
-    const pelicula: Pelicula = new Pelicula(0, "pelicula1", "genero1");
-    const peliculaGuardada: Pelicula = await repositorioPeliculaPostgreSQL.guardar(pelicula);
+    
+    const peliculaGuardada: Pelicula = await repositorioPeliculaPostgreSQL.guardar(peliculaParaGuardar);
     expect(peliculaGuardada.obtenerId()).toEqual(1);
-    expect(peliculaGuardada.obtenerTitulo()).toEqual(pelicula.obtenerTitulo());
-    expect(peliculaGuardada.obtenerGenero()).toEqual(pelicula.obtenerGenero());
+    expect(peliculaGuardada.obtenerTitulo()).toEqual(peliculaParaGuardar.obtenerTitulo());
+    expect(peliculaGuardada.obtenerGenero()).toEqual(peliculaParaGuardar.obtenerGenero());
   });
 
   test("deberia guardar multiples peliculas en la base de datos y devolver los datos correctos", async () => {
-    const pelicula: Pelicula = new Pelicula(0, "pelicula1", "genero1");
-    const peliculaGuardada: Pelicula = await repositorioPeliculaPostgreSQL.guardar(pelicula);
+    const peliculaGuardada: Pelicula = await repositorioPeliculaPostgreSQL.guardar(peliculaParaGuardar);
     expect(peliculaGuardada.obtenerId()).toEqual(1);
-    expect(peliculaGuardada.obtenerTitulo()).toEqual(pelicula.obtenerTitulo());
-    expect(peliculaGuardada.obtenerGenero()).toEqual(pelicula.obtenerGenero());
+    expect(peliculaGuardada.obtenerTitulo()).toEqual(peliculaParaGuardar.obtenerTitulo());
+    expect(peliculaGuardada.obtenerGenero()).toEqual(peliculaParaGuardar.obtenerGenero());
 
     const pelicula2: Pelicula = new Pelicula(0, "pelicula2", "genero2");
     const peliculaGuardada2: Pelicula = await repositorioPeliculaPostgreSQL.guardar(pelicula2);
@@ -45,17 +48,14 @@ describe("RepositorioPeliculaPostgreSQL", () => {
   });
 
   test("deberia devolver un error si la pelicula que se quiere guardar tiene un id diferente de 0", async () => {
-    const pelicula: Pelicula = new Pelicula(1, "pelicula1", "genero1");
+    const pelicula: Pelicula = new Pelicula(1, titulo, genero);
     await expect(repositorioPeliculaPostgreSQL.guardar(pelicula)).rejects.toThrow(PeliculaYaPersistidaError);
   });
 
   test("deberia devolver una pelicula pasando su id con una sola pelicula guardada", async () => {
     const id: number = 1;
-    const titulo: string = "pelicula1";
-    const genero: string = "genero1";
 
-    const pelicula: Pelicula = new Pelicula(0, titulo, genero);
-    await repositorioPeliculaPostgreSQL.guardar(pelicula);
+    await repositorioPeliculaPostgreSQL.guardar(peliculaParaGuardar);
     const peliculaRecuperada: Pelicula = await repositorioPeliculaPostgreSQL.recuperar(id);
     expect(peliculaRecuperada.obtenerId()).toEqual(id);
     expect(peliculaRecuperada.obtenerTitulo()).toEqual(titulo);
@@ -95,13 +95,11 @@ describe("RepositorioPeliculaPostgreSQL", () => {
     });
 
     test("deberia devolver una lista con la unica pelicula guardada si no se pasa ningun filtro", async () => {
-      const titulo: string = "pelicula1";
-      const pelicula: Pelicula = new Pelicula(0, titulo, "genero1");
-      await repositorioPeliculaPostgreSQL.guardar(pelicula);
+      await repositorioPeliculaPostgreSQL.guardar(peliculaParaGuardar);
       const peliculas: Pelicula[] = await repositorioPeliculaPostgreSQL.listarPeliculas();
       expect(peliculas.length).toEqual(1);
-      expect(peliculas[0]!.obtenerTitulo()).toEqual(pelicula.obtenerTitulo());
-      expect(peliculas[0]!.obtenerGenero()).toEqual(pelicula.obtenerGenero());
+      expect(peliculas[0]!.obtenerTitulo()).toEqual(peliculaParaGuardar.obtenerTitulo());
+      expect(peliculas[0]!.obtenerGenero()).toEqual(peliculaParaGuardar.obtenerGenero());
     });
 
     test("deberia devolver una lista con todas las peliculas guardadas si no se pasa ningun filtro", async () => {
@@ -117,55 +115,49 @@ describe("RepositorioPeliculaPostgreSQL", () => {
     });
 
     test("deberia devolver las peliculas que coincidan con el titulo", async () => {
-      const titulo: string = "pelicula1";
-      const pelicula: Pelicula = new Pelicula(0, titulo, "genero1");
-      await repositorioPeliculaPostgreSQL.guardar(pelicula);
+      await repositorioPeliculaPostgreSQL.guardar(peliculaParaGuardar);
       const pelicula2: Pelicula = new Pelicula(0, "pelicula2", "genero2");
       await repositorioPeliculaPostgreSQL.guardar(pelicula2);
 
       const peliculas: Pelicula[] = await repositorioPeliculaPostgreSQL.listarPeliculas(titulo);
       expect(peliculas.length).toEqual(1);
-      expect(peliculas[0]!.obtenerTitulo()).toEqual(pelicula.obtenerTitulo());
-      expect(peliculas[0]!.obtenerGenero()).toEqual(pelicula.obtenerGenero());
+      expect(peliculas[0]!.obtenerTitulo()).toEqual(peliculaParaGuardar.obtenerTitulo());
+      expect(peliculas[0]!.obtenerGenero()).toEqual(peliculaParaGuardar.obtenerGenero());
     });
 
     test("deberia devolver las peliculas que coincidan con el genero", async () => {
-      const genero: string = "genero1";
-      const pelicula: Pelicula = new Pelicula(0, "pelicula1", genero);
-      await repositorioPeliculaPostgreSQL.guardar(pelicula);
+      await repositorioPeliculaPostgreSQL.guardar(peliculaParaGuardar);
       const pelicula2: Pelicula = new Pelicula(0, "pelicula2", "genero2");
       await repositorioPeliculaPostgreSQL.guardar(pelicula2);
 
       const peliculas: Pelicula[] = await repositorioPeliculaPostgreSQL.listarPeliculas(undefined, genero);
       expect(peliculas.length).toEqual(1);
-      expect(peliculas[0]!.obtenerTitulo()).toEqual(pelicula.obtenerTitulo());
-      expect(peliculas[0]!.obtenerGenero()).toEqual(pelicula.obtenerGenero());
+      expect(peliculas[0]!.obtenerTitulo()).toEqual(peliculaParaGuardar.obtenerTitulo());
+      expect(peliculas[0]!.obtenerGenero()).toEqual(peliculaParaGuardar.obtenerGenero());
     });
 
     test("deberia devolver las peliculas que tengan un titulo similar al parametro de titulo", async () => {
       const tituloSimilar: string = "pelicula";
-      const pelicula: Pelicula = new Pelicula(0, "pelicula1", "genero1");
-      await repositorioPeliculaPostgreSQL.guardar(pelicula);
+      await repositorioPeliculaPostgreSQL.guardar(peliculaParaGuardar);
       const pelicula2: Pelicula = new Pelicula(0, "corto1", "genero2");
       await repositorioPeliculaPostgreSQL.guardar(pelicula2);
 
       const peliculas: Pelicula[] = await repositorioPeliculaPostgreSQL.listarPeliculas(tituloSimilar);
       expect(peliculas.length).toEqual(1);
-      expect(peliculas[0]!.obtenerTitulo()).toEqual(pelicula.obtenerTitulo());
-      expect(peliculas[0]!.obtenerGenero()).toEqual(pelicula.obtenerGenero());
+      expect(peliculas[0]!.obtenerTitulo()).toEqual(peliculaParaGuardar.obtenerTitulo());
+      expect(peliculas[0]!.obtenerGenero()).toEqual(peliculaParaGuardar.obtenerGenero());
     });
 
     test("deberia devolver las peliculas que tengan un genero similar al parametro de genero", async () => {
       const generoSimilar: string = "genero";
-      const pelicula: Pelicula = new Pelicula(0, "pelicula1", "genero1");
-      await repositorioPeliculaPostgreSQL.guardar(pelicula);
+      await repositorioPeliculaPostgreSQL.guardar(peliculaParaGuardar);
       const pelicula2: Pelicula = new Pelicula(0, "pelicula2", "tipo2");
       await repositorioPeliculaPostgreSQL.guardar(pelicula2);
 
       const peliculas: Pelicula[] = await repositorioPeliculaPostgreSQL.listarPeliculas(undefined, generoSimilar);
       expect(peliculas.length).toEqual(1);
-      expect(peliculas[0]!.obtenerTitulo()).toEqual(pelicula.obtenerTitulo());
-      expect(peliculas[0]!.obtenerGenero()).toEqual(pelicula.obtenerGenero());
+      expect(peliculas[0]!.obtenerTitulo()).toEqual(peliculaParaGuardar.obtenerTitulo());
+      expect(peliculas[0]!.obtenerGenero()).toEqual(peliculaParaGuardar.obtenerGenero());
     });
   });
 });
