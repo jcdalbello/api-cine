@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import AgregarPeliculaComando from './comandos/agregar-pelicula-comando';
 import RepositorioPelicula from './dominio/puerto-repositorio-pelicula';
 import RepositorioPeliculaPostgreSQL from './adaptadores/repositorio-pelicula-postgresql';
-import CamposIncorrectosDePeliculaError from './errores/campo-incorrecto-pelicula-error';
+import CampoIncorrectoPeliculaError from './errores/campo-incorrecto-pelicula-error';
 import Pelicula from './dominio/pelicula';
 import ObtenerPeliculasComando from './comandos/obtener-peliculas-comando';
 import ObtenerPeliculaPorIdComando from './comandos/obtener-pelicula-por-id-comando';
@@ -10,6 +10,7 @@ import PeliculaNoEncontradaError from './errores/pelicula-no-encontrada-error';
 import MensajesDeErrorDePelicula from './errores/i-mensajes-de-error-de-pelicula';
 import CampoIncorrectoSalaError from './errores/campo-incorrecto-sala-error';
 import Sala from './dominio/sala';
+import MensajesDeErrorDeSala from './errores/i-mensajes-de-error-de-sala';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -46,7 +47,7 @@ function validarDatosVaciosDePelicula(titulo: string | undefined, genero: string
   }
 
   if (Object.keys(mensajes).length > 0) {
-    throw new CamposIncorrectosDePeliculaError(mensajes);
+    throw new CampoIncorrectoPeliculaError(mensajes);
   }
 }
 
@@ -63,7 +64,7 @@ app.post("/peliculas", async (req: Request, res: Response) => {
       genero: pelicula.obtenerGenero(),
     });
   } catch (error) {
-    if (error instanceof CamposIncorrectosDePeliculaError) {
+    if (error instanceof CampoIncorrectoPeliculaError) {
       const mensajesDeError: MensajesDeErrorDePelicula = {
         id: error.id!,
         titulo: error.titulo!,
@@ -87,9 +88,21 @@ app.get("/peliculas/:id", async (req: Request, res: Response) => {
   }
 });
 
+function validadDatosVaciosDePelicula(capacidad: number | undefined): void {
+  const mensajes: MensajesDeErrorDeSala = {};
+  if (capacidad === undefined) {
+    mensajes.capacidad = "La capacidad es un campo obligatorio";
+  }
+
+  if (Object.keys(mensajes).length > 0) {
+    throw new CampoIncorrectoSalaError(mensajes);
+  }
+}
+
 app.post("/salas", (req: Request, res: Response) => {
   const capacidad = req.body.capacidad as number;
   try {
+    validadDatosVaciosDePelicula(capacidad);
     if (capacidad === 50) {
       const sala: Sala = new Sala(1, capacidad);
       res.status(201).json(sala);

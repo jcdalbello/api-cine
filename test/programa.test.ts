@@ -123,7 +123,6 @@ describe("POST /peliculas", () => {
     expect(respuesta.body.titulo).toEqual("El titulo es un campo obligatorio");
   });
 
-
   test("deberia devolver un codigo 400 y el error correspondiente si no se pasa ningun valor como genero al momento de crear una pelicula", async () => {
     const datosPeliculaSinGenero = { titulo: titulo };
     const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosPeliculaSinGenero);
@@ -385,5 +384,12 @@ describe("POST /salas", () => {
     const respuesta = await requestWithSupertest.post(urlSalas).send(datosCreacionDeSalaCapacidadInvalida);
     expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
     expect(respuesta.body.capacidad).toEqual("La capacidad de la sala debe ser mayor a 0");
+  });
+
+  test("deberia devolver un codigo 400 y el error correspondiente si no se pasa ningun valor como capacidad al momento de crear una sala", async () => {
+    const datosCreacionDeSalaSinCapacidad = { };
+    const respuesta = await requestWithSupertest.post(urlSalas).send(datosCreacionDeSalaSinCapacidad);
+    expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
+    expect(respuesta.body.capacidad).toEqual("La capacidad es un campo obligatorio");
   });
 });
