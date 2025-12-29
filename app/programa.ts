@@ -86,10 +86,17 @@ app.get("/peliculas/:id", async (req: Request, res: Response) => {
 });
 
 app.post("/salas", (req: Request, res: Response) => {
-  res.status(201).send({
-    id: 1,
-    capacidad: 50,
-  });
+  if (req.body.capacidad === 50) {
+    res.status(201).send({
+      id: 1,
+      capacidad: 50,
+    });
+  } else {
+    res.status(201).send({
+      id: 2,
+      capacidad: 100,
+    });
+  }
 });
 
 const server = app

@@ -347,18 +347,33 @@ describe("POST /salas", () => {
   const id: number = 1;
   const capacidad: number = 50;
 
-  const datosCreacionSala: DatosCreacionDeSala = {
+  const datosCreacionDeSala: DatosCreacionDeSala = {
     capacidad: capacidad,
   }
 
   test("deberia devolver un codigo 201 si se crea correctamente una sala", async () => {
-    const respuesta = await requestWithSupertest.post(urlSalas).send(datosCreacionSala);
+    const respuesta = await requestWithSupertest.post(urlSalas).send(datosCreacionDeSala);
     expect(respuesta.status).toEqual(CodigosHTTP.CreacionExitosa);
   });
 
   test("deberia devolver los datos de la sala creada", async () => {
-    const respuesta = await requestWithSupertest.post(urlSalas).send(datosCreacionSala);
+    const respuesta = await requestWithSupertest.post(urlSalas).send(datosCreacionDeSala);
     expect(respuesta.body.id).toEqual(id);
     expect(respuesta.body.capacidad).toEqual(capacidad);
+  });
+
+  test("deberia devolver los datos de cada sala al crear mas de una", async () => {
+    const respuesta = await requestWithSupertest.post(urlSalas).send(datosCreacionDeSala);
+    expect(respuesta.body.id).toEqual(id);
+    expect(respuesta.body.capacidad).toEqual(capacidad);
+
+    const id2: number = 2;
+    const capacidad2: number = 100;
+    const datosCreacionDeSala2: DatosCreacionDeSala = {
+      capacidad: capacidad2,
+    };
+    const respuesta2 = await requestWithSupertest.post(urlSalas).send(datosCreacionDeSala2);
+    expect(respuesta2.body.id).toEqual(id2);
+    expect(respuesta2.body.capacidad).toEqual(capacidad2);
   });
 });
