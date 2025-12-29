@@ -10,6 +10,11 @@ describe("ObtenerPeliculasComando", () => {
   mockRepositorioPelicula = mock<RepositorioPelicula>();
   obtenerPeliculasComando = new ObtenerPeliculasComando(mockRepositorioPelicula);
 
+  const id: number = 1;
+  const titulo: string = "pelicula1";
+  const genero: string = "genero1";
+  const mockPelicula: Pelicula = new Pelicula(id, titulo, genero);
+
   test("deberia crear un objeto ObtenerPeliculasComando", () => {
     expect(obtenerPeliculasComando).toBeInstanceOf(ObtenerPeliculasComando);
   });
@@ -21,46 +26,41 @@ describe("ObtenerPeliculasComando", () => {
   });
 
   test("deberia devolver una lista con una sola pelicula cuando solo hay una pelicula guardada", async () => {
-    const pelicula: Pelicula = new Pelicula(1, "pelicula1", "genero1");
-    mockRepositorioPelicula.listarPeliculas.mockResolvedValue([pelicula]);
+    mockRepositorioPelicula.listarPeliculas.mockResolvedValue([mockPelicula]);
     const peliculas: Pelicula[] = await obtenerPeliculasComando.ejecutar();
     expect(peliculas.length).toEqual(1);
-    expect(peliculas).toContain(pelicula);
+    expect(peliculas).toContain(mockPelicula);
   });
 
   test("deberia devolver una lista con las peliculas que coinciden con el titulo", async () => {
-    const titulo: string = "pelicula1";
-    const pelicula: Pelicula = new Pelicula(1, titulo, "genero1");
-    mockRepositorioPelicula.listarPeliculas.mockResolvedValue([pelicula]);
+    mockRepositorioPelicula.listarPeliculas.mockResolvedValue([mockPelicula]);
     const peliculas: Pelicula[] = await obtenerPeliculasComando.ejecutar(titulo);
     expect(peliculas.length).toEqual(1);
-    expect(peliculas).toContain(pelicula);
+    expect(peliculas).toContain(mockPelicula);
   });
 
   test("deberia devolver una lista con las peliculas que coinciden con el genero", async () => {
-    const genero: string = "genero1";
-    const pelicula: Pelicula = new Pelicula(1, "pelicula", genero);
-    mockRepositorioPelicula.listarPeliculas.mockResolvedValue([pelicula]);
+    mockRepositorioPelicula.listarPeliculas.mockResolvedValue([mockPelicula]);
     const peliculas: Pelicula[] = await obtenerPeliculasComando.ejecutar(genero);
     expect(peliculas.length).toEqual(1);
-    expect(peliculas).toContain(pelicula);
+    expect(peliculas).toContain(mockPelicula);
   });
 
   test("deberia devolver una lista con las peliculas que tengan un titulo similar al indicado", async () => {
-    const titulo: string = "pelicula";
-    const pelicula: Pelicula = new Pelicula(1, titulo, "genero1");
-    mockRepositorioPelicula.listarPeliculas.mockResolvedValue([pelicula]);
-    const peliculas: Pelicula[] = await obtenerPeliculasComando.ejecutar(titulo);
+    const tituloSimilar: string = "pelicula";
+    const mockPelicula: Pelicula = new Pelicula(1, tituloSimilar, genero);
+    mockRepositorioPelicula.listarPeliculas.mockResolvedValue([mockPelicula]);
+    const peliculas: Pelicula[] = await obtenerPeliculasComando.ejecutar(tituloSimilar);
     expect(peliculas.length).toEqual(1);
-    expect(peliculas).toContain(pelicula);
+    expect(peliculas).toContain(mockPelicula);
   });
 
   test("deberia devolver una lista con las peliculas que tengan un titulo similar al indicado", async () => {
-    const genero: string = "genero";
-    const pelicula: Pelicula = new Pelicula(1, "pelicula1", genero);
-    mockRepositorioPelicula.listarPeliculas.mockResolvedValue([pelicula]);
-    const peliculas: Pelicula[] = await obtenerPeliculasComando.ejecutar(genero);
+    const generoSimilar: string = "genero";
+    const mockPelicula: Pelicula = new Pelicula(1, titulo, generoSimilar);
+    mockRepositorioPelicula.listarPeliculas.mockResolvedValue([mockPelicula]);
+    const peliculas: Pelicula[] = await obtenerPeliculasComando.ejecutar(generoSimilar);
     expect(peliculas.length).toEqual(1);
-    expect(peliculas).toContain(pelicula);
+    expect(peliculas).toContain(mockPelicula);
   });
 });
