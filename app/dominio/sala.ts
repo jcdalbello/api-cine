@@ -6,4 +6,12 @@ export default class Sala {
     this.id = id;
     this.capacidad = capacidad;
   }
+
+  public obtenerId(): number {
+    return this.id;
+  }
+
+  public obtenerCapacidad(): number {
+    return this.capacidad;
+  }
 }

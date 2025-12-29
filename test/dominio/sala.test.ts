@@ -8,4 +8,9 @@ describe("Sala", () => {
   test("deberia crear un objeto Sala", () => {
     expect(sala).toBeInstanceOf(Sala);
   });
+
+  test("deberia devolver sus datos correctamente", () => {
+    expect(sala.obtenerId()).toEqual(id);
+    expect(sala.obtenerCapacidad()).toEqual(capacidad);
+  });
 });
