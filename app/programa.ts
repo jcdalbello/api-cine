@@ -8,6 +8,8 @@ import ObtenerPeliculasComando from './comandos/obtener-peliculas-comando';
 import ObtenerPeliculaPorIdComando from './comandos/obtener-pelicula-por-id-comando';
 import PeliculaNoEncontradaError from './errores/pelicula-no-encontrada-error';
 import MensajesDeErrorDePelicula from './errores/i-mensajes-de-error-de-pelicula';
+import CampoIncorrectoSalaError from './errores/campo-incorrecto-sala-error';
+import Sala from './dominio/sala';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -86,16 +88,19 @@ app.get("/peliculas/:id", async (req: Request, res: Response) => {
 });
 
 app.post("/salas", (req: Request, res: Response) => {
-  if (req.body.capacidad === 50) {
-    res.status(201).send({
-      id: 1,
-      capacidad: 50,
-    });
-  } else {
-    res.status(201).send({
-      id: 2,
-      capacidad: 100,
-    });
+  const capacidad = req.body.capacidad as number;
+  try {
+    if (capacidad === 50) {
+      const sala: Sala = new Sala(1, capacidad);
+      res.status(201).json(sala);
+    } else {
+      const sala: Sala = new Sala(2, capacidad);
+      res.status(201).json(sala);
+    }
+  } catch (error) {
+    if (error instanceof CampoIncorrectoSalaError) {
+      res.status(400).json(error);
+    }
   }
 });
 

@@ -376,4 +376,14 @@ describe("POST /salas", () => {
     expect(respuesta2.body.id).toEqual(id2);
     expect(respuesta2.body.capacidad).toEqual(capacidad2);
   });
+
+  test.skip("deberia devolver un error 400 si la capacidad es igual o menor que 0", async () => {
+    const datosCreacionDeSalaCapacidadInvalida: DatosCreacionDeSala = {
+      capacidad: 0,
+    };
+
+    const respuesta = await requestWithSupertest.post(urlSalas).send(datosCreacionDeSalaCapacidadInvalida);
+    expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
+    expect(respuesta.body.capacidad).toEqual("La capacidad de la sala debe ser mayor a 0");
+  });
 });
