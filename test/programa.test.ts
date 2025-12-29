@@ -393,3 +393,12 @@ describe("POST /salas", () => {
     expect(respuesta.body.capacidad).toEqual("La capacidad es un campo obligatorio");
   });
 });
+
+describe("GET /salas", () => {
+  const urlSalas: string = "/salas";
+
+  test("deberia devolver un codigo 200", async () => {
+    const respuesta = await requestWithSupertest.get(urlSalas);
+    expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
+  });
+});
