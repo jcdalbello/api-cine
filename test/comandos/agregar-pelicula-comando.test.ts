@@ -14,13 +14,14 @@ describe("AgregarPeliculaComando", () => {
   const id: number = 1;
   const titulo: string = "pelicula1";
   const genero: string = "genero1";
+  const mockPelicula: Pelicula = new Pelicula(id, titulo, genero);
 
   test("deberia crear un objeto AgregarPeliculaComando", () => {
     expect(agregarPeliculaComando).toBeInstanceOf(AgregarPeliculaComando);
   });
 
   test("deberia crear una pelicula con los datos correctos", async () => {
-    mockRepositorioPelicula.guardar.mockResolvedValue(new Pelicula(id, titulo, genero));
+    mockRepositorioPelicula.guardar.mockResolvedValue(mockPelicula);
     const pelicula: Pelicula = await agregarPeliculaComando.ejecutar(titulo, genero);
     expect(pelicula.obtenerId()).toEqual(id);
     expect(pelicula.obtenerTitulo()).toEqual(titulo);
@@ -28,7 +29,7 @@ describe("AgregarPeliculaComando", () => {
   });
 
   test("deberia crear dos peliculas con los datos correctos", async () => {
-    mockRepositorioPelicula.guardar.mockResolvedValue(new Pelicula(id, titulo, genero));
+    mockRepositorioPelicula.guardar.mockResolvedValue(mockPelicula);
     const pelicula: Pelicula = await agregarPeliculaComando.ejecutar(titulo, genero);
     expect(pelicula.obtenerId()).toEqual(id);
     expect(pelicula.obtenerTitulo()).toEqual(titulo);
@@ -51,8 +52,8 @@ describe("AgregarPeliculaComando", () => {
   });
   
   test("deberia devolver un error al pasar un genero demasiado largo", async () => {
-    const longitudMaximaTitulo: number = 70;
-    const generoDemasiadoLargo: string = "a".repeat(longitudMaximaTitulo + 1);
+    const longitudMaximaGenero: number = 70;
+    const generoDemasiadoLargo: string = "a".repeat(longitudMaximaGenero + 1);
     await expect(agregarPeliculaComando.ejecutar(titulo, generoDemasiadoLargo)).rejects.toThrow(CampoIncorrectoPeliculaError);
   });
 });
