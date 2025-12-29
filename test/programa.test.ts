@@ -377,7 +377,7 @@ describe("POST /salas", () => {
     expect(respuesta2.body.capacidad).toEqual(capacidad2);
   });
 
-  test.skip("deberia devolver un error 400 si la capacidad es igual o menor que 0", async () => {
+  test("deberia devolver un error 400 si la capacidad es igual o menor que 0", async () => {
     const datosCreacionDeSalaCapacidadInvalida: DatosCreacionDeSala = {
       capacidad: 0,
     };
