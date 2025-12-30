@@ -1,7 +1,7 @@
 import RepositorioSala from "../dominio/puerto-repositorio-sala";
 import Sala from "../dominio/sala";
 
-export default class ObtenerSalaPorIdComando {
+export default class BuscarSalaPorIdComando {
   constructor(
     private readonly repositorioSala: RepositorioSala
   ) {}

@@ -7,7 +7,7 @@ import PeliculaNoEncontradaError from "../../app/errores/pelicula-no-encontrada-
 let mockRepositorioPeliculas: Mock<RepositorioPelicula>;
 let obtenerPeliculaPorIdComando: BuscarPeliculaPorIdComando;
 
-describe("ObtenerPeliculaPorIdComando", () => {
+describe("BuscarPeliculaPorIdComando", () => {
   mockRepositorioPeliculas = mock<RepositorioPelicula>();
   obtenerPeliculaPorIdComando = new BuscarPeliculaPorIdComando(mockRepositorioPeliculas);
 

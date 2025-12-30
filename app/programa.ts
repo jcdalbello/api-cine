@@ -15,7 +15,7 @@ import MensajesDeErrorDeSala from './errores/i-mensajes-de-error-de-sala';
 import RepositorioSala from './dominio/puerto-repositorio-sala';
 import AgregarSalaComando from './comandos/agregar-sala-comando';
 import BuscarSalasComando from './comandos/buscar-salas-comando';
-import ObtenerSalaPorIdComando from './comandos/obtener-sala-por-id-comando';
+import BuscarSalaPorIdComando from './comandos/buscar-sala-por-id-comando';
 import SalaNoEncontradaError from './errores/sala-no-encontrada-error';
 
 const app: Express = express();
@@ -157,7 +157,7 @@ function validarDatosDeBusquedaDeSalaPorId(idComoString: string | undefined): vo
 app.get("/salas/:id", async (req: Request, res: Response) => {
   try {
     validarDatosDeBusquedaDeSalaPorId(req.params.id);
-    const obtenerSalaPorIdComando: ObtenerSalaPorIdComando = new ObtenerSalaPorIdComando(repositorioSala);
+    const obtenerSalaPorIdComando: BuscarSalaPorIdComando = new BuscarSalaPorIdComando(repositorioSala);
     const sala: Sala = await obtenerSalaPorIdComando.ejecutar(parseInt(req.params.id!));
     res.status(200).json(sala);
   } catch (error) {

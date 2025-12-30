@@ -1,14 +1,14 @@
 import { mock, Mock } from "ts-jest-mocker";
-import ObtenerSalaPorIdComando from "../../app/comandos/obtener-sala-por-id-comando";
+import BuscarSalaPorIdComando from "../../app/comandos/buscar-sala-por-id-comando";
 import RepositorioSala from "../../app/dominio/puerto-repositorio-sala";
 import Sala from "../../app/dominio/sala";
 import SalaNoEncontradaError from "../../app/errores/sala-no-encontrada-error";
 
-describe("ObtenerSalaPorIdComando", () => {
+describe("BuscarSalaPorIdComando", () => {
   const mockRepositorioSala: Mock<RepositorioSala> = mock<RepositorioSala>();
-  const obtenerSalaPorIdComando: ObtenerSalaPorIdComando = new ObtenerSalaPorIdComando(mockRepositorioSala);
+  const obtenerSalaPorIdComando: BuscarSalaPorIdComando = new BuscarSalaPorIdComando(mockRepositorioSala);
   test("deberia crear un objeto ObtenerSalaPorIdComando", () => {
-    expect(obtenerSalaPorIdComando).toBeInstanceOf(ObtenerSalaPorIdComando);
+    expect(obtenerSalaPorIdComando).toBeInstanceOf(BuscarSalaPorIdComando);
   });
 
   test("deberia devolver la sala con el id pasado por parametro", async () => {
