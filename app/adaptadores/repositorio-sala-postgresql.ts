@@ -55,8 +55,21 @@ export default class RepositorioSalaPostgreSQL implements RepositorioSala {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/require-await
   public async recuperar(id: number): Promise<Sala> {
-    return new Sala(id, 50);
+    const query: string = `
+      SELECT * FROM salas
+      WHERE id = $1;    
+    `;
+    const values: number[] = [id];
+
+    const resultado = await this.pool.query(query, values);
+
+    const idRecuperado: number = resultado.rows[0].id;
+    const capacidadComoString: string = resultado.rows[0].capacidad;
+    const capacidadRecuperada: number = parseInt(capacidadComoString);
+    return new Sala(
+      idRecuperado,
+      capacidadRecuperada,
+    );
   }
 }

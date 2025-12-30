@@ -93,5 +93,22 @@ describe("RepositorioSalaPostgreSQL", () => {
       expect(sala.obtenerId()).toEqual(idSala);
       expect(sala.obtenerCapacidad()).toEqual(50);
     });
+
+    test("deberia recuperar multiples salas por sus ids correspondientes", async () => {
+      const cantidadDeSalas: number = 10;
+      for (let i = 1; i <= cantidadDeSalas; i++) {
+        const capacidad: number = i * 10;
+        const salaParaGuardar: Sala = new Sala(0, capacidad);
+        await repositorioSalaPostgreSQL.guardar(salaParaGuardar);
+      }
+
+      for (let i = 1; i <= cantidadDeSalas; i++) {
+        const idActual: number = i;
+        const capacidadActual: number = i * 10;
+        const salaRecuperada: Sala = await repositorioSalaPostgreSQL.recuperar(idActual);
+        expect(salaRecuperada.obtenerId()).toEqual(idActual);
+        expect(salaRecuperada.obtenerCapacidad()).toEqual(capacidadActual);
+      }
+    });
   });
 });
