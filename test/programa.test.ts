@@ -475,7 +475,7 @@ describe("GET /salas/:id", () => {
       expect(respuesta.body.capacidad).toEqual(capacidad);
     });
 
-    test.skip("deberia devolver la sala correspondiente al id pasado por parametro en cada iteracion", async () => {
+    test("deberia devolver la sala correspondiente al id pasado por parametro en cada iteracion", async () => {
       const cantidadDeSalasAGenerar: number = 10;
       for (let i = 1; i <= cantidadDeSalasAGenerar; i++) {
         const idActual: number = i;

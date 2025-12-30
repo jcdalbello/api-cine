@@ -165,3 +165,9 @@ GET {{host}}/salas?capacidad=-1
 Content-Type: application/json
 
 {}
+
+### Recuperar salas por id (asumiendo que hay una sala creada con el id pasado) (200)
+GET {{host}}/salas/1
+Content-Type: application/json
+
+{}
