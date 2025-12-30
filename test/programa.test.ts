@@ -493,4 +493,11 @@ describe("GET /salas/:id", () => {
         expect(respuesta.body.capacidad).toEqual(capacidadActual);
       }
     });
+
+    test.skip("deberia devolver un error 404 si no existe ninguna sala con el id indicado", async () => {
+      const idDesconocido: number = 999;
+      const respuesta = await requestWithSupertest.get(urlSalaPorId + idDesconocido.toString());
+      expect(respuesta.status).toEqual(CodigosHTTP.RecursoNoEncontrado);
+      expect(respuesta.body.id).toEqual("No se encontro ninguna sala con el id indicado");
+    });
   });

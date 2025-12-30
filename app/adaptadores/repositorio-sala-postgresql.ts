@@ -3,6 +3,7 @@ import { pool } from "./pool-postgresql";
 import RepositorioSala from "../dominio/puerto-repositorio-sala";
 import Sala from "../dominio/sala";
 import SalaYaPersistidaError from "../errores/sala-ya-persistida-error";
+import SalaNoEncontradaError from "../errores/sala-no-encontrada-error";
 
 export default class RepositorioSalaPostgreSQL implements RepositorioSala {
   private pool: Pool;
@@ -63,6 +64,10 @@ export default class RepositorioSalaPostgreSQL implements RepositorioSala {
     const values: number[] = [id];
 
     const resultado = await this.pool.query(query, values);
+
+    if (resultado.rowCount === 0) {
+      throw new SalaNoEncontradaError();
+    }
 
     const idRecuperado: number = resultado.rows[0].id;
     const capacidadComoString: string = resultado.rows[0].capacidad;

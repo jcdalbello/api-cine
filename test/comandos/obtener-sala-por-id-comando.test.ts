@@ -2,6 +2,7 @@ import { mock, Mock } from "ts-jest-mocker";
 import ObtenerSalaPorIdComando from "../../app/comandos/obtener-sala-por-id-comando";
 import RepositorioSala from "../../app/dominio/puerto-repositorio-sala";
 import Sala from "../../app/dominio/sala";
+import SalaNoEncontradaError from "../../app/errores/sala-no-encontrada-error";
 
 describe("ObtenerSalaPorIdComando", () => {
   const mockRepositorioSala: Mock<RepositorioSala> = mock<RepositorioSala>();
@@ -36,5 +37,11 @@ describe("ObtenerSalaPorIdComando", () => {
       expect(salaRecuperada.obtenerId()).toEqual(salaActual.obtenerId());
       expect(salaRecuperada.obtenerCapacidad()).toEqual(salaActual.obtenerCapacidad());
     }
+  });
+
+  test("deberia devolver la un error SalaNoEncontradaError si no se encuentra ninguna sala con el id pasado por parametro", async () => {
+    const idInexistente: number = 999;
+    mockRepositorioSala.recuperar.mockRejectedValue(new SalaNoEncontradaError());
+    await expect(obtenerSalaPorIdComando.ejecutar(idInexistente)).rejects.toThrow(SalaNoEncontradaError);
   });
 });

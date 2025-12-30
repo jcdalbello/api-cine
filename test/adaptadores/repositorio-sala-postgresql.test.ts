@@ -1,6 +1,7 @@
 import { pool } from "../../app/adaptadores/pool-postgresql";
 import RepositorioSalaPostgreSQL from "../../app/adaptadores/repositorio-sala-postgresql";
 import Sala from "../../app/dominio/sala";
+import SalaNoEncontradaError from "../../app/errores/sala-no-encontrada-error";
 import SalaYaPersistidaError from "../../app/errores/sala-ya-persistida-error";
 
 describe("RepositorioSalaPostgreSQL", () => {
@@ -109,6 +110,11 @@ describe("RepositorioSalaPostgreSQL", () => {
         expect(salaRecuperada.obtenerId()).toEqual(idActual);
         expect(salaRecuperada.obtenerCapacidad()).toEqual(capacidadActual);
       }
+    });
+
+    test("deberia devolver un error SalaNoEncontradaError si no se encuentra ninguna sala con el id pasado por parametro", async () => {
+      const idInexistente: number = 999;
+      await expect(repositorioSalaPostgreSQL.recuperar(idInexistente)).rejects.toThrow(SalaNoEncontradaError);
     });
   });
 });
