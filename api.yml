@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
-  title: API de Películas
-  description: Documentación generada basada en tests de Supertest
-  version: 1.0.0
+  title: API de Peliculas y Salas
+  description: Documentacion generada basada en tests de Supertest
+  version: 1.1.0
 servers:
   - url: http://localhost:3000
     description: Servidor Local
@@ -11,29 +11,29 @@ paths:
   /:
     get:
       summary: Health check
-      description: Verifica que el servidor esté respondiendo.
+      description: Verifica que el servidor este respondiendo.
       responses:
         '200':
-          description: Operación exitosa.
+          description: Operacion exitosa.
 
   /peliculas:
     get:
-      summary: Obtener lista de películas
-      description: Devuelve un array con todas las películas. Permite filtrar por título y género (búsqueda parcial/fuzzy).
+      summary: Obtener lista de peliculas
+      description: Devuelve un array con todas las peliculas. Permite filtrar por titulo y genero (busqueda parcial/fuzzy).
       parameters:
         - in: query
           name: titulo
           schema:
             type: string
-          description: Filtra las películas por título (coincidencia parcial).
+          description: Filtra las peliculas por titulo (coincidencia parcial).
         - in: query
           name: genero
           schema:
             type: string
-          description: Filtra las películas por género (coincidencia parcial).
+          description: Filtra las peliculas por genero (coincidencia parcial).
       responses:
         '200':
-          description: Lista de películas obtenida exitosamente.
+          description: Lista de peliculas obtenida exitosamente.
           content:
             application/json:
               schema:
@@ -42,8 +42,8 @@ paths:
                   $ref: '#/components/schemas/Pelicula'
     
     post:
-      summary: Crear una nueva película
-      description: Crea una película con título y género. Valida longitud (max 70) y campos obligatorios.
+      summary: Crear una nueva pelicula
+      description: Crea una pelicula con titulo y genero. Valida longitud (max 70) y campos obligatorios.
       requestBody:
         required: true
         content:
@@ -52,13 +52,13 @@ paths:
               $ref: '#/components/schemas/PeliculaInput'
       responses:
         '201':
-          description: Película creada exitosamente.
+          description: Pelicula creada exitosamente.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Pelicula'
         '400':
-          description: Datos incorrectos (Validación fallida).
+          description: Datos incorrectos (Validacion fallida).
           content:
             application/json:
               schema:
@@ -76,17 +76,17 @@ paths:
 
   /peliculas/{id}:
     get:
-      summary: Obtener una película por ID
+      summary: Obtener una pelicula por ID
       parameters:
         - in: path
           name: id
           schema:
             type: integer
           required: true
-          description: ID numérico de la película.
+          description: ID numerico de la pelicula.
       responses:
         '200':
-          description: Película encontrada.
+          description: Pelicula encontrada.
           content:
             application/json:
               schema:
@@ -100,9 +100,93 @@ paths:
               example:
                 id: "no se encontro ninguna pelicula con el id indicado"
 
+  /salas:
+    get:
+      summary: Obtener lista de salas
+      description: Devuelve un array con todas las salas. Permite filtrar por capacidad minima.
+      parameters:
+        - in: query
+          name: capacidad
+          schema:
+            type: integer
+          description: Filtra salas con capacidad igual o mayor a la indicada.
+      responses:
+        '200':
+          description: Lista de salas obtenida exitosamente (puede estar vacia).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sala'
+        '400':
+          description: Error de validacion en los parametros de busqueda.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampoIncorrectoSalaError'
+
+    post:
+      summary: Crear una nueva sala
+      description: Crea una sala con una capacidad especifica.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalaInput'
+      responses:
+        '201':
+          description: Sala creada exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sala'
+        '400':
+          description: Datos incorrectos (capacidad faltante o menor/igual a 0).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampoIncorrectoSalaError'
+              example:
+                capacidad: "La capacidad es un campo obligatorio"
+
+  /salas/{id}:
+    get:
+      summary: Obtener una sala por ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID numerico de la sala.
+      responses:
+        '200':
+          description: Sala encontrada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sala'
+        '400':
+          description: ID invalido (formato no numerico).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampoIncorrectoSalaError'
+              example:
+                id: "El id debe ser un numero valido"
+        '404':
+          description: Sala no encontrada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalaNoEncontradaError'
+              example:
+                id: "no se encontro ninguna sala con el id indicado"
+
 components:
   schemas:
-    # Objeto completo de Película (Salida)
     Pelicula:
       type: object
       properties:
@@ -116,7 +200,6 @@ components:
           type: string
           example: "genero1"
     
-    # Objeto para crear Película (Entrada)
     PeliculaInput:
       type: object
       required:
@@ -132,7 +215,6 @@ components:
           maxLength: 70
           example: "genero1"
     
-    # Estructura de error 400 (Basado en tus tests)
     CampoIncorrectoPeliculaError:
       type: object
       properties:
@@ -146,10 +228,46 @@ components:
           type: string
           description: Mensaje de error relacionado con el genero
     
-    # Estructura de error 404 (Basado en tus tests)
     PeliculaNoEncontradaError:
       type: object
       properties:
         id:
           type: string
           description: Mensaje explicando que el ID no existe
+
+    Sala:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+        capacidad:
+          type: integer
+          example: 50
+    
+    SalaInput:
+      type: object
+      required:
+        - capacidad
+      properties:
+        capacidad:
+          type: integer
+          description: Capacidad de la sala (debe ser mayor a 0)
+          example: 100
+
+    CampoIncorrectoSalaError:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Mensaje de error si el ID no es numerico
+        capacidad:
+          type: string
+          description: Mensaje de error si la capacidad es invalida o falta
+
+    SalaNoEncontradaError:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Mensaje explicando que la Sala con ese ID no existe
