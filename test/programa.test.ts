@@ -446,4 +446,11 @@ describe("GET /salas", () => {
     expect(capacidadesDevueltas).toContainEqual(datosCreacionDeSalaCapacidadSuficiente.capacidad);
     expect(capacidadesDevueltas).not.toContainEqual(datosCreacionDeSalaCapacidadInsuficiente.capacidad);
   });
+
+  test("deberia devolver un error 400 si el parametro de capacidad es un numero menor o igual a 0", async () => {
+    const capacidadInvalida: number = 0;
+    const respuesta = await requestWithSupertest.get(urlSalas + "/" + "?" + "capacidad=" + capacidadInvalida.toString());
+    expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
+    expect(respuesta.body.capacidad).toEqual("No se pueden buscar salas por capacidad menor a 0");
+  });
 });

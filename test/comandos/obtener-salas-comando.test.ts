@@ -2,6 +2,7 @@ import { Mock, mock } from "ts-jest-mocker";
 import ObtenerSalasComando from "../../app/comandos/obtener-salas-comando";
 import RepositorioSala from "../../app/dominio/puerto-repositorio-sala";
 import Sala from "../../app/dominio/sala";
+import CampoIncorrectoSalaError from "../../app/errores/campo-incorrecto-sala-error";
 
 describe("ObtenerSalasComando", () => {
   const mockRepositorioSala: Mock<RepositorioSala> = mock<RepositorioSala>();
@@ -48,5 +49,10 @@ describe("ObtenerSalasComando", () => {
     expect(salas).toContainEqual(sala2);
     expect(salas).toContainEqual(sala3);
     expect(salas).not.toContainEqual(sala1);
+  });
+
+  test("deberia devolver un error CampoIncorrectoSalaError si la capacidad pasada por parametro es menor o igual a 0", async () => {
+    const capacidadInvalida: number = 0;
+    await expect(obtenerSalasComando.ejectuar(capacidadInvalida)).rejects.toThrow(CampoIncorrectoSalaError);
   });
 });

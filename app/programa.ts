@@ -128,9 +128,15 @@ app.get("/salas", async (req: Request, res: Response) => {
   if (capacidadComoString !== undefined) {
     capacidad = parseInt(capacidadComoString);
   }
-  const obtenerSalasComando: ObtenerSalasComando = new ObtenerSalasComando(repositorioSala);
-  const salas: Sala[] = await obtenerSalasComando.ejectuar(capacidad);
-  res.status(200).json(salas);
+  try {
+    const obtenerSalasComando: ObtenerSalasComando = new ObtenerSalasComando(repositorioSala);
+    const salas: Sala[] = await obtenerSalasComando.ejectuar(capacidad);
+    res.status(200).json(salas);
+  } catch(error) {
+    if (error instanceof CampoIncorrectoSalaError) {
+      res.status(400).json(error);
+    }
+  }
 });
 
 const server = app
