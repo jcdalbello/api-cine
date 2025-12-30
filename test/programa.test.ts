@@ -474,4 +474,23 @@ describe("GET /salas/:id", () => {
       expect(respuesta.body.id).toEqual(id);
       expect(respuesta.body.capacidad).toEqual(capacidad);
     });
+
+    test.skip("deberia devolver la sala correspondiente al id pasado por parametro en cada iteracion", async () => {
+      const cantidadDeSalasAGenerar: number = 10;
+      for (let i = 1; i <= cantidadDeSalasAGenerar; i++) {
+        const idActual: number = i;
+        const capacidadActual: number = i * 10;
+        
+        const datosCreacionDeSalaActual: DatosCreacionDeSala = {
+          capacidad: capacidadActual,
+        };
+
+        await requestWithSupertest.post("/salas").send(datosCreacionDeSalaActual);
+
+        const respuesta = await requestWithSupertest.get(urlSalaPorId + idActual.toString());
+        expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
+        expect(respuesta.body.id).toEqual(idActual);
+        expect(respuesta.body.capacidad).toEqual(capacidadActual);
+      }
+    });
   });

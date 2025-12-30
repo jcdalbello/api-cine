@@ -15,6 +15,7 @@ import MensajesDeErrorDeSala from './errores/i-mensajes-de-error-de-sala';
 import RepositorioSala from './dominio/puerto-repositorio-sala';
 import AgregarSalaComando from './comandos/agregar-sala-comando';
 import ObtenerSalasComando from './comandos/obtener-salas-comando';
+import ObtenerSalaPorIdComando from './comandos/obtener-sala-por-id-comando';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -140,7 +141,9 @@ app.get("/salas", async (req: Request, res: Response) => {
 });
 
 app.get("/salas/:id", (req: Request, res: Response) => {
-  const sala: Sala = new Sala(1, 50);
+  const obtenerSalaPorIdComando: ObtenerSalaPorIdComando = new ObtenerSalaPorIdComando();
+  const sala: Sala = obtenerSalaPorIdComando.ejecutar(parseInt(req.params.id!));
+  // const sala: Sala = new Sala(1, 50);
   res.status(200).json(sala);
 });
 
