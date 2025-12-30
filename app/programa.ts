@@ -16,6 +16,7 @@ import RepositorioSala from './dominio/puerto-repositorio-sala';
 import AgregarSalaComando from './comandos/agregar-sala-comando';
 import ObtenerSalasComando from './comandos/obtener-salas-comando';
 import ObtenerSalaPorIdComando from './comandos/obtener-sala-por-id-comando';
+import SalaNoEncontradaError from './errores/sala-no-encontrada-error';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -141,9 +142,15 @@ app.get("/salas", async (req: Request, res: Response) => {
 });
 
 app.get("/salas/:id", async (req: Request, res: Response) => {
-  const obtenerSalaPorIdComando: ObtenerSalaPorIdComando = new ObtenerSalaPorIdComando(repositorioSala);
-  const sala: Sala = await obtenerSalaPorIdComando.ejecutar(parseInt(req.params.id!));
-  res.status(200).json(sala);
+  try {
+    const obtenerSalaPorIdComando: ObtenerSalaPorIdComando = new ObtenerSalaPorIdComando(repositorioSala);
+    const sala: Sala = await obtenerSalaPorIdComando.ejecutar(parseInt(req.params.id!));
+    res.status(200).json(sala);
+  } catch (error) {
+    if (error instanceof SalaNoEncontradaError) {
+      res.status(404).json(error);
+    }
+  }
 });
 
 const server = app

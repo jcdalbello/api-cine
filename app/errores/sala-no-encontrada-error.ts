@@ -3,6 +3,6 @@ export default class SalaNoEncontradaError extends Error {
   
   constructor() {
     super();
-    this.id = "La sala solicitada no se ha encontrado";
+    this.id = "No se encontro ninguna sala con el id indicado";
   }
 }

@@ -494,7 +494,7 @@ describe("GET /salas/:id", () => {
       }
     });
 
-    test.skip("deberia devolver un error 404 si no existe ninguna sala con el id indicado", async () => {
+    test("deberia devolver un error 404 si no existe ninguna sala con el id indicado", async () => {
       const idDesconocido: number = 999;
       const respuesta = await requestWithSupertest.get(urlSalaPorId + idDesconocido.toString());
       expect(respuesta.status).toEqual(CodigosHTTP.RecursoNoEncontrado);
