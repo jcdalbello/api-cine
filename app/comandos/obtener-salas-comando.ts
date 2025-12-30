@@ -1,9 +1,12 @@
+import RepositorioSala from "../dominio/puerto-repositorio-sala";
 import Sala from "../dominio/sala";
 
 export default class ObtenerSalasComando {
-  constructor() {}
+  constructor(
+    private readonly repositorioSala: RepositorioSala,
+  ) {}
 
   public ejectuar(): Sala[] {
-    return [];
+    return this.repositorioSala.listarSalas();
   }
 }

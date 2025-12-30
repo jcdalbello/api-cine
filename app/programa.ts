@@ -123,7 +123,7 @@ app.post("/salas", (req: Request, res: Response) => {
 });
 
 app.get("/salas", (req: Request, res: Response) => {
-  const obtenerSalasComando: ObtenerSalasComando = new ObtenerSalasComando();
+  const obtenerSalasComando: ObtenerSalasComando = new ObtenerSalasComando(repositorioSala);
   const salas: Sala[] = obtenerSalasComando.ejectuar();
   res.status(200).json(salas);
 });

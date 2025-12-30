@@ -13,4 +13,8 @@ export default class RepositorioSalaPostgreSQL implements RepositorioSala {
     }
     return salaGuardada;
   }
+
+  public listarSalas(): Sala[] {
+    return [];
+  }
 }
