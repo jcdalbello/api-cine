@@ -3,7 +3,7 @@ import Sala from "../dominio/sala";
 import CampoIncorrectoSalaError from "../errores/campo-incorrecto-sala-error";
 import MensajesDeErrorDeSala from "../errores/i-mensajes-de-error-de-sala";
 
-export default class ObtenerSalasComando {
+export default class BuscarSalasComando {
   constructor(
     private readonly repositorioSala: RepositorioSala,
   ) {}

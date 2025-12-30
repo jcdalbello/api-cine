@@ -1,14 +1,14 @@
 import { Mock, mock } from "ts-jest-mocker";
-import ObtenerSalasComando from "../../app/comandos/obtener-salas-comando";
+import BuscarSalasComando from "../../app/comandos/buscar-salas-comando";
 import RepositorioSala from "../../app/dominio/puerto-repositorio-sala";
 import Sala from "../../app/dominio/sala";
 import CampoIncorrectoSalaError from "../../app/errores/campo-incorrecto-sala-error";
 
-describe("ObtenerSalasComando", () => {
+describe("BuscarSalasComando", () => {
   const mockRepositorioSala: Mock<RepositorioSala> = mock<RepositorioSala>();
-  const obtenerSalasComando: ObtenerSalasComando = new ObtenerSalasComando(mockRepositorioSala);
+  const obtenerSalasComando: BuscarSalasComando = new BuscarSalasComando(mockRepositorioSala);
   test("deberia crear un objeto ObtenerSalasComando", () => {
-    expect(obtenerSalasComando).toBeInstanceOf(ObtenerSalasComando);
+    expect(obtenerSalasComando).toBeInstanceOf(BuscarSalasComando);
   });
 
   test("deberia devolver una lista vacia cuando no hay salas guardadas", async () => {

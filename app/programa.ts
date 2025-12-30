@@ -14,7 +14,7 @@ import Sala from './dominio/sala';
 import MensajesDeErrorDeSala from './errores/i-mensajes-de-error-de-sala';
 import RepositorioSala from './dominio/puerto-repositorio-sala';
 import AgregarSalaComando from './comandos/agregar-sala-comando';
-import ObtenerSalasComando from './comandos/obtener-salas-comando';
+import BuscarSalasComando from './comandos/buscar-salas-comando';
 import ObtenerSalaPorIdComando from './comandos/obtener-sala-por-id-comando';
 import SalaNoEncontradaError from './errores/sala-no-encontrada-error';
 
@@ -131,7 +131,7 @@ app.get("/salas", async (req: Request, res: Response) => {
     capacidad = parseInt(capacidadComoString);
   }
   try {
-    const obtenerSalasComando: ObtenerSalasComando = new ObtenerSalasComando(repositorioSala);
+    const obtenerSalasComando: BuscarSalasComando = new BuscarSalasComando(repositorioSala);
     const salas: Sala[] = await obtenerSalasComando.ejectuar(capacidad);
     res.status(200).json(salas);
   } catch(error) {
