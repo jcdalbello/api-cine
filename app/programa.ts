@@ -5,7 +5,7 @@ import RepositorioPeliculaPostgreSQL from './adaptadores/repositorio-pelicula-po
 import RepositorioSalaPostgreSQL from './adaptadores/repositorio-sala-postgresql';
 import CampoIncorrectoPeliculaError from './errores/campo-incorrecto-pelicula-error';
 import Pelicula from './dominio/pelicula';
-import ObtenerPeliculasComando from './comandos/obtener-peliculas-comando';
+import BuscarPeliculasComando from './comandos/buscar-peliculas-comando';
 import ObtenerPeliculaPorIdComando from './comandos/obtener-pelicula-por-id-comando';
 import PeliculaNoEncontradaError from './errores/pelicula-no-encontrada-error';
 import MensajesDeErrorDePelicula from './errores/i-mensajes-de-error-de-pelicula';
@@ -43,7 +43,7 @@ app.get("/", (req: Request, res: Response) => {
 app.get("/peliculas", async (req: Request, res: Response) => {
   const titulo = req.query.titulo as string | undefined;
   const genero = req.query.genero as string | undefined;
-  const obtenerPeliculas: ObtenerPeliculasComando = new ObtenerPeliculasComando(repositorioPelicula);
+  const obtenerPeliculas: BuscarPeliculasComando = new BuscarPeliculasComando(repositorioPelicula);
   const peliculas: Pelicula[] = await obtenerPeliculas.ejecutar(titulo, genero);
   res.status(200).send(peliculas);
 });

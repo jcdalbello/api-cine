@@ -1,14 +1,14 @@
-import ObtenerPeliculasComando from "../../app/comandos/obtener-peliculas-comando";
+import BuscarPeliculasComando from "../../app/comandos/buscar-peliculas-comando";
 import Pelicula from "../../app/dominio/pelicula";
 import { Mock, mock } from "ts-jest-mocker";
 import RepositorioPelicula from "../../app/dominio/puerto-repositorio-pelicula";
 
 let mockRepositorioPelicula: Mock<RepositorioPelicula>;
-let obtenerPeliculasComando: ObtenerPeliculasComando;
+let obtenerPeliculasComando: BuscarPeliculasComando;
 
-describe("ObtenerPeliculasComando", () => {
+describe("BuscarPeliculasComando", () => {
   mockRepositorioPelicula = mock<RepositorioPelicula>();
-  obtenerPeliculasComando = new ObtenerPeliculasComando(mockRepositorioPelicula);
+  obtenerPeliculasComando = new BuscarPeliculasComando(mockRepositorioPelicula);
 
   const id: number = 1;
   const titulo: string = "pelicula1";
@@ -16,7 +16,7 @@ describe("ObtenerPeliculasComando", () => {
   const mockPelicula: Pelicula = new Pelicula(id, titulo, genero);
 
   test("deberia crear un objeto ObtenerPeliculasComando", () => {
-    expect(obtenerPeliculasComando).toBeInstanceOf(ObtenerPeliculasComando);
+    expect(obtenerPeliculasComando).toBeInstanceOf(BuscarPeliculasComando);
   });
 
   test("deberia devolver una lista vacia cuando no hay peliculas", async () => {
