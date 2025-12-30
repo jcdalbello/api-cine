@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import AgregarPeliculaComando from './comandos/agregar-pelicula-comando';
 import RepositorioPelicula from './dominio/puerto-repositorio-pelicula';
 import RepositorioPeliculaPostgreSQL from './adaptadores/repositorio-pelicula-postgresql';
+import RepositorioSalaPostgreSQL from './adaptadores/repositorio-sala-postgresql';
 import CampoIncorrectoPeliculaError from './errores/campo-incorrecto-pelicula-error';
 import Pelicula from './dominio/pelicula';
 import ObtenerPeliculasComando from './comandos/obtener-peliculas-comando';
@@ -11,6 +12,8 @@ import MensajesDeErrorDePelicula from './errores/i-mensajes-de-error-de-pelicula
 import CampoIncorrectoSalaError from './errores/campo-incorrecto-sala-error';
 import Sala from './dominio/sala';
 import MensajesDeErrorDeSala from './errores/i-mensajes-de-error-de-sala';
+import RepositorioSala from './dominio/puerto-repositorio-sala';
+import AgregarSalaComando from './comandos/agregar-sala-comando';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -21,7 +24,12 @@ function crearRepositorioPelicula(): RepositorioPelicula {
   return new RepositorioPeliculaPostgreSQL();
 }
 
+function crearRepositorioSala(): RepositorioSala {
+  return new RepositorioSalaPostgreSQL();
+}
+
 const repositorioPelicula: RepositorioPelicula = crearRepositorioPelicula();
+const repositorioSala: RepositorioSala = crearRepositorioSala();
 
 app.get("/", (req: Request, res: Response) => {
   res
@@ -103,13 +111,9 @@ app.post("/salas", (req: Request, res: Response) => {
   const capacidad = req.body.capacidad as number;
   try {
     validadDatosVaciosDePelicula(capacidad);
-    if (capacidad === 50) {
-      const sala: Sala = new Sala(1, capacidad);
-      res.status(201).json(sala);
-    } else {
-      const sala: Sala = new Sala(2, capacidad);
-      res.status(201).json(sala);
-    }
+    const agregarSalaComando: AgregarSalaComando = new AgregarSalaComando(repositorioSala);
+    const sala: Sala = agregarSalaComando.ejecutar(capacidad);
+    res.status(201).json(sala);
   } catch (error) {
     if (error instanceof CampoIncorrectoSalaError) {
       res.status(400).json(error);
