@@ -1,18 +1,18 @@
-import ObtenerPeliculaPorIdComando from "../../app/comandos/obtener-pelicula-por-id-comando";
+import BuscarPeliculaPorIdComando from "../../app/comandos/buscar-pelicula-por-id-comando";
 import Pelicula from "../../app/dominio/pelicula";
 import RepositorioPelicula from "../../app/dominio/puerto-repositorio-pelicula";
 import { mock, Mock } from "ts-jest-mocker";
 import PeliculaNoEncontradaError from "../../app/errores/pelicula-no-encontrada-error";
 
 let mockRepositorioPeliculas: Mock<RepositorioPelicula>;
-let obtenerPeliculaPorIdComando: ObtenerPeliculaPorIdComando;
+let obtenerPeliculaPorIdComando: BuscarPeliculaPorIdComando;
 
 describe("ObtenerPeliculaPorIdComando", () => {
   mockRepositorioPeliculas = mock<RepositorioPelicula>();
-  obtenerPeliculaPorIdComando = new ObtenerPeliculaPorIdComando(mockRepositorioPeliculas);
+  obtenerPeliculaPorIdComando = new BuscarPeliculaPorIdComando(mockRepositorioPeliculas);
 
   test("deberia crear un objeto ObtenerPeliculaPorIdComando", () => {
-    expect(obtenerPeliculaPorIdComando).toBeInstanceOf(ObtenerPeliculaPorIdComando);
+    expect(obtenerPeliculaPorIdComando).toBeInstanceOf(BuscarPeliculaPorIdComando);
   });
 
   test("deberia devolver la unica pelicula guardada en la base de datos", async () => {

@@ -1,7 +1,7 @@
 import Pelicula from "../dominio/pelicula";
 import RepositorioPelicula from "../dominio/puerto-repositorio-pelicula";
 
-export default class ObtenerPeliculaPorIdComando {
+export default class BuscarPeliculaPorIdComando {
   constructor(
     private readonly repositorioPelicula: RepositorioPelicula,
   ) {}

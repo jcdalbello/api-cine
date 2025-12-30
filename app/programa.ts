@@ -6,7 +6,7 @@ import RepositorioSalaPostgreSQL from './adaptadores/repositorio-sala-postgresql
 import CampoIncorrectoPeliculaError from './errores/campo-incorrecto-pelicula-error';
 import Pelicula from './dominio/pelicula';
 import BuscarPeliculasComando from './comandos/buscar-peliculas-comando';
-import ObtenerPeliculaPorIdComando from './comandos/obtener-pelicula-por-id-comando';
+import BuscarPeliculaPorIdComando from './comandos/buscar-pelicula-por-id-comando';
 import PeliculaNoEncontradaError from './errores/pelicula-no-encontrada-error';
 import MensajesDeErrorDePelicula from './errores/i-mensajes-de-error-de-pelicula';
 import CampoIncorrectoSalaError from './errores/campo-incorrecto-sala-error';
@@ -89,7 +89,7 @@ app.post("/peliculas", async (req: Request, res: Response) => {
 app.get("/peliculas/:id", async (req: Request, res: Response) => {
   try {
     const id: number = parseInt(req.params.id!);
-    const obtenerPeliculaPorIdComando: ObtenerPeliculaPorIdComando = new ObtenerPeliculaPorIdComando(repositorioPelicula);
+    const obtenerPeliculaPorIdComando: BuscarPeliculaPorIdComando = new BuscarPeliculaPorIdComando(repositorioPelicula);
     const pelicula: Pelicula = await obtenerPeliculaPorIdComando.ejecutar(id);
     res.status(200).send(pelicula);
   } catch (error) {
