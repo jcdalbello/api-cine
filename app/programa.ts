@@ -122,9 +122,9 @@ app.post("/salas", async (req: Request, res: Response) => {
   }
 });
 
-app.get("/salas", (req: Request, res: Response) => {
+app.get("/salas", async (req: Request, res: Response) => {
   const obtenerSalasComando: ObtenerSalasComando = new ObtenerSalasComando(repositorioSala);
-  const salas: Sala[] = obtenerSalasComando.ejectuar();
+  const salas: Sala[] = await obtenerSalasComando.ejectuar();
   res.status(200).json(salas);
 });
 

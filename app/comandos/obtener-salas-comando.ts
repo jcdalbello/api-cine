@@ -6,7 +6,7 @@ export default class ObtenerSalasComando {
     private readonly repositorioSala: RepositorioSala,
   ) {}
 
-  public ejectuar(): Sala[] {
-    return this.repositorioSala.listarSalas();
+  public async ejectuar(): Promise<Sala[]> {
+    return await this.repositorioSala.listarSalas();
   }
 }

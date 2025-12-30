@@ -25,7 +25,17 @@ export default class RepositorioSalaPostgreSQL implements RepositorioSala {
     );
   }
 
-  public listarSalas(): Sala[] {
-    return [];
+  public async listarSalas(): Promise<Sala[]> {
+    const query: string = `
+      SELECT * FROM salas;
+    `;
+
+    const resultado = await this.pool.query(query);
+    return resultado.rows.map((row) => {
+      const id: number = row.id;
+      const capacidad: number = row.capacidad;
+      
+      return new Sala(id, capacidad);
+    });
   }
 }

@@ -46,17 +46,18 @@ describe("RepositorioSalaPostgreSQL", () => {
   });
 
   describe("listarSalas", () => {
-    test("deberia devovler una lista vacia de salas", () => {
-      const salas: Sala[] = repositorioSalaPostgreSQL.listarSalas();
+    test("deberia devovler una lista vacia de salas", async () => {
+      const salas: Sala[] = await repositorioSalaPostgreSQL.listarSalas();
       expect(salas.length).toEqual(0);
     });
 
-    test.skip("deberia devovler una lista con una sola sala si solo se guardo una sala", async() => {
+    test("deberia devovler una lista con una sola sala si solo se guardo una sala", async () => {
       const sala: Sala = new Sala(0, 50);
-      await repositorioSalaPostgreSQL.guardar(sala);
-      const salas: Sala[] = repositorioSalaPostgreSQL.listarSalas();
+      const salaGuardada: Sala = await repositorioSalaPostgreSQL.guardar(sala);
+
+      const salas: Sala[] = await repositorioSalaPostgreSQL.listarSalas();
       expect(salas.length).toEqual(1);
-      expect(salas).toContainEqual(sala);
+      expect(salas).toContainEqual(salaGuardada);
     });
   });
 });

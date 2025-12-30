@@ -10,26 +10,26 @@ describe("ObtenerSalasComando", () => {
     expect(obtenerSalasComando).toBeInstanceOf(ObtenerSalasComando);
   });
 
-  test("deberia devolver una lista vacia cuando no hay salas guardadas", () => {
-    mockRepositorioSala.listarSalas.mockReturnValue([]);
-    const salas = obtenerSalasComando.ejectuar();
+  test("deberia devolver una lista vacia cuando no hay salas guardadas", async () => {
+    mockRepositorioSala.listarSalas.mockResolvedValue([]);
+    const salas: Sala[] = await obtenerSalasComando.ejectuar();
     expect(salas).toEqual([]);
   });
 
-  test("deberia devolver una lista con una sola sala cuando hay una sola sala guardada", () => {
+  test("deberia devolver una lista con una sola sala cuando hay una sola sala guardada", async () => {
     const sala: Sala = new Sala(1, 50);
-    mockRepositorioSala.listarSalas.mockReturnValue([sala]);
-    const salas = obtenerSalasComando.ejectuar();
+    mockRepositorioSala.listarSalas.mockResolvedValue([sala]);
+    const salas: Sala[] = await obtenerSalasComando.ejectuar();
     expect(mockRepositorioSala.listarSalas).toHaveBeenCalled();
     expect(salas).toContain(sala);
   });
 
-  test("deberia devolver una lista con todas las salas guardadas", () => {
+  test("deberia devolver una lista con todas las salas guardadas", async () => {
     const sala1: Sala = new Sala(1, 50);
     const sala2: Sala = new Sala(2, 100);
     const sala3: Sala = new Sala(3, 150);
-    mockRepositorioSala.listarSalas.mockReturnValue([sala1, sala2, sala3]);
-    const salas = obtenerSalasComando.ejectuar();
+    mockRepositorioSala.listarSalas.mockResolvedValue([sala1, sala2, sala3]);
+    const salas: Sala[] = await obtenerSalasComando.ejectuar();
     expect(mockRepositorioSala.listarSalas).toHaveBeenCalled();
     expect(salas).toContain(sala1);
     expect(salas).toContain(sala2);
