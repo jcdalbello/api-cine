@@ -171,3 +171,9 @@ GET {{host}}/salas/1
 Content-Type: application/json
 
 {}
+
+### Intentar recuperar una sala con un id que no existe (asumiendo que no hay salas con id = 9999) (404)
+GET {{host}}/salas/9999
+Content-Type: application/json
+
+{}
