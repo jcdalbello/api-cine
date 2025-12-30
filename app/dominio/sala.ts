@@ -37,6 +37,10 @@ export default class Sala {
     this.capacidad = capacidad;
   }
 
+  public tieneIdAsignado(): boolean {
+    return this.id !== 0;
+  }
+
   private validarCapacidad(capacidad: number): void {
     if (capacidad < MINIMA_CAPACIDAD) {
       throw new CampoIncorrectoSalaError({

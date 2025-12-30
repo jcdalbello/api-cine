@@ -1,6 +1,7 @@
 import { pool } from "../../app/adaptadores/pool-postgresql";
 import RepositorioSalaPostgreSQL from "../../app/adaptadores/repositorio-sala-postgresql";
 import Sala from "../../app/dominio/sala";
+import SalaYaPersistidaError from "../../app/errores/sala-ya-persistida-error";
 
 describe("RepositorioSalaPostgreSQL", () => {
   const repositorioSalaPostgreSQL: RepositorioSalaPostgreSQL = new RepositorioSalaPostgreSQL();
@@ -42,6 +43,11 @@ describe("RepositorioSalaPostgreSQL", () => {
       const salaGuardada2: Sala = await repositorioSalaPostgreSQL.guardar(sala2);
       expect(salaGuardada2.obtenerId()).toEqual(2);
       expect(salaGuardada2.obtenerCapacidad()).toEqual(sala2.obtenerCapacidad());
+    });
+
+    test("deberia devolver un error si la sala que se quiere guardar tiene un id diferente de 0", async () => {
+      const sala: Sala = new Sala(1, 50);
+      await expect(repositorioSalaPostgreSQL.guardar(sala)).rejects.toThrow(SalaYaPersistidaError);
     });
   });
 

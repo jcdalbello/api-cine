@@ -2,6 +2,7 @@ import { Pool } from "pg";
 import { pool } from "./pool-postgresql";
 import RepositorioSala from "../dominio/puerto-repositorio-sala";
 import Sala from "../dominio/sala";
+import SalaYaPersistidaError from "../errores/sala-ya-persistida-error";
 
 export default class RepositorioSalaPostgreSQL implements RepositorioSala {
   private pool: Pool;
@@ -10,6 +11,10 @@ export default class RepositorioSalaPostgreSQL implements RepositorioSala {
     this.pool = pool;
   }
   public async guardar(sala: Sala): Promise<Sala> {
+    if (sala.tieneIdAsignado()) {
+      throw new SalaYaPersistidaError();
+    }
+
     const query: string = `
       INSERT INTO salas (capacidad)
       VALUES ($1)
