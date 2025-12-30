@@ -139,6 +139,11 @@ app.get("/salas", async (req: Request, res: Response) => {
   }
 });
 
+app.get("/salas/:id", (req: Request, res: Response) => {
+  const sala: Sala = new Sala(1, 50);
+  res.status(200).json(sala);
+});
+
 const server = app
   .listen(puerto, (): void => {
     console.log(`Servidor corriendo en http://localhost:${puerto}`);

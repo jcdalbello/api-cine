@@ -454,3 +454,24 @@ describe("GET /salas", () => {
     expect(respuesta.body.capacidad).toEqual("No se pueden buscar salas por capacidad menor a 0");
   });
 });
+
+describe("GET /salas/:id", () => {
+    const id: number = 1;
+    const capacidad: number = 50;
+    const urlSalaPorId: string = "/salas/";
+
+    interface DatosCreacionDeSala {
+      capacidad: number;
+    }
+    
+    const datosCreacionDeSala: DatosCreacionDeSala = {
+      capacidad: capacidad,
+    }
+    test("deberia devolver un codigo 200 y la sala con ese id si existe", async () => {
+      await requestWithSupertest.post("/salas").send(datosCreacionDeSala);
+      const respuesta = await requestWithSupertest.get(urlSalaPorId + id);
+      expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
+      expect(respuesta.body.id).toEqual(id);
+      expect(respuesta.body.capacidad).toEqual(capacidad);
+    });
+  });
