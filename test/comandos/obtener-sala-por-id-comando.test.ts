@@ -24,17 +24,17 @@ describe("ObtenerSalaPorIdComando", () => {
   });
 
   test("deberia devolver la sala correspondiente al id pasado por parametro con varias salas", async () => {
-      const cantidadDeSalasAGenerar: number = 10;
-      for (let i = 1; i <= cantidadDeSalasAGenerar; i++) {
-        const idActual: number = i;
-        const capacidadActual: number = i * 10;
-        const salaActual: Sala = new Sala(idActual, capacidadActual);
-        mockRepositorioSala.recuperar.mockResolvedValue(salaActual);
-        const salaRecuperada: Sala = await obtenerSalaPorIdComando.ejecutar(idActual);
+    const cantidadDeSalasAGenerar: number = 10;
+    for (let i = 1; i <= cantidadDeSalasAGenerar; i++) {
+      const idActual: number = i;
+      const capacidadActual: number = i * 10;
+      const salaActual: Sala = new Sala(idActual, capacidadActual);
+      mockRepositorioSala.recuperar.mockResolvedValue(salaActual);
+      const salaRecuperada: Sala = await obtenerSalaPorIdComando.ejecutar(idActual);
 
-        expect(salaRecuperada).toBeInstanceOf(Sala);
-        expect(salaRecuperada.obtenerId()).toEqual(salaActual.obtenerId());
-        expect(salaRecuperada.obtenerCapacidad()).toEqual(salaActual.obtenerCapacidad());
-      }
-    });
+      expect(salaRecuperada).toBeInstanceOf(Sala);
+      expect(salaRecuperada.obtenerId()).toEqual(salaActual.obtenerId());
+      expect(salaRecuperada.obtenerCapacidad()).toEqual(salaActual.obtenerCapacidad());
+    }
+  });
 });

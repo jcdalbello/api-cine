@@ -82,4 +82,16 @@ describe("RepositorioSalaPostgreSQL", () => {
       expect(salas).not.toContainEqual(salaGuardada1);
     });
   });
+
+  describe("recuperar", () => {
+    test("deberia recuperar una sala por su id", async () => {
+      const idSala: number = 1;
+      const capacidad: number = 50;
+      const salaParaGuardar: Sala = new Sala(0, capacidad);
+      await repositorioSalaPostgreSQL.guardar(salaParaGuardar);
+      const sala: Sala = await repositorioSalaPostgreSQL.recuperar(idSala);
+      expect(sala.obtenerId()).toEqual(idSala);
+      expect(sala.obtenerCapacidad()).toEqual(50);
+    });
+  });
 });
