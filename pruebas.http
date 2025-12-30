@@ -177,3 +177,9 @@ GET {{host}}/salas/9999
 Content-Type: application/json
 
 {}
+
+### Intentar recuperar una sala con un id que no es un numero (400)
+GET {{host}}/salas/idInvalido
+Content-Type: application/json
+
+{}

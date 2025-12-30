@@ -456,48 +456,55 @@ describe("GET /salas", () => {
 });
 
 describe("GET /salas/:id", () => {
-    const id: number = 1;
-    const capacidad: number = 50;
-    const urlSalaPorId: string = "/salas/";
+  const id: number = 1;
+  const capacidad: number = 50;
+  const urlSalaPorId: string = "/salas/";
 
-    interface DatosCreacionDeSala {
-      capacidad: number;
-    }
-    
-    const datosCreacionDeSala: DatosCreacionDeSala = {
-      capacidad: capacidad,
-    }
-    test("deberia devolver un codigo 200 y la sala con ese id si existe", async () => {
-      await requestWithSupertest.post("/salas").send(datosCreacionDeSala);
-      const respuesta = await requestWithSupertest.get(urlSalaPorId + id);
-      expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
-      expect(respuesta.body.id).toEqual(id);
-      expect(respuesta.body.capacidad).toEqual(capacidad);
-    });
-
-    test("deberia devolver la sala correspondiente al id pasado por parametro en cada iteracion", async () => {
-      const cantidadDeSalasAGenerar: number = 10;
-      for (let i = 1; i <= cantidadDeSalasAGenerar; i++) {
-        const idActual: number = i;
-        const capacidadActual: number = i * 10;
-        
-        const datosCreacionDeSalaActual: DatosCreacionDeSala = {
-          capacidad: capacidadActual,
-        };
-
-        await requestWithSupertest.post("/salas").send(datosCreacionDeSalaActual);
-
-        const respuesta = await requestWithSupertest.get(urlSalaPorId + idActual.toString());
-        expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
-        expect(respuesta.body.id).toEqual(idActual);
-        expect(respuesta.body.capacidad).toEqual(capacidadActual);
-      }
-    });
-
-    test("deberia devolver un error 404 si no existe ninguna sala con el id indicado", async () => {
-      const idDesconocido: number = 999;
-      const respuesta = await requestWithSupertest.get(urlSalaPorId + idDesconocido.toString());
-      expect(respuesta.status).toEqual(CodigosHTTP.RecursoNoEncontrado);
-      expect(respuesta.body.id).toEqual("No se encontro ninguna sala con el id indicado");
-    });
+  interface DatosCreacionDeSala {
+    capacidad: number;
+  }
+  
+  const datosCreacionDeSala: DatosCreacionDeSala = {
+    capacidad: capacidad,
+  }
+  test("deberia devolver un codigo 200 y la sala con ese id si existe", async () => {
+    await requestWithSupertest.post("/salas").send(datosCreacionDeSala);
+    const respuesta = await requestWithSupertest.get(urlSalaPorId + id);
+    expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
+    expect(respuesta.body.id).toEqual(id);
+    expect(respuesta.body.capacidad).toEqual(capacidad);
   });
+
+  test("deberia devolver la sala correspondiente al id pasado por parametro en cada iteracion", async () => {
+    const cantidadDeSalasAGenerar: number = 10;
+    for (let i = 1; i <= cantidadDeSalasAGenerar; i++) {
+      const idActual: number = i;
+      const capacidadActual: number = i * 10;
+      
+      const datosCreacionDeSalaActual: DatosCreacionDeSala = {
+        capacidad: capacidadActual,
+      };
+
+      await requestWithSupertest.post("/salas").send(datosCreacionDeSalaActual);
+
+      const respuesta = await requestWithSupertest.get(urlSalaPorId + idActual.toString());
+      expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
+      expect(respuesta.body.id).toEqual(idActual);
+      expect(respuesta.body.capacidad).toEqual(capacidadActual);
+    }
+  });
+
+  test("deberia devolver un error 404 si no existe ninguna sala con el id indicado", async () => {
+    const idDesconocido: number = 999;
+    const respuesta = await requestWithSupertest.get(urlSalaPorId + idDesconocido.toString());
+    expect(respuesta.status).toEqual(CodigosHTTP.RecursoNoEncontrado);
+    expect(respuesta.body.id).toEqual("No se encontro ninguna sala con el id indicado");
+  });
+
+  test("deberia devolver un error 400 si se pasa un valor que no es un numero como id", async () => {
+    const idInvalido: string = "idInvalido";
+    const respuesta = await requestWithSupertest.get(urlSalaPorId + idInvalido);
+    expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
+    expect(respuesta.body.id).toEqual("El id debe ser un numero valido");
+  });
+});

@@ -141,12 +141,29 @@ app.get("/salas", async (req: Request, res: Response) => {
   }
 });
 
+function validarDatosDeBusquedaDeSalaPorId(idComoString: string | undefined): void {
+  const mensajes: MensajesDeErrorDeSala = {};
+
+  const idParseado: number = Number(idComoString);
+  if (Number.isNaN(idParseado)) {
+    mensajes.id = "El id debe ser un numero valido";
+  }
+
+  if (Object.keys(mensajes).length > 0) {
+    throw new CampoIncorrectoSalaError(mensajes);
+  }
+}
+
 app.get("/salas/:id", async (req: Request, res: Response) => {
   try {
+    validarDatosDeBusquedaDeSalaPorId(req.params.id);
     const obtenerSalaPorIdComando: ObtenerSalaPorIdComando = new ObtenerSalaPorIdComando(repositorioSala);
     const sala: Sala = await obtenerSalaPorIdComando.ejecutar(parseInt(req.params.id!));
     res.status(200).json(sala);
   } catch (error) {
+    if (error instanceof CampoIncorrectoSalaError) {
+      res.status(400).json(error);
+    }
     if (error instanceof SalaNoEncontradaError) {
       res.status(404).json(error);
     }
