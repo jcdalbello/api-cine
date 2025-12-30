@@ -123,8 +123,13 @@ app.post("/salas", async (req: Request, res: Response) => {
 });
 
 app.get("/salas", async (req: Request, res: Response) => {
+  const capacidadComoString = req.query.capacidad as string | undefined;
+  let capacidad: number | undefined = undefined;
+  if (capacidadComoString !== undefined) {
+    capacidad = parseInt(capacidadComoString);
+  }
   const obtenerSalasComando: ObtenerSalasComando = new ObtenerSalasComando(repositorioSala);
-  const salas: Sala[] = await obtenerSalasComando.ejectuar();
+  const salas: Sala[] = await obtenerSalasComando.ejectuar(capacidad);
   res.status(200).json(salas);
 });
 

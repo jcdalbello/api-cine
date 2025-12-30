@@ -30,12 +30,23 @@ export default class RepositorioSalaPostgreSQL implements RepositorioSala {
     );
   }
 
-  public async listarSalas(): Promise<Sala[]> {
-    const query: string = `
-      SELECT * FROM salas;
+  public async listarSalas(capacidad?: number): Promise<Sala[]> {
+    let query: string = `
+      SELECT * FROM salas WHERE 1=1
     `;
+    const valores: number[] = [];
+    let contadorParametros: number = 1;
 
-    const resultado = await this.pool.query(query);
+    if (capacidad !== undefined) {
+      const condicionCapacidad: string = ` AND capacidad >= $${contadorParametros}`;
+      query += condicionCapacidad;
+      valores.push(capacidad);
+      contadorParametros++;
+    }
+
+    query += ";";
+
+    const resultado = await this.pool.query(query, valores);
     return resultado.rows.map((row) => {
       const id: number = row.id;
       const capacidad: number = row.capacidad;

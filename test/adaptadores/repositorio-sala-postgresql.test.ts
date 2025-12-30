@@ -65,5 +65,21 @@ describe("RepositorioSalaPostgreSQL", () => {
       expect(salas.length).toEqual(1);
       expect(salas).toContainEqual(salaGuardada);
     });
+
+    test("deberia devovler una lista con todas las salas que tengan una capacidad mayor o igual a la pasada por parametro", async () => {
+      const capacidadMinima: number = 50;
+      const sala1: Sala = new Sala(0, capacidadMinima - 1);
+      const sala2: Sala = new Sala(0, capacidadMinima);
+      const sala3: Sala = new Sala(0, capacidadMinima + 1);
+      const salaGuardada1: Sala = await repositorioSalaPostgreSQL.guardar(sala1);
+      const salaGuardada2: Sala = await repositorioSalaPostgreSQL.guardar(sala2);
+      const salaGuardada3: Sala = await repositorioSalaPostgreSQL.guardar(sala3);
+
+      const salas: Sala[] = await repositorioSalaPostgreSQL.listarSalas(capacidadMinima);
+      expect(salas.length).toEqual(2);
+      expect(salas).toContainEqual(salaGuardada2);
+      expect(salas).toContainEqual(salaGuardada3);
+      expect(salas).not.toContainEqual(salaGuardada1);
+    });
   });
 });

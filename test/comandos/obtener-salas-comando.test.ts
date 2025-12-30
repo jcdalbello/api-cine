@@ -35,4 +35,18 @@ describe("ObtenerSalasComando", () => {
     expect(salas).toContain(sala2);
     expect(salas).toContain(sala3);
   });
+
+  test("deberia devolver una lista con todas las salas que tengan una capacidad mayor o igual a la pasada por parametro", async () => {
+    const capacidadMinima: number = 50;
+    mockRepositorioSala.listarSalas.mockResolvedValue([]);
+    const sala1: Sala = new Sala(1, capacidadMinima - 1);
+    const sala2: Sala = new Sala(2, capacidadMinima);
+    const sala3: Sala = new Sala(3, capacidadMinima + 1);
+    mockRepositorioSala.listarSalas.mockResolvedValue([sala2, sala3]);
+    const salas: Sala[] = await obtenerSalasComando.ejectuar(capacidadMinima);
+    expect(mockRepositorioSala.listarSalas).toHaveBeenCalled();
+    expect(salas).toContainEqual(sala2);
+    expect(salas).toContainEqual(sala3);
+    expect(salas).not.toContainEqual(sala1);
+  });
 });

@@ -425,5 +425,25 @@ describe("GET /salas", () => {
     expect(respuesta.body.length).toEqual(1);
     expect(respuesta.body[0].id).toEqual(id);
     expect(respuesta.body[0].capacidad).toEqual(datosCreacionDeSala.capacidad);
-  }); 
+  });
+
+  test("deberia devolver una lista solamente con las salas que tengan una capacidad igual o mayor a la pasada por parametro", async () => {
+    const capacidadMinima: number = capacidad;
+    const datosCreacionDeSalaCapacidadInsuficiente: DatosCreacionDeSala = { capacidad: capacidadMinima - 1 };
+    const datosCreacionDeSalaCapacidadSuficiente: DatosCreacionDeSala = { capacidad: capacidadMinima + 1 };
+    await requestWithSupertest.post(urlSalas).send(datosCreacionDeSala);
+    await requestWithSupertest.post(urlSalas).send(datosCreacionDeSalaCapacidadInsuficiente);
+    await requestWithSupertest.post(urlSalas).send(datosCreacionDeSalaCapacidadSuficiente);
+
+    const respuesta = await requestWithSupertest.get(urlSalas + "/" + "?" + "capacidad=" + capacidadMinima.toString());
+    expect(respuesta.body.length).toEqual(2);
+
+    const capacidadesDevueltas: number[] = [];
+    for (const sala of respuesta.body) {
+      capacidadesDevueltas.push(sala.capacidad as number);
+    }
+    expect(capacidadesDevueltas).toContainEqual(datosCreacionDeSala.capacidad);
+    expect(capacidadesDevueltas).toContainEqual(datosCreacionDeSalaCapacidadSuficiente.capacidad);
+    expect(capacidadesDevueltas).not.toContainEqual(datosCreacionDeSalaCapacidadInsuficiente.capacidad);
+  });
 });
