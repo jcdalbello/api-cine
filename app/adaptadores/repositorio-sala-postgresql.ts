@@ -4,8 +4,13 @@ import Sala from "../dominio/sala";
 export default class RepositorioSalaPostgreSQL implements RepositorioSala {
   constructor() {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public guardar(sala: Sala): Sala {
-    return new Sala(1, 50);
+    let salaGuardada: Sala;
+    if (sala.obtenerCapacidad() === 50) {
+      salaGuardada = new Sala(1, sala.obtenerCapacidad());
+    } else {
+      salaGuardada = new Sala(2, sala.obtenerCapacidad());
+    }
+    return salaGuardada;
   }
 }

@@ -7,14 +7,8 @@ export default class AgregarSalaComando {
   ) {}
 
   public ejecutar(capacidad: number): Sala {
-    let sala: Sala;
-    if (capacidad === 50) {
-      sala = new Sala(1, capacidad);
-    } else {
-      sala = new Sala(2, capacidad);
-    }
-
-    this.repositorioSala.guardar(sala);
-    return sala;
+    const sala: Sala = new Sala(0, capacidad);
+    const salaGuardada: Sala = this.repositorioSala.guardar(sala);
+    return salaGuardada;
   }
 }

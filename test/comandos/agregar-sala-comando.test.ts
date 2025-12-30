@@ -38,6 +38,8 @@ describe("AgregarSalaComando", () => {
 
     const id2: number = 2;
     const capacidad2: number = 100;
+    const mockSala2: Sala = new Sala(id2, capacidad2);
+    mockRepositorioSala.guardar.mockReturnValue(mockSala2);
     const sala2: Sala = agregarSalaComando.ejecutar(capacidad2);
     expect(sala2.obtenerId()).toEqual(id2);
     expect(sala2.obtenerCapacidad()).toEqual(capacidad2);
