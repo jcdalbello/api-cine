@@ -1,9 +1,12 @@
+import RepositorioSala from "../dominio/puerto-repositorio-sala";
 import Sala from "../dominio/sala";
 
 export default class ObtenerSalaPorIdComando {
-  constructor() {}
+  constructor(
+    private readonly repositorioSala: RepositorioSala
+  ) {}
 
-  public ejecutar(id: number): Sala {
-    return new Sala(id, 50);
+  public ejecutar(id: number): Promise<Sala> {
+    return this.repositorioSala.recuperar(id);
   }
 }

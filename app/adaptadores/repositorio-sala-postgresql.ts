@@ -54,4 +54,9 @@ export default class RepositorioSalaPostgreSQL implements RepositorioSala {
       return new Sala(id, capacidad);
     });
   }
+
+  // eslint-disable-next-line @typescript-eslint/require-await
+  public async recuperar(id: number): Promise<Sala> {
+    return new Sala(id, 50);
+  }
 }

@@ -140,10 +140,9 @@ app.get("/salas", async (req: Request, res: Response) => {
   }
 });
 
-app.get("/salas/:id", (req: Request, res: Response) => {
-  const obtenerSalaPorIdComando: ObtenerSalaPorIdComando = new ObtenerSalaPorIdComando();
-  const sala: Sala = obtenerSalaPorIdComando.ejecutar(parseInt(req.params.id!));
-  // const sala: Sala = new Sala(1, 50);
+app.get("/salas/:id", async (req: Request, res: Response) => {
+  const obtenerSalaPorIdComando: ObtenerSalaPorIdComando = new ObtenerSalaPorIdComando(repositorioSala);
+  const sala: Sala = await obtenerSalaPorIdComando.ejecutar(parseInt(req.params.id!));
   res.status(200).json(sala);
 });
 
