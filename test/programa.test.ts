@@ -419,7 +419,7 @@ describe("GET /salas", () => {
     expect(respuesta.body).toEqual([]);
   });
 
-  test.skip("deberia devolver una la unica sala creada si no se pasan parametros de busqueda", async () => {
+  test("deberia devolver una la unica sala creada si no se pasan parametros de busqueda", async () => {
     await requestWithSupertest.post(urlSalas).send(datosCreacionDeSala);
     const respuesta = await requestWithSupertest.get(urlSalas);
     expect(respuesta.body.length).toEqual(1);
