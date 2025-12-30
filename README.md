@@ -1,2 +1,5 @@
-# api-cine
-API REST para la gestión de un cine desarrollada con TypeScript
+# API Cine
+
+[![API Cine CI](https://github.com/jcdalbello/api-cine/actions/workflows/.api-cine-ci.yml/badge.svg?branch=main)](https://github.com/jcdalbello/api-cine/actions/workflows/.api-cine-ci.yml)
+
+Proyecto API REST de muestra para la gestión de un cine.
