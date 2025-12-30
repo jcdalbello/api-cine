@@ -3,3 +3,8 @@ CREATE TABLE IF NOT EXISTS peliculas (
     titulo VARCHAR(255) NOT NULL,
     genero VARCHAR(100) NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS salas (
+    id SERIAL PRIMARY KEY,
+    capacidad INT NOT NULL
+);

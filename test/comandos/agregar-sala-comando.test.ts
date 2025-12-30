@@ -18,40 +18,40 @@ describe("AgregarSalaComando", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockRepositorioSala.guardar.mockReturnValue(mockSala);
+    mockRepositorioSala.guardar.mockResolvedValue(mockSala);
   });
 
   test("deberia crear un objeto AgregarSalaComando", () => {
     expect(agregarSalaComando).toBeInstanceOf(AgregarSalaComando);
   });
 
-  test("deberia crear correctamente una sala y devolver el resultado", () => {
-    const sala: Sala = agregarSalaComando.ejecutar(capacidad);
+  test("deberia crear correctamente una sala y devolver el resultado", async () => {
+    const sala: Sala = await agregarSalaComando.ejecutar(capacidad);
     expect(sala.obtenerId()).toEqual(id);
     expect(sala.obtenerCapacidad()).toEqual(capacidad);
   });
 
-  test("deberia crear correctamente mas de una sala y devolver el resultado de cada una", () => {
-    const sala: Sala = agregarSalaComando.ejecutar(capacidad);
+  test("deberia crear correctamente mas de una sala y devolver el resultado de cada una", async () => {
+    const sala: Sala = await agregarSalaComando.ejecutar(capacidad);
     expect(sala.obtenerId()).toEqual(id);
     expect(sala.obtenerCapacidad()).toEqual(capacidad);
 
     const id2: number = 2;
     const capacidad2: number = 100;
     const mockSala2: Sala = new Sala(id2, capacidad2);
-    mockRepositorioSala.guardar.mockReturnValue(mockSala2);
-    const sala2: Sala = agregarSalaComando.ejecutar(capacidad2);
+    mockRepositorioSala.guardar.mockResolvedValue(mockSala2);
+    const sala2: Sala = await agregarSalaComando.ejecutar(capacidad2);
     expect(sala2.obtenerId()).toEqual(id2);
     expect(sala2.obtenerCapacidad()).toEqual(capacidad2);
   });
 
-  test("deberia devolver un error si la capacidad es igual o menor que 0", () => {
+  test("deberia devolver un error si la capacidad es igual o menor que 0", async() => {
     const capacidadIncorrecta: number = 0;
-    expect(() => {agregarSalaComando.ejecutar(capacidadIncorrecta)}).toThrow(CampoIncorrectoSalaError);
+    await expect(agregarSalaComando.ejecutar(capacidadIncorrecta)).rejects.toThrow(CampoIncorrectoSalaError);
   });
 
-  test("deberia llamar al repositorio de salas", () => {
-    agregarSalaComando.ejecutar(capacidad);
+  test("deberia llamar al repositorio de salas", async () => {
+    await agregarSalaComando.ejecutar(capacidad);
     expect(mockRepositorioSala.guardar).toHaveBeenCalled();
   });
 });

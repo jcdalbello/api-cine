@@ -6,9 +6,9 @@ export default class AgregarSalaComando {
     private readonly repositorioSala: RepositorioSala,
   ) {}
 
-  public ejecutar(capacidad: number): Sala {
-    const sala: Sala = new Sala(0, capacidad);
-    const salaGuardada: Sala = this.repositorioSala.guardar(sala);
+  public async ejecutar(capacidad: number): Promise<Sala> {
+    const salaSinGuardar: Sala = new Sala(0, capacidad);
+    const salaGuardada: Sala = await this.repositorioSala.guardar(salaSinGuardar);
     return salaGuardada;
   }
 }

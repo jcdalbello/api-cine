@@ -13,6 +13,7 @@ enum CodigosHTTP {
 
 afterEach(async () => {
   await pool.query("TRUNCATE TABLE peliculas RESTART IDENTITY CASCADE");
+  await pool.query("TRUNCATE TABLE salas RESTART IDENTITY CASCADE");
 });
 
 afterAll(async () => {

@@ -23,4 +23,16 @@ describe("ObtenerSalasComando", () => {
     expect(mockRepositorioSala.listarSalas).toHaveBeenCalled();
     expect(salas).toContain(sala);
   });
+
+  test("deberia devolver una lista con todas las salas guardadas", () => {
+    const sala1: Sala = new Sala(1, 50);
+    const sala2: Sala = new Sala(2, 100);
+    const sala3: Sala = new Sala(3, 150);
+    mockRepositorioSala.listarSalas.mockReturnValue([sala1, sala2, sala3]);
+    const salas = obtenerSalasComando.ejectuar();
+    expect(mockRepositorioSala.listarSalas).toHaveBeenCalled();
+    expect(salas).toContain(sala1);
+    expect(salas).toContain(sala2);
+    expect(salas).toContain(sala3);
+  });
 });

@@ -108,12 +108,12 @@ function validadDatosVaciosDePelicula(capacidad: number | undefined): void {
   }
 }
 
-app.post("/salas", (req: Request, res: Response) => {
+app.post("/salas", async (req: Request, res: Response) => {
   const capacidad = req.body.capacidad as number;
   try {
     validadDatosVaciosDePelicula(capacidad);
     const agregarSalaComando: AgregarSalaComando = new AgregarSalaComando(repositorioSala);
-    const sala: Sala = agregarSalaComando.ejecutar(capacidad);
+    const sala: Sala = await agregarSalaComando.ejecutar(capacidad);
     res.status(201).json(sala);
   } catch (error) {
     if (error instanceof CampoIncorrectoSalaError) {
