@@ -109,3 +109,59 @@ GET {{host}}/peliculas?titulo=Termi
 
 ### Obtener una lista de peliculas con un genero similar al filtro (fuzzy search) (200)
 GET {{host}}/peliculas?genero=Acc
+
+### Crear una nueva sala (201)
+POST {{host}}/salas
+Content-Type: application/json
+
+{
+  "capacidad": 50
+}
+
+### Crear otra nueva sala (201)
+POST {{host}}/salas
+Content-Type: application/json
+
+{
+  "capacidad": 100
+}
+
+### Crear otra nueva sala (201)
+POST {{host}}/salas
+Content-Type: application/json
+
+{
+  "capacidad": 150
+}
+
+### Intentar crear una sala con capacidad 0 (400)
+POST {{host}}/salas
+Content-Type: application/json
+
+{
+  "capacidad": 0
+}
+
+### Intentar crear una sala sin capacidad (400)
+POST {{host}}/salas
+Content-Type: application/json
+
+{}
+
+### Obtener todas las salas creadas (Lista vacia al inicio)
+GET {{host}}/salas
+Content-Type: application/json
+
+{}
+
+### Obtener todas las salas con una capacidad igual o mayor al parametro (Lista vacia al inicio)
+GET {{host}}/salas?capacidad=100
+Content-Type: application/json
+
+{}
+
+### Intentar obtener salas pasando una capacidad negativa (400
+GET {{host}}/salas?capacidad=-1
+Content-Type: application/json
+
+{}
