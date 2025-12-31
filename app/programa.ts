@@ -18,6 +18,7 @@ import BuscarSalasComando from './comandos/buscar-salas-comando';
 import BuscarSalaPorIdComando from './comandos/buscar-sala-por-id-comando';
 import SalaNoEncontradaError from './errores/sala-no-encontrada-error';
 import CreacionPeliculaDTO from './dtos/creacion-pelicula-dto';
+import PeliculaDTO from './dtos/pelicula-dto';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -73,12 +74,8 @@ app.post("/peliculas", async (req: Request, res: Response) => {
       genero: genero!,
     };
     const agregarPeliculaComando: AgregarPeliculaComando = new AgregarPeliculaComando(repositorioPelicula);
-    const pelicula = await agregarPeliculaComando.ejecutar(creacionPeliculaDTO);
-    res.status(201).send({
-      id: pelicula.obtenerId(),
-      titulo: pelicula.obtenerTitulo(),
-      genero: pelicula.obtenerGenero(),
-    });
+    const pelicula: PeliculaDTO = await agregarPeliculaComando.ejecutar(creacionPeliculaDTO);
+    res.status(201).json(pelicula);
   } catch (error) {
     if (error instanceof CampoIncorrectoPeliculaError) {
       const mensajesDeError: MensajesDeErrorDePelicula = {
