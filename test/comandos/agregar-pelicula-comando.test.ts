@@ -3,6 +3,7 @@ import Pelicula from "../../app/dominio/pelicula";
 import { Mock, mock } from "ts-jest-mocker";
 import RepositorioPelicula from "../../app/dominio/puerto-repositorio-pelicula";
 import CampoIncorrectoPeliculaError from "../../app/errores/campo-incorrecto-pelicula-error";
+import CreacionPeliculaDTO from "../../app/dtos/creacion-pelicula-dto";
 
 let mockRepositorioPelicula: Mock<RepositorioPelicula>;
 let agregarPeliculaComando: AgregarPeliculaComando;
@@ -14,6 +15,10 @@ describe("AgregarPeliculaComando", () => {
   const id: number = 1;
   const titulo: string = "pelicula1";
   const genero: string = "genero1";
+  const creacionPeliculaDTO: CreacionPeliculaDTO = {
+    titulo: titulo,
+    genero: genero,
+  };
   const mockPelicula: Pelicula = new Pelicula(id, titulo, genero);
 
   test("deberia crear un objeto AgregarPeliculaComando", () => {
@@ -22,7 +27,7 @@ describe("AgregarPeliculaComando", () => {
 
   test("deberia crear una pelicula con los datos correctos", async () => {
     mockRepositorioPelicula.guardar.mockResolvedValue(mockPelicula);
-    const pelicula: Pelicula = await agregarPeliculaComando.ejecutar(titulo, genero);
+    const pelicula: Pelicula = await agregarPeliculaComando.ejecutar(creacionPeliculaDTO);
     expect(pelicula.obtenerId()).toEqual(id);
     expect(pelicula.obtenerTitulo()).toEqual(titulo);
     expect(pelicula.obtenerGenero()).toEqual(genero);
@@ -30,7 +35,7 @@ describe("AgregarPeliculaComando", () => {
 
   test("deberia crear dos peliculas con los datos correctos", async () => {
     mockRepositorioPelicula.guardar.mockResolvedValue(mockPelicula);
-    const pelicula: Pelicula = await agregarPeliculaComando.ejecutar(titulo, genero);
+    const pelicula: Pelicula = await agregarPeliculaComando.ejecutar(creacionPeliculaDTO);
     expect(pelicula.obtenerId()).toEqual(id);
     expect(pelicula.obtenerTitulo()).toEqual(titulo);
     expect(pelicula.obtenerGenero()).toEqual(genero);
@@ -39,7 +44,7 @@ describe("AgregarPeliculaComando", () => {
     const titulo2: string = "pelicula2";
     const genero2: string = "genero2";
     mockRepositorioPelicula.guardar.mockResolvedValue(new Pelicula(id2, titulo2, genero2));
-    const pelicula2: Pelicula = await agregarPeliculaComando.ejecutar(titulo2, genero2);
+    const pelicula2: Pelicula = await agregarPeliculaComando.ejecutar(creacionPeliculaDTO);
     expect(pelicula2.obtenerId()).toEqual(id2);
     expect(pelicula2.obtenerTitulo()).toEqual(titulo2);
     expect(pelicula2.obtenerGenero()).toEqual(genero2);
@@ -48,12 +53,20 @@ describe("AgregarPeliculaComando", () => {
   test("deberia devolver un error al pasar un titulo demasiado largo", async () => {
     const longitudMaximaTitulo: number = 70;
     const tituloDemasiadoLargo: string = "a".repeat(longitudMaximaTitulo + 1);
-    await expect(agregarPeliculaComando.ejecutar(tituloDemasiadoLargo, genero)).rejects.toThrow(CampoIncorrectoPeliculaError);
+    const creacionPeliculaDTOTituloDemasiadoLargo: CreacionPeliculaDTO = {
+      ...creacionPeliculaDTO,
+      titulo: tituloDemasiadoLargo,
+    };
+    await expect(agregarPeliculaComando.ejecutar(creacionPeliculaDTOTituloDemasiadoLargo)).rejects.toThrow(CampoIncorrectoPeliculaError);
   });
   
   test("deberia devolver un error al pasar un genero demasiado largo", async () => {
     const longitudMaximaGenero: number = 70;
     const generoDemasiadoLargo: string = "a".repeat(longitudMaximaGenero + 1);
-    await expect(agregarPeliculaComando.ejecutar(titulo, generoDemasiadoLargo)).rejects.toThrow(CampoIncorrectoPeliculaError);
+    const creacionPeliculaDTOTituloDemasiadoLargo: CreacionPeliculaDTO = {
+      ...creacionPeliculaDTO,
+      genero: generoDemasiadoLargo,
+    };
+    await expect(agregarPeliculaComando.ejecutar(creacionPeliculaDTOTituloDemasiadoLargo)).rejects.toThrow(CampoIncorrectoPeliculaError);
   });
 });

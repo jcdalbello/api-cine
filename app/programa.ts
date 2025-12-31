@@ -17,6 +17,7 @@ import AgregarSalaComando from './comandos/agregar-sala-comando';
 import BuscarSalasComando from './comandos/buscar-salas-comando';
 import BuscarSalaPorIdComando from './comandos/buscar-sala-por-id-comando';
 import SalaNoEncontradaError from './errores/sala-no-encontrada-error';
+import CreacionPeliculaDTO from './dtos/creacion-pelicula-dto';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -67,8 +68,12 @@ app.post("/peliculas", async (req: Request, res: Response) => {
   const genero: string | undefined = req.body.genero;
   try { 
     validarDatosVaciosDePelicula(titulo, genero);
+    const creacionPeliculaDTO: CreacionPeliculaDTO = {
+      titulo: titulo!,
+      genero: genero!,
+    };
     const agregarPeliculaComando: AgregarPeliculaComando = new AgregarPeliculaComando(repositorioPelicula);
-    const pelicula = await agregarPeliculaComando.ejecutar(titulo!, genero!);
+    const pelicula = await agregarPeliculaComando.ejecutar(creacionPeliculaDTO);
     res.status(201).send({
       id: pelicula.obtenerId(),
       titulo: pelicula.obtenerTitulo(),
