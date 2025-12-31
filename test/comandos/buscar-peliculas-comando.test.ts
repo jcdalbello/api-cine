@@ -2,7 +2,7 @@ import BuscarPeliculasComando from "../../app/comandos/buscar-peliculas-comando"
 import Pelicula from "../../app/dominio/pelicula";
 import { Mock, mock } from "ts-jest-mocker";
 import RepositorioPelicula from "../../app/dominio/puerto-repositorio-pelicula";
-import FiltrosBusquedaPeliculasDTO from "../../app/dominio/filtros-busqueda-peliculas-dto";
+import FiltrosBusquedaPeliculasDTO from "../../app/dtos/filtros-busqueda-peliculas-dto";
 import ListaPeliculasDTO from "../../app/dtos/lista-peliculas-dto";
 
 let mockRepositorioPelicula: Mock<RepositorioPelicula>;

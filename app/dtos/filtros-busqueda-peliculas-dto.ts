@@ -1,4 +1,4 @@
 export default interface FiltrosBusquedaPeliculasDTO {
-  titulo?: string;
-  genero?: string;
+  readonly titulo?: string;
+  readonly genero?: string;
 }

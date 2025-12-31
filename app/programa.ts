@@ -21,8 +21,9 @@ import PeliculaDTO from './dtos/pelicula-dto';
 import CreacionSalaDTO from './dtos/creacion-sala-dto';
 import SalaDTO from './dtos/sala-dto';
 import IdDTO from './dtos/id-dto';
-import FiltrosBusquedaPeliculasDTO from './dominio/filtros-busqueda-peliculas-dto';
+import FiltrosBusquedaPeliculasDTO from './dtos/filtros-busqueda-peliculas-dto';
 import ListaPeliculasDTO from './dtos/lista-peliculas-dto';
+import FiltrosBusquedaSalasDTO from './dtos/filtros-busqueda-salas-dto';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -142,8 +143,11 @@ app.get("/salas", async (req: Request, res: Response) => {
     capacidad = parseInt(capacidadComoString);
   }
   try {
+    const filtros: FiltrosBusquedaSalasDTO = {
+      capacidad: capacidad!,
+    };
     const obtenerSalasComando: BuscarSalasComando = new BuscarSalasComando(repositorioSala);
-    const salas: Sala[] = await obtenerSalasComando.ejectuar(capacidad);
+    const salas: Sala[] = await obtenerSalasComando.ejectuar(filtros);
     res.status(200).json(salas);
   } catch(error) {
     if (error instanceof CampoIncorrectoSalaError) {

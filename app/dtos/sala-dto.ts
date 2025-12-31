@@ -1,4 +1,4 @@
 export default interface SalaDTO {
-  id: number;
-  capacidad: number;
+  readonly id: number;
+  readonly capacidad: number;
 }

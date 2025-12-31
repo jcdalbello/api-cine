@@ -1,5 +1,5 @@
 import RepositorioPelicula from "../dominio/puerto-repositorio-pelicula";
-import FiltrosBusquedaPeliculasDTO from "../dominio/filtros-busqueda-peliculas-dto";
+import FiltrosBusquedaPeliculasDTO from "../dtos/filtros-busqueda-peliculas-dto";
 import Pelicula from "../dominio/pelicula";
 import PeliculaDTO from "../dtos/pelicula-dto";
 import ListaPeliculasDTO from "../dtos/lista-peliculas-dto";
