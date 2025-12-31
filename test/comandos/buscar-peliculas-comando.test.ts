@@ -3,6 +3,7 @@ import Pelicula from "../../app/dominio/pelicula";
 import { Mock, mock } from "ts-jest-mocker";
 import RepositorioPelicula from "../../app/dominio/puerto-repositorio-pelicula";
 import FiltrosBusquedaPeliculasDTO from "../../app/dominio/filtros-busqueda-peliculas-dto";
+import ListaPeliculasDTO from "../../app/dtos/lista-peliculas-dto";
 
 let mockRepositorioPelicula: Mock<RepositorioPelicula>;
 let obtenerPeliculasComando: BuscarPeliculasComando;
@@ -23,16 +24,16 @@ describe("BuscarPeliculasComando", () => {
   test("deberia devolver una lista vacia cuando no hay peliculas", async () => {
     mockRepositorioPelicula.listarPeliculas.mockResolvedValue([]);
     const filtros: FiltrosBusquedaPeliculasDTO = {};
-    const peliculas: Pelicula[] = await obtenerPeliculasComando.ejecutar(filtros);
-    expect(peliculas.length).toEqual(0);
+    const listaPeliculas: ListaPeliculasDTO = await obtenerPeliculasComando.ejecutar(filtros);
+    expect(listaPeliculas.peliculas.length).toEqual(0);
   });
 
   test("deberia devolver una lista con una sola pelicula cuando solo hay una pelicula guardada", async () => {
     mockRepositorioPelicula.listarPeliculas.mockResolvedValue([mockPelicula]);
     const filtros: FiltrosBusquedaPeliculasDTO = {};
-    const peliculas: Pelicula[] = await obtenerPeliculasComando.ejecutar(filtros);
-    expect(peliculas.length).toEqual(1);
-    expect(peliculas).toContain(mockPelicula);
+    const listaPeliculas: ListaPeliculasDTO = await obtenerPeliculasComando.ejecutar(filtros);
+    expect(listaPeliculas.peliculas.length).toEqual(1);
+    expect(listaPeliculas.peliculas).toContainEqual(mockPelicula);
   });
 
   test("deberia devolver una lista con las peliculas que coinciden con el titulo", async () => {
@@ -40,9 +41,9 @@ describe("BuscarPeliculasComando", () => {
     const filtros: FiltrosBusquedaPeliculasDTO = {
       titulo: titulo,
     };
-    const peliculas: Pelicula[] = await obtenerPeliculasComando.ejecutar(filtros);
-    expect(peliculas.length).toEqual(1);
-    expect(peliculas).toContain(mockPelicula);
+    const listaPeliculas: ListaPeliculasDTO = await obtenerPeliculasComando.ejecutar(filtros);
+    expect(listaPeliculas.peliculas.length).toEqual(1);
+    expect(listaPeliculas.peliculas).toContainEqual(mockPelicula);
   });
 
   test("deberia devolver una lista con las peliculas que coinciden con el genero", async () => {
@@ -50,9 +51,9 @@ describe("BuscarPeliculasComando", () => {
     const filtros: FiltrosBusquedaPeliculasDTO = {
       genero: genero,
     };
-    const peliculas: Pelicula[] = await obtenerPeliculasComando.ejecutar(filtros);
-    expect(peliculas.length).toEqual(1);
-    expect(peliculas).toContain(mockPelicula);
+    const listaPeliculas: ListaPeliculasDTO = await obtenerPeliculasComando.ejecutar(filtros);
+    expect(listaPeliculas.peliculas.length).toEqual(1);
+    expect(listaPeliculas.peliculas).toContainEqual(mockPelicula);
   });
 
   test("deberia devolver una lista con las peliculas que tengan un titulo similar al indicado", async () => {
@@ -62,9 +63,9 @@ describe("BuscarPeliculasComando", () => {
     const filtros: FiltrosBusquedaPeliculasDTO = {
       titulo: tituloSimilar,
     };
-    const peliculas: Pelicula[] = await obtenerPeliculasComando.ejecutar(filtros);
-    expect(peliculas.length).toEqual(1);
-    expect(peliculas).toContain(mockPelicula);
+    const listaPeliculas: ListaPeliculasDTO = await obtenerPeliculasComando.ejecutar(filtros);
+    expect(listaPeliculas.peliculas.length).toEqual(1);
+    expect(listaPeliculas.peliculas).toContainEqual(mockPelicula);
   });
 
   test("deberia devolver una lista con las peliculas que tengan un titulo similar al indicado", async () => {
@@ -74,8 +75,8 @@ describe("BuscarPeliculasComando", () => {
     const filtros: FiltrosBusquedaPeliculasDTO = {
       genero: generoSimilar,
     };
-    const peliculas: Pelicula[] = await obtenerPeliculasComando.ejecutar(filtros);
-    expect(peliculas.length).toEqual(1);
-    expect(peliculas).toContain(mockPelicula);
+    const listaPeliculas: ListaPeliculasDTO = await obtenerPeliculasComando.ejecutar(filtros);
+    expect(listaPeliculas.peliculas.length).toEqual(1);
+    expect(listaPeliculas.peliculas).toContainEqual(mockPelicula);
   });
 });

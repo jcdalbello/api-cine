@@ -4,7 +4,6 @@ import RepositorioPelicula from './dominio/puerto-repositorio-pelicula';
 import RepositorioPeliculaPostgreSQL from './adaptadores/repositorio-pelicula-postgresql';
 import RepositorioSalaPostgreSQL from './adaptadores/repositorio-sala-postgresql';
 import CampoIncorrectoPeliculaError from './errores/campo-incorrecto-pelicula-error';
-import Pelicula from './dominio/pelicula';
 import BuscarPeliculasComando from './comandos/buscar-peliculas-comando';
 import BuscarPeliculaPorIdComando from './comandos/buscar-pelicula-por-id-comando';
 import PeliculaNoEncontradaError from './errores/pelicula-no-encontrada-error';
@@ -23,6 +22,7 @@ import CreacionSalaDTO from './dtos/creacion-sala-dto';
 import SalaDTO from './dtos/sala-dto';
 import IdDTO from './dtos/id-dto';
 import FiltrosBusquedaPeliculasDTO from './dominio/filtros-busqueda-peliculas-dto';
+import ListaPeliculasDTO from './dtos/lista-peliculas-dto';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -54,8 +54,8 @@ app.get("/peliculas", async (req: Request, res: Response) => {
     genero: genero!,
   };
   const obtenerPeliculas: BuscarPeliculasComando = new BuscarPeliculasComando(repositorioPelicula);
-  const peliculas: Pelicula[] = await obtenerPeliculas.ejecutar(filtros);
-  res.status(200).send(peliculas);
+  const listaPeliculas: ListaPeliculasDTO = await obtenerPeliculas.ejecutar(filtros);
+  res.status(200).send(listaPeliculas.peliculas);
 });
 
 function validarDatosVaciosDePelicula(titulo: string | undefined, genero: string | undefined): void {
