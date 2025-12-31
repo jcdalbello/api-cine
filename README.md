@@ -36,7 +36,7 @@ $ yarn start
 
 ## Endpoint
 
-Los endpoints disponibles de la aplicación pueden verse en el archivo `api.yml`, y renderizarse en [Swagger Editor](https://editor.swagger.io/).
+Los endpoints disponibles de la aplicación, asi como los casos de error y las restricciones de los objetos, pueden verse en el archivo `api.yml` y renderizarse en [Swagger Editor](https://editor.swagger.io/).
 
 ## Pruebas
 
@@ -48,7 +48,7 @@ A lo largo del desarrollo del programa se realizaron los siguientes tipos de pru
 
 * **Pruebas de aceptación**: con el archivo `pruebas.http` se puede probar facilmente el comportamiento de los endpoint, a modo de tener una forma sencilla de realizar pruebas manuales o que apunten a casos específicos que busque el usuario.
 
-## Arquitectura
+## Arquitectura del proyecto
 
 ### Arquitectura hexagonal
 
@@ -67,6 +67,10 @@ Se usaron clases Repositorio para abstraer la lógica de acceso a la capa de per
 ### Patron Comando
 
 A modo de interfaz entre el controlador y el modelo computable, se usan clases que modelan casos de uso para realizar las funcionalidades de la API. Esto permite una mayor modularización, evitar crear una sola clase sobrecargada que maneje todas las funcionalidades, y facilita el testeo.
+
+### DTO
+
+Usados para establecer una interfaz de comunicación entre el controlador y los comandos del modelo computable, así como entre el modelo y la vista, además de facilitar futuras refactorizaciones que involucren cambios en los datos que se pasan en los endpoints a los comandos.
 
 ## Estructura de archivos
 
@@ -103,6 +107,6 @@ PostgreSQL | Gestión de base de datos
 
 ## Creditos
 
-Hecho por Dal Bello Juan Cruz, estudiante de Ingeniería en Computación UNTREF (3er año, al momento de creación de este repositorio).
+Hecho por Dal Bello Juan Cruz, estudiante de Ingeniería en Computación UNTREF.
 
 Basado en el proyecto final de la materia Ingeniería de Software I.
