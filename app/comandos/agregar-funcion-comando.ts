@@ -7,6 +7,7 @@ import CreacionFuncionDTO from "../dtos/creacion-funcion-dto";
 import FuncionDTO from "../dtos/funcion-dto";
 import PeliculaDTO from "../dtos/pelicula-dto";
 import SalaDTO from "../dtos/sala-dto";
+import Funcion from "../dominio/funcion";
 
 export default class AgregarFuncionComando {
   constructor(
@@ -31,9 +32,11 @@ export default class AgregarFuncionComando {
       titulo: pelicula.obtenerTitulo(),
       genero: pelicula.obtenerGenero(),
     };
+
+    const funcion: Funcion = await this.repositorioFuncion.guardar(new Funcion(idFuncion, sala, pelicula));
   
     const funcionDTO: FuncionDTO = {
-      id: idFuncion,
+      id: funcion.obtenerId(),
       sala: salaDTO,
       pelicula: peliculaDTO,
     };
