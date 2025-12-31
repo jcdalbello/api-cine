@@ -22,6 +22,7 @@ import PeliculaDTO from './dtos/pelicula-dto';
 import CreacionSalaDTO from './dtos/creacion-sala-dto';
 import SalaDTO from './dtos/sala-dto';
 import IdDTO from './dtos/id-dto';
+import FiltrosBusquedaPeliculasDTO from './dominio/filtros-busqueda-peliculas-dto';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -48,8 +49,12 @@ app.get("/", (req: Request, res: Response) => {
 app.get("/peliculas", async (req: Request, res: Response) => {
   const titulo = req.query.titulo as string | undefined;
   const genero = req.query.genero as string | undefined;
+  const filtros: FiltrosBusquedaPeliculasDTO = {
+    titulo: titulo!,
+    genero: genero!,
+  };
   const obtenerPeliculas: BuscarPeliculasComando = new BuscarPeliculasComando(repositorioPelicula);
-  const peliculas: Pelicula[] = await obtenerPeliculas.ejecutar(titulo, genero);
+  const peliculas: Pelicula[] = await obtenerPeliculas.ejecutar(filtros);
   res.status(200).send(peliculas);
 });
 
