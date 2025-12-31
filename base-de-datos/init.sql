@@ -8,3 +8,9 @@ CREATE TABLE IF NOT EXISTS salas (
     id SERIAL PRIMARY KEY,
     capacidad INT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS funciones (
+    id SERIAL PRIMARY KEY,
+    id_sala INT NOT NULL,
+    id_pelicula INT NOT NULL
+);

@@ -21,6 +21,7 @@ describe("RepositorioFuncionPostgresql", () => {
   afterEach(async () => {
     await pool.query("TRUNCATE TABLE peliculas RESTART IDENTITY CASCADE");
     await pool.query("TRUNCATE TABLE salas RESTART IDENTITY CASCADE");
+    await pool.query("TRUNCATE TABLE funciones RESTART IDENTITY CASCADE");
   });
 
   afterAll(async () => {
@@ -44,5 +45,26 @@ describe("RepositorioFuncionPostgresql", () => {
     expect(funcionGuardada.obtenerId()).toEqual(idFuncion);
     expect(funcionGuardada.obtenerSala()).toEqual(salaGuardada);
     expect(funcionGuardada.obtenerPelicula()).toEqual(peliculaGuardada);
+  });
+
+
+  test("deberia guardar multiples funciones en la base de datos y devolver los datos correctos de cada una", async () => {
+    const cantidadDeFuncionesAGuardar: number = 5;
+    for (let i = 1; i <= cantidadDeFuncionesAGuardar; i++) {
+      const salaParaGuardarActual: Sala = new Sala(0, capacidadSala + i);
+      const salaGuardadaActual: Sala = await repositorioSalaPostgreSQL.guardar(salaParaGuardarActual);
+
+      const peliculaParaGuardarActual: Pelicula = new Pelicula(0, tituloPelicula + i, generoPelicula + i);
+      const peliculaGuardadaActual: Pelicula = await repositorioPeliculaPostgreSQL.guardar(peliculaParaGuardarActual);
+
+      const funcionParaGuardarActual: Funcion = new Funcion(0, salaGuardadaActual, peliculaGuardadaActual);
+      const funcionGuardadaActual: Funcion = await repositorioFuncionPostgresql.guardar(funcionParaGuardarActual);
+
+      const idFuncionActual: number = i;
+
+      expect(funcionGuardadaActual.obtenerId()).toEqual(idFuncionActual);
+      expect(funcionGuardadaActual.obtenerSala()).toEqual(salaGuardadaActual);
+      expect(funcionGuardadaActual.obtenerPelicula()).toEqual(peliculaGuardadaActual);
+    }
   });
 });
