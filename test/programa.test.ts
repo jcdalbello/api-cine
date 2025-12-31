@@ -329,7 +329,7 @@ describe("GET /peliculas/{id}", () => {
     const idDesconocido: number = 999;
     const respuesta = await requestWithSupertest.get(urlPeliculasPorId + idDesconocido.toString());
     expect(respuesta.status).toEqual(CodigosHTTP.RecursoNoEncontrado);
-    expect(respuesta.body.id).toEqual("no se encontro ninguna pelicula con el id indicado");
+    expect(respuesta.body.id).toEqual("No se encontro ninguna pelicula con el id indicado");
   });
 
   test("deberia devolver un error y un codigo 404 si no existe ninguna pelicula con el id indicado con peliculas cargadas", async () => {
@@ -337,7 +337,7 @@ describe("GET /peliculas/{id}", () => {
     const idDesconocido: number = 999;
     const respuesta = await requestWithSupertest.get(urlPeliculasPorId + idDesconocido.toString());
     expect(respuesta.status).toEqual(CodigosHTTP.RecursoNoEncontrado);
-    expect(respuesta.body.id).toEqual("no se encontro ninguna pelicula con el id indicado");
+    expect(respuesta.body.id).toEqual("No se encontro ninguna pelicula con el id indicado");
   });
 });
 
@@ -642,6 +642,6 @@ describe("POST /funciones", () => {
 
     const respuesta = await requestWithSupertest.post("/funciones").send(creacionFuncionDTO);
     expect(respuesta.status).toEqual(CodigosHTTP.RecursoNoEncontrado);
-    expect(respuesta.body.idPelicula).toEqual("no se encontro ninguna pelicula con el id indicado");
+    expect(respuesta.body.idPelicula).toEqual("No se encontro ninguna pelicula con el id indicado");
   });
 });

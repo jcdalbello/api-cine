@@ -3,6 +3,6 @@ export default class PeliculaNoEncontradaError extends Error {
 
   constructor() {
     super();
-    this.id = "no se encontro ninguna pelicula con el id indicado";
+    this.id = "No se encontro ninguna pelicula con el id indicado";
   }
 }
