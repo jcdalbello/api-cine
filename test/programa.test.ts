@@ -645,3 +645,11 @@ describe("POST /funciones", () => {
     expect(respuesta.body.idPelicula).toEqual("No se encontro ninguna pelicula con el id indicado");
   });
 });
+
+describe("GET /funciones", () => {
+  test("deberia devolver una lista vacia si no se guardo ninguna funcion", async () => {
+    const respuesta = await requestWithSupertest.get("/funciones");
+    expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
+    expect(respuesta.body.length).toEqual(0);
+  });
+});
