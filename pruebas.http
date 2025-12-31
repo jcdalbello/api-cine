@@ -160,8 +160,14 @@ Content-Type: application/json
 
 {}
 
-### Intentar obtener salas pasando una capacidad negativa (400
+### Intentar obtener salas pasando una capacidad negativa (400)
 GET {{host}}/salas?capacidad=-1
+Content-Type: application/json
+
+{}
+
+### Intentar obtener salas pasando un valor no numerico como capacidad (400)
+GET {{host}}/salas?capacidad=noEsUnNumero
 Content-Type: application/json
 
 {}
