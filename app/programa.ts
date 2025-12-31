@@ -78,12 +78,7 @@ app.post("/peliculas", async (req: Request, res: Response) => {
     res.status(201).json(pelicula);
   } catch (error) {
     if (error instanceof CampoIncorrectoPeliculaError) {
-      const mensajesDeError: MensajesDeErrorDePelicula = {
-        id: error.id!,
-        titulo: error.titulo!,
-        genero: error.genero!,
-      }
-      res.status(400).send(mensajesDeError);
+      res.status(400).json(error);
     }
   }
 });
