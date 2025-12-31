@@ -647,9 +647,42 @@ describe("POST /funciones", () => {
 });
 
 describe("GET /funciones", () => {
+  const idFuncion: number = 1;
+
+  const idSala: number = 1;
+  const idPelicula: number = 1;
+
+  const capacidadSala: number = 50;
+  const tituloPelicula: string = "pelicula1";
+  const generoPelicula: string = "genero1";
+
+  const creacionSalaDTO: CreacionSalaDTO = { capacidad: capacidadSala };
+
+  const creacionPeliculaDTO: CreacionPeliculaDTO ={
+    titulo: tituloPelicula,
+    genero: generoPelicula,
+  };
+
+  const creacionFuncionDTO: CreacionFuncionDTO = {
+    idSala: idSala,
+    idPelicula: idPelicula,
+  };
+
   test("deberia devolver una lista vacia si no se guardo ninguna funcion", async () => {
     const respuesta = await requestWithSupertest.get("/funciones");
     expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
     expect(respuesta.body.length).toEqual(0);
+  });
+
+  test.skip("deberia devolver una lista con una sola funcion si solo se agrego una", async () => {
+    const respuestaPostSala = await requestWithSupertest.post("/salas").send(creacionSalaDTO);
+    const respuestaPostPelicula = await requestWithSupertest.post("/peliculas").send(creacionPeliculaDTO);
+    await requestWithSupertest.post("/funciones").send(creacionFuncionDTO);
+    const respuesta = await requestWithSupertest.get("/funciones");
+    expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
+    expect(respuesta.body.length).toEqual(1);
+    expect(respuesta.body[0].id).toEqual(idFuncion);
+    expect(respuesta.body[0].sala).toEqual(respuestaPostSala.body);
+    expect(respuesta.body[0].pelicula).toEqual(respuestaPostPelicula.body);
   });
 });

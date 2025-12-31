@@ -31,6 +31,8 @@ import RepositorioFuncion from './dominio/puerto-repositorio-funcion';
 import RepositorioFuncionPostgreSQL from './adaptadores/repositorio-funcion-postgresql';
 import MensajesDeErrorDeFuncion from './errores/i-mensajes-de-error-de-funcion';
 import CampoIncorrectoFuncionError from './errores/campo-incorrecto-funcion-error';
+import FiltrosBusquedaFuncionesDTO from './dtos/filtros-busqueda-funciones-dto';
+import BuscarFuncionesComando from './comandos/buscar-funciones-comando';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -268,7 +270,10 @@ app.post("/funciones", async (req: Request, res: Response) => {
 });
 
 app.get("/funciones", (req: Request, res: Response) => {
-  res.status(200).json([]);
+  const filtros: FiltrosBusquedaFuncionesDTO = {};
+  const buscarFuncionesComando: BuscarFuncionesComando = new BuscarFuncionesComando();
+  const funciones = buscarFuncionesComando.ejecutar(filtros);
+  res.status(200).json(funciones);
 });
 
 const server = app
