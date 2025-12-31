@@ -136,13 +136,23 @@ app.post("/salas", async (req: Request, res: Response) => {
   }
 });
 
+function validarDatosDeBusquedaDeSalaPorFiltros(capacidad: number | undefined): void {
+  const mensajes: MensajesDeErrorDeSala = {};
+
+  if (capacidad !== undefined && Number.isNaN(capacidad)) {
+    mensajes.capacidad = "La capacidad debe ser un numero valido";
+  }
+
+  if (Object.keys(mensajes).length > 0) {
+    throw new CampoIncorrectoSalaError(mensajes);
+  }
+}
+
 app.get("/salas", async (req: Request, res: Response) => {
   const capacidadComoString = req.query.capacidad as string | undefined;
-  let capacidad: number | undefined = undefined;
-  if (capacidadComoString !== undefined) {
-    capacidad = parseInt(capacidadComoString);
-  }
+  const capacidad: number | undefined = capacidadComoString !== undefined ? parseInt(capacidadComoString) : undefined;
   try {
+    validarDatosDeBusquedaDeSalaPorFiltros(capacidad);
     const filtros: FiltrosBusquedaSalasDTO = {
       capacidad: capacidad!,
     };
