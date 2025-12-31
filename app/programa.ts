@@ -93,7 +93,7 @@ app.get("/peliculas/:id", async (req: Request, res: Response) => {
       id: id,
     };
     const obtenerPeliculaPorIdComando: BuscarPeliculaPorIdComando = new BuscarPeliculaPorIdComando(repositorioPelicula);
-    const pelicula: Pelicula = await obtenerPeliculaPorIdComando.ejecutar(idDTO);
+    const pelicula: PeliculaDTO = await obtenerPeliculaPorIdComando.ejecutar(idDTO);
     res.status(200).send(pelicula);
   } catch (error) {
     if (error instanceof PeliculaNoEncontradaError) {

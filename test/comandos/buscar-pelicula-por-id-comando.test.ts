@@ -4,6 +4,7 @@ import RepositorioPelicula from "../../app/dominio/puerto-repositorio-pelicula";
 import { mock, Mock } from "ts-jest-mocker";
 import PeliculaNoEncontradaError from "../../app/errores/pelicula-no-encontrada-error";
 import IdDTO from "../../app/dtos/id-dto";
+import PeliculaDTO from "../../app/dtos/pelicula-dto";
 
 let mockRepositorioPeliculas: Mock<RepositorioPelicula>;
 let obtenerPeliculaPorIdComando: BuscarPeliculaPorIdComando;
@@ -25,10 +26,10 @@ describe("BuscarPeliculaPorIdComando", () => {
     const idDTO: IdDTO = {
       id: id,
     };
-    const peliculaRecuperada: Pelicula = await obtenerPeliculaPorIdComando.ejecutar(idDTO);
-    expect(peliculaRecuperada.obtenerId()).toEqual(id);
-    expect(peliculaRecuperada.obtenerTitulo()).toEqual(titulo);
-    expect(peliculaRecuperada.obtenerGenero()).toEqual(genero);
+    const peliculaRecuperada: PeliculaDTO = await obtenerPeliculaPorIdComando.ejecutar(idDTO);
+    expect(peliculaRecuperada.id).toEqual(id);
+    expect(peliculaRecuperada.titulo).toEqual(titulo);
+    expect(peliculaRecuperada.genero).toEqual(genero);
   });
 
   test("deberia devolver cada pelicula correspondiente al id", async () => {
@@ -41,10 +42,10 @@ describe("BuscarPeliculaPorIdComando", () => {
       const idDTO: IdDTO = {
         id: idActual,
       };
-      const peliculaRecuperada: Pelicula = await obtenerPeliculaPorIdComando.ejecutar(idDTO);
-      expect(peliculaRecuperada.obtenerId()).toEqual(idActual);
-      expect(peliculaRecuperada.obtenerTitulo()).toEqual(tituloActual);
-      expect(peliculaRecuperada.obtenerGenero()).toEqual(generoActual);
+      const peliculaRecuperada: PeliculaDTO = await obtenerPeliculaPorIdComando.ejecutar(idDTO);
+      expect(peliculaRecuperada.id).toEqual(idActual);
+      expect(peliculaRecuperada.titulo).toEqual(tituloActual);
+      expect(peliculaRecuperada.genero).toEqual(generoActual);
     }
   });
 
