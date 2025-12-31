@@ -561,4 +561,40 @@ describe("POST /funciones", () => {
     expect(respuesta.body.sala).toEqual(respuestaPostSala.body);
     expect(respuesta.body.pelicula).toEqual(respuestaPostPelicula.body);
   });
+
+  test.skip("deberia devolver los datos de mas de una funcion creada", async () => {
+    const respuesta = await requestWithSupertest.post("/funciones").send(creacionFuncionDTO);
+    expect(respuesta.status).toEqual(CodigosHTTP.CreacionExitosa);
+    expect(respuesta.body.id).toEqual(idFuncion);
+    expect(respuesta.body.sala).toEqual(respuestaPostSala.body);
+    expect(respuesta.body.pelicula).toEqual(respuestaPostPelicula.body);
+
+    const idFuncion2: number = 2;
+    const idSala2: number = 2;
+    const idPelicula2: number = 2;
+
+    const capacidad2: number = 100;
+    const titulo2: string = "pelicula2";
+    const genero2: string = "genero2";
+
+    const creacionSalaDTO2: CreacionSalaDTO = { capacidad: capacidad2 };
+    const creacionPeliculaDTO2: CreacionPeliculaDTO = {
+      titulo: titulo2,
+      genero: genero2,
+    };
+
+    const respuestaPostSala2 = await requestWithSupertest.post("/salas").send(creacionSalaDTO2);
+    const respuestaPostPelicula2 = await requestWithSupertest.post("/peliculas").send(creacionPeliculaDTO2);
+
+    const creacionFuncionDTO2: CreacionFuncionDTO = {
+      idSala: idSala2,
+      idPelicula: idPelicula2,
+    };
+
+    const respuesta2 = await requestWithSupertest.post("/funciones").send(creacionFuncionDTO2);
+    expect(respuesta2.status).toEqual(CodigosHTTP.CreacionExitosa);
+    expect(respuesta2.body.id).toEqual(idFuncion2);
+    expect(respuesta2.body.sala).toEqual(respuestaPostSala2.body);
+    expect(respuesta2.body.pelicula).toEqual(respuestaPostPelicula2.body);
+  });
 });
