@@ -198,6 +198,10 @@ app.get("/salas/:id", async (req: Request, res: Response) => {
   }
 });
 
+app.post("/funciones", (req: Request, res: Response) => {
+  res.status(201).json();
+});
+
 const server = app
   .listen(puerto, (): void => {
     console.log(`Servidor corriendo en http://localhost:${puerto}`);

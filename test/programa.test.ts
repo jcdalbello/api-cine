@@ -1,6 +1,7 @@
 import { app, server } from "../app/programa";
 import supertest from "supertest";
 import { pool } from "../app/adaptadores/pool-postgresql";
+import CreacionFuncionDTO from "../app/dtos/creacion-funcion-dto";
 
 const requestWithSupertest = supertest(app);
 
@@ -513,5 +514,18 @@ describe("GET /salas/:id", () => {
     const respuesta = await requestWithSupertest.get(urlSalaPorId + idInvalido);
     expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
     expect(respuesta.body.id).toEqual("El id debe ser un numero valido");
+  });
+});
+
+describe("POST /funciones", () => {
+  test("deberia devolver un codigo 201 si se crea correctamente una funcion", async () => {
+    const idSala: number = 1;
+    const idPelicula: number = 1;
+    const creacionFuncionDTO: CreacionFuncionDTO = {
+      idSala: idSala,
+      idPelicula: idPelicula,
+    };
+    const respuesta = await requestWithSupertest.post("/funciones").send(creacionFuncionDTO);
+    expect(respuesta.status).toEqual(CodigosHTTP.CreacionExitosa);
   });
 });
