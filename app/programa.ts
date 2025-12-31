@@ -20,6 +20,8 @@ import SalaNoEncontradaError from './errores/sala-no-encontrada-error';
 import CreacionPeliculaDTO from './dtos/creacion-pelicula-dto';
 import PeliculaDTO from './dtos/pelicula-dto';
 import CreacionSalaDTO from './dtos/creacion-sala-dto';
+import SalaDTO from './dtos/sala-dto';
+import IdDTO from './dtos/id-dto';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -87,8 +89,11 @@ app.post("/peliculas", async (req: Request, res: Response) => {
 app.get("/peliculas/:id", async (req: Request, res: Response) => {
   try {
     const id: number = parseInt(req.params.id!);
+    const idDTO: IdDTO = {
+      id: id,
+    };
     const obtenerPeliculaPorIdComando: BuscarPeliculaPorIdComando = new BuscarPeliculaPorIdComando(repositorioPelicula);
-    const pelicula: Pelicula = await obtenerPeliculaPorIdComando.ejecutar(id);
+    const pelicula: Pelicula = await obtenerPeliculaPorIdComando.ejecutar(idDTO);
     res.status(200).send(pelicula);
   } catch (error) {
     if (error instanceof PeliculaNoEncontradaError) {
@@ -116,7 +121,7 @@ app.post("/salas", async (req: Request, res: Response) => {
       capacidad: capacidad,
     };
     const agregarSalaComando: AgregarSalaComando = new AgregarSalaComando(repositorioSala);
-    const sala: Sala = await agregarSalaComando.ejecutar(creacionSalaDTO);
+    const sala: SalaDTO = await agregarSalaComando.ejecutar(creacionSalaDTO);
     res.status(201).json(sala);
   } catch (error) {
     if (error instanceof CampoIncorrectoSalaError) {

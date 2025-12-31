@@ -3,6 +3,7 @@ import Pelicula from "../../app/dominio/pelicula";
 import RepositorioPelicula from "../../app/dominio/puerto-repositorio-pelicula";
 import { mock, Mock } from "ts-jest-mocker";
 import PeliculaNoEncontradaError from "../../app/errores/pelicula-no-encontrada-error";
+import IdDTO from "../../app/dtos/id-dto";
 
 let mockRepositorioPeliculas: Mock<RepositorioPelicula>;
 let obtenerPeliculaPorIdComando: BuscarPeliculaPorIdComando;
@@ -21,7 +22,10 @@ describe("BuscarPeliculaPorIdComando", () => {
     const genero: string = "genero1";
     const pelicula: Pelicula = new Pelicula(id, titulo, genero);
     mockRepositorioPeliculas.recuperar.mockResolvedValue(pelicula);
-    const peliculaRecuperada: Pelicula = await obtenerPeliculaPorIdComando.ejecutar(id);
+    const idDTO: IdDTO = {
+      id: id,
+    };
+    const peliculaRecuperada: Pelicula = await obtenerPeliculaPorIdComando.ejecutar(idDTO);
     expect(peliculaRecuperada.obtenerId()).toEqual(id);
     expect(peliculaRecuperada.obtenerTitulo()).toEqual(titulo);
     expect(peliculaRecuperada.obtenerGenero()).toEqual(genero);
@@ -34,7 +38,10 @@ describe("BuscarPeliculaPorIdComando", () => {
       const generoActual: string = "genero" + i;
       const pelicula: Pelicula = new Pelicula(idActual, tituloActual, generoActual);
       mockRepositorioPeliculas.recuperar.mockResolvedValue(pelicula);
-      const peliculaRecuperada: Pelicula = await obtenerPeliculaPorIdComando.ejecutar(idActual);
+      const idDTO: IdDTO = {
+        id: idActual,
+      };
+      const peliculaRecuperada: Pelicula = await obtenerPeliculaPorIdComando.ejecutar(idDTO);
       expect(peliculaRecuperada.obtenerId()).toEqual(idActual);
       expect(peliculaRecuperada.obtenerTitulo()).toEqual(tituloActual);
       expect(peliculaRecuperada.obtenerGenero()).toEqual(generoActual);
@@ -43,7 +50,10 @@ describe("BuscarPeliculaPorIdComando", () => {
 
   test("deberia devolver un error PeliculaNoEncontradaError al no encontrar ninguna pelicula con el id indicado cuando no hay peliculas", async () => {
     const id: number = 1;
+    const idDTO: IdDTO = {
+      id: id,
+    };
     mockRepositorioPeliculas.recuperar.mockRejectedValue(new PeliculaNoEncontradaError());
-    await expect(obtenerPeliculaPorIdComando.ejecutar(id)).rejects.toThrow(PeliculaNoEncontradaError);
+    await expect(obtenerPeliculaPorIdComando.ejecutar(idDTO)).rejects.toThrow(PeliculaNoEncontradaError);
   });
 });
