@@ -24,6 +24,7 @@ import FiltrosBusquedaPeliculasDTO from './dtos/filtros-busqueda-peliculas-dto';
 import ListaPeliculasDTO from './dtos/lista-peliculas-dto';
 import FiltrosBusquedaSalasDTO from './dtos/filtros-busqueda-salas-dto';
 import ListaSalasDTO from './dtos/lista-salas-dto';
+import FuncionDTO from './dtos/funcion-dto';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -199,7 +200,26 @@ app.get("/salas/:id", async (req: Request, res: Response) => {
 });
 
 app.post("/funciones", (req: Request, res: Response) => {
-  res.status(201).json();
+  const idFuncion: number = 1;
+  
+  const salaDTO: SalaDTO = {
+    id: 1,
+    capacidad: 50,
+  };
+
+  const peliculaDTO: PeliculaDTO = {
+    id: 1,
+    titulo: "pelicula1",
+    genero: "genero1",
+  };
+
+  const funcionDTO: FuncionDTO = {
+    id: idFuncion,
+    sala: salaDTO,
+    pelicula: peliculaDTO,
+  };
+
+  res.status(201).json(funcionDTO);
 });
 
 const server = app
