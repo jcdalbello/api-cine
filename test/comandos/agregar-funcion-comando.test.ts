@@ -1,7 +1,7 @@
 import { mock, Mock } from "ts-jest-mocker";
 import AgregarFuncionComando from "../../app/comandos/agregar-funcion-comando";
 import RepositorioSala from "../../app/dominio/puerto-repositorio-sala";
-import RepositorioFuncion from "../../app/dominio/purto-repositorio-funcion";
+import RepositorioFuncion from "../../app/dominio/puerto-repositorio-funcion";
 import RepositorioPelicula from "../../app/dominio/puerto-repositorio-pelicula";
 import Sala from "../../app/dominio/sala";
 import Pelicula from "../../app/dominio/pelicula";
@@ -45,11 +45,43 @@ describe("AgregarFuncionComando", () => {
       idPelicula: idPelicula,
     };
     
-    // eslint-disable-next-line @typescript-eslint/await-thenable
     const funcionDTO: FuncionDTO = await agregarFuncionComando.ejecutar(creacionFuncionDTO);
 
     expect(funcionDTO.id).toEqual(idFuncion);
     expect(funcionDTO.sala).toEqual(mockSala);
     expect(funcionDTO.pelicula).toEqual(mockPelicula);
+  });
+
+  test("deberia crear multiples funciones con los datos correctos", async () => {
+    const cantidadDeFuncionesAGenerar: number = 5;
+    
+    for (let i = 1; i <= cantidadDeFuncionesAGenerar; i++) {
+      const idSalaActual: number = i;
+      const capacidadSalaActual: number = i * 10;
+      const salaActual: Sala = new Sala(idSalaActual, capacidadSalaActual);
+
+      const idPeliculaActual: number = i;
+      const tituloPeliculaActual: string = "pelicula" + i;
+      const generoPeliculaActual: string = "genero" + i;
+      const peliculaActual: Pelicula = new Pelicula(idPeliculaActual, tituloPeliculaActual, generoPeliculaActual);
+
+      const idFuncionActual: number = 1;
+      const funcionActual: Funcion = new Funcion(idFuncionActual, salaActual, peliculaActual);
+
+      mockRepositorioSala.recuperar.mockResolvedValue(salaActual);
+      mockRepositorioPelicula.recuperar.mockResolvedValue(peliculaActual);
+      mockRepositorioFuncion.guardar.mockResolvedValue(funcionActual);
+
+      const creacionFuncionActualDTO: CreacionFuncionDTO = {
+        idSala: idSalaActual,
+        idPelicula: idPeliculaActual,
+      };
+
+      const funcionActualDTO: FuncionDTO = await agregarFuncionComando.ejecutar(creacionFuncionActualDTO);
+
+      expect(funcionActualDTO.id).toEqual(idFuncionActual);
+      expect(funcionActualDTO.sala).toEqual(salaActual);
+      expect(funcionActualDTO.pelicula).toEqual(peliculaActual);
+    }
   });
 });

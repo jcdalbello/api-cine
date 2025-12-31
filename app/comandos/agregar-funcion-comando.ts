@@ -1,6 +1,8 @@
+import Pelicula from "../dominio/pelicula";
 import RepositorioPelicula from "../dominio/puerto-repositorio-pelicula";
 import RepositorioSala from "../dominio/puerto-repositorio-sala";
-import RepositorioFuncion from "../dominio/purto-repositorio-funcion";
+import RepositorioFuncion from "../dominio/puerto-repositorio-funcion";
+import Sala from "../dominio/sala";
 import CreacionFuncionDTO from "../dtos/creacion-funcion-dto";
 import FuncionDTO from "../dtos/funcion-dto";
 import PeliculaDTO from "../dtos/pelicula-dto";
@@ -13,19 +15,21 @@ export default class AgregarFuncionComando {
     private readonly repositorioFuncion: RepositorioFuncion
   ) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public ejecutar(creacionFuncionDTO: CreacionFuncionDTO): FuncionDTO {
+  public async ejecutar(creacionFuncionDTO: CreacionFuncionDTO): Promise<FuncionDTO> {
     const idFuncion: number = 1;
-      
+
+    const sala: Sala = await this.repositorioSala.recuperar(creacionFuncionDTO.idSala);
+    const pelicula: Pelicula = await this.repositorioPelicula.recuperar(creacionFuncionDTO.idPelicula);
+
     const salaDTO: SalaDTO = {
-      id: 1,
-      capacidad: 50,
+      id: sala.obtenerId(),
+      capacidad: sala.obtenerCapacidad(),
     };
-  
+
     const peliculaDTO: PeliculaDTO = {
-      id: 1,
-      titulo: "pelicula1",
-      genero: "genero1",
+      id: pelicula.obtenerId(),
+      titulo: pelicula.obtenerTitulo(),
+      genero: pelicula.obtenerGenero(),
     };
   
     const funcionDTO: FuncionDTO = {
