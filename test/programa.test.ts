@@ -632,4 +632,16 @@ describe("POST /funciones", () => {
     expect(respuesta.status).toEqual(CodigosHTTP.RecursoNoEncontrado);
     expect(respuesta.body.idSala).toEqual("No se encontro ninguna sala con el id indicado");
   });
+
+  test("deberia devolver un error 404 no se encuentra una pelicula con el id de pelicula indicado", async () => {
+    const idPeliculaNoEncontrada: number = 9999;
+    const creacionFuncionDTO: CreacionFuncionDTO = {
+      idSala: idSala,
+      idPelicula: idPeliculaNoEncontrada,
+    };
+
+    const respuesta = await requestWithSupertest.post("/funciones").send(creacionFuncionDTO);
+    expect(respuesta.status).toEqual(CodigosHTTP.RecursoNoEncontrado);
+    expect(respuesta.body.idPelicula).toEqual("no se encontro ninguna pelicula con el id indicado");
+  });
 });

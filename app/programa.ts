@@ -258,6 +258,12 @@ app.post("/funciones", async (req: Request, res: Response) => {
       };
       res.status(404).json(mensajes);
     }
+    if (error instanceof PeliculaNoEncontradaError) {
+      const mensajes: MensajesDeErrorDeFuncion = {
+        idPelicula: error.id,
+      };
+      res.status(404).json(mensajes);
+    }
   }
 });
 
