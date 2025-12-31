@@ -29,6 +29,8 @@ import CreacionFuncionDTO from './dtos/creacion-funcion-dto';
 import AgregarFuncionComando from './comandos/agregar-funcion-comando';
 import RepositorioFuncion from './dominio/puerto-repositorio-funcion';
 import RepositorioFuncionPostgreSQL from './adaptadores/repositorio-funcion-postgresql';
+import MensajesDeErrorDeFuncion from './errores/i-mensajes-de-error-de-funcion';
+import CampoIncorrectoFuncionError from './errores/campo-incorrecto-funcion-error';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -208,43 +210,41 @@ app.get("/salas/:id", async (req: Request, res: Response) => {
   }
 });
 
+function validarDatosDeCreacionDeFuncion(idSalaComoString: string | undefined): void {
+  const mensajes: MensajesDeErrorDeFuncion = {};
+
+  const idSalaParseado: number = Number(idSalaComoString);
+  if (Number.isNaN(idSalaParseado)) {
+    mensajes.idSala = "El id de sala debe ser un numero valido";
+  }
+
+  if (Object.keys(mensajes).length > 0) {
+    throw new CampoIncorrectoFuncionError(mensajes);
+  }
+}
+
 app.post("/funciones", async (req: Request, res: Response) => {
-  const idSala = req.body.idSala as number;
+  const idSalaComoString = req.body.idSala as string | undefined;
   const idPelicula = req.body.idPelicula as number;
-  const creacionFuncionDTO: CreacionFuncionDTO = {
-    idSala: idSala,
-    idPelicula: idPelicula,
-  };
-  const agregarFuncionComando: AgregarFuncionComando = new AgregarFuncionComando(
-    repositorioSala,
-    repositorioPelicula,
-    repositorioFuncion
-  );
-  const funcion: FuncionDTO = await agregarFuncionComando.ejecutar(creacionFuncionDTO);
-  res.status(201).json(funcion);
 
-  /*
-  const idFuncion: number = 1;
-  
-  const salaDTO: SalaDTO = {
-    id: 1,
-    capacidad: 50,
-  };
-
-  const peliculaDTO: PeliculaDTO = {
-    id: 1,
-    titulo: "pelicula1",
-    genero: "genero1",
-  };
-
-  const funcionDTO: FuncionDTO = {
-    id: idFuncion,
-    sala: salaDTO,
-    pelicula: peliculaDTO,
-  };
-
-  res.status(201).json(funcionDTO);
-  */
+  try {
+    validarDatosDeCreacionDeFuncion(idSalaComoString);
+    const creacionFuncionDTO: CreacionFuncionDTO = {
+      idSala: parseInt(idSalaComoString!),
+      idPelicula: idPelicula,
+    };
+    const agregarFuncionComando: AgregarFuncionComando = new AgregarFuncionComando(
+      repositorioSala,
+      repositorioPelicula,
+      repositorioFuncion
+    );
+    const funcion: FuncionDTO = await agregarFuncionComando.ejecutar(creacionFuncionDTO);
+    res.status(201).json(funcion);
+  } catch (error) {
+    if (error instanceof CampoIncorrectoFuncionError) {
+      res.status(400).json(error);
+    }
+  }
 });
 
 const server = app
