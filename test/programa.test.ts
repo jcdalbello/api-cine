@@ -609,4 +609,15 @@ describe("POST /funciones", () => {
     expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
     expect(respuesta.body.idSala).toEqual("El id de sala debe ser un numero valido");
   });
+
+  test("deberia devolver un error 400 si se pasa un valor no numerico como id de pelicula", async () => {
+    const idPeliculaNoNumerico: string = "idInvalido";
+
+    const respuesta = await requestWithSupertest.post("/funciones").send({
+      idSala: idSala,
+      idPelicula: idPeliculaNoNumerico,
+    });
+    expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
+    expect(respuesta.body.idSala).toEqual("El id de pelicula debe ser un numero valido");
+  });
 });

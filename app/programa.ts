@@ -210,12 +210,17 @@ app.get("/salas/:id", async (req: Request, res: Response) => {
   }
 });
 
-function validarDatosDeCreacionDeFuncion(idSalaComoString: string | undefined): void {
+function validarDatosDeCreacionDeFuncion(idSalaComoString: string | undefined, idPeliculaComoString: string | undefined): void {
   const mensajes: MensajesDeErrorDeFuncion = {};
 
   const idSalaParseado: number = Number(idSalaComoString);
   if (Number.isNaN(idSalaParseado)) {
     mensajes.idSala = "El id de sala debe ser un numero valido";
+  }
+
+  const idPeliculaParseado: number = Number(idPeliculaComoString);
+  if (Number.isNaN(idPeliculaParseado)) {
+    mensajes.idSala = "El id de pelicula debe ser un numero valido";
   }
 
   if (Object.keys(mensajes).length > 0) {
@@ -225,13 +230,13 @@ function validarDatosDeCreacionDeFuncion(idSalaComoString: string | undefined): 
 
 app.post("/funciones", async (req: Request, res: Response) => {
   const idSalaComoString = req.body.idSala as string | undefined;
-  const idPelicula = req.body.idPelicula as number;
+  const idPeliculaComoString = req.body.idPelicula as string | undefined;
 
   try {
-    validarDatosDeCreacionDeFuncion(idSalaComoString);
+    validarDatosDeCreacionDeFuncion(idSalaComoString, idPeliculaComoString);
     const creacionFuncionDTO: CreacionFuncionDTO = {
       idSala: parseInt(idSalaComoString!),
-      idPelicula: idPelicula,
+      idPelicula: parseInt(idPeliculaComoString!),
     };
     const agregarFuncionComando: AgregarFuncionComando = new AgregarFuncionComando(
       repositorioSala,
