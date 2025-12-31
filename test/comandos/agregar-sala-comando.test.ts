@@ -1,6 +1,7 @@
 import AgregarSalaComando from "../../app/comandos/agregar-sala-comando";
 import RepositorioSala from "../../app/dominio/puerto-repositorio-sala";
 import Sala from "../../app/dominio/sala";
+import CreacionSalaDTO from "../../app/dtos/creacion-sala-dto";
 import CampoIncorrectoSalaError from "../../app/errores/campo-incorrecto-sala-error";
 import { Mock, mock } from "ts-jest-mocker";
 
@@ -14,6 +15,10 @@ describe("AgregarSalaComando", () => {
   const id: number = 1;
   const capacidad: number = 50;
 
+  const creacionSalaDTO: CreacionSalaDTO = {
+    capacidad: capacidad,
+  };
+
   const mockSala: Sala = new Sala(id, capacidad);
 
   beforeEach(() => {
@@ -26,32 +31,38 @@ describe("AgregarSalaComando", () => {
   });
 
   test("deberia crear correctamente una sala y devolver el resultado", async () => {
-    const sala: Sala = await agregarSalaComando.ejecutar(capacidad);
+    const sala: Sala = await agregarSalaComando.ejecutar(creacionSalaDTO);
     expect(sala.obtenerId()).toEqual(id);
     expect(sala.obtenerCapacidad()).toEqual(capacidad);
   });
 
   test("deberia crear correctamente mas de una sala y devolver el resultado de cada una", async () => {
-    const sala: Sala = await agregarSalaComando.ejecutar(capacidad);
+    const sala: Sala = await agregarSalaComando.ejecutar(creacionSalaDTO);
     expect(sala.obtenerId()).toEqual(id);
     expect(sala.obtenerCapacidad()).toEqual(capacidad);
 
     const id2: number = 2;
     const capacidad2: number = 100;
+    const creacionSalaDTO2: CreacionSalaDTO = {
+      capacidad: capacidad2,
+    };
     const mockSala2: Sala = new Sala(id2, capacidad2);
     mockRepositorioSala.guardar.mockResolvedValue(mockSala2);
-    const sala2: Sala = await agregarSalaComando.ejecutar(capacidad2);
+    const sala2: Sala = await agregarSalaComando.ejecutar(creacionSalaDTO2);
     expect(sala2.obtenerId()).toEqual(id2);
     expect(sala2.obtenerCapacidad()).toEqual(capacidad2);
   });
 
   test("deberia devolver un error si la capacidad es igual o menor que 0", async() => {
     const capacidadIncorrecta: number = 0;
-    await expect(agregarSalaComando.ejecutar(capacidadIncorrecta)).rejects.toThrow(CampoIncorrectoSalaError);
+    const creacionSalaDTOCapacidadInvalida: CreacionSalaDTO = {
+      capacidad: capacidadIncorrecta,
+    };
+    await expect(agregarSalaComando.ejecutar(creacionSalaDTOCapacidadInvalida)).rejects.toThrow(CampoIncorrectoSalaError);
   });
 
   test("deberia llamar al repositorio de salas", async () => {
-    await agregarSalaComando.ejecutar(capacidad);
+    await agregarSalaComando.ejecutar(creacionSalaDTO);
     expect(mockRepositorioSala.guardar).toHaveBeenCalled();
   });
 });

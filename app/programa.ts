@@ -19,6 +19,7 @@ import BuscarSalaPorIdComando from './comandos/buscar-sala-por-id-comando';
 import SalaNoEncontradaError from './errores/sala-no-encontrada-error';
 import CreacionPeliculaDTO from './dtos/creacion-pelicula-dto';
 import PeliculaDTO from './dtos/pelicula-dto';
+import CreacionSalaDTO from './dtos/creacion-sala-dto';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -111,8 +112,11 @@ app.post("/salas", async (req: Request, res: Response) => {
   const capacidad = req.body.capacidad as number;
   try {
     validadDatosVaciosDePelicula(capacidad);
+    const creacionSalaDTO: CreacionSalaDTO = {
+      capacidad: capacidad,
+    };
     const agregarSalaComando: AgregarSalaComando = new AgregarSalaComando(repositorioSala);
-    const sala: Sala = await agregarSalaComando.ejecutar(capacidad);
+    const sala: Sala = await agregarSalaComando.ejecutar(creacionSalaDTO);
     res.status(201).json(sala);
   } catch (error) {
     if (error instanceof CampoIncorrectoSalaError) {
