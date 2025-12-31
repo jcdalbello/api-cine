@@ -2,6 +2,7 @@ import AgregarSalaComando from "../../app/comandos/agregar-sala-comando";
 import RepositorioSala from "../../app/dominio/puerto-repositorio-sala";
 import Sala from "../../app/dominio/sala";
 import CreacionSalaDTO from "../../app/dtos/creacion-sala-dto";
+import SalaDTO from "../../app/dtos/sala-dto";
 import CampoIncorrectoSalaError from "../../app/errores/campo-incorrecto-sala-error";
 import { Mock, mock } from "ts-jest-mocker";
 
@@ -31,15 +32,15 @@ describe("AgregarSalaComando", () => {
   });
 
   test("deberia crear correctamente una sala y devolver el resultado", async () => {
-    const sala: Sala = await agregarSalaComando.ejecutar(creacionSalaDTO);
-    expect(sala.obtenerId()).toEqual(id);
-    expect(sala.obtenerCapacidad()).toEqual(capacidad);
+    const sala: SalaDTO = await agregarSalaComando.ejecutar(creacionSalaDTO);
+    expect(sala.id).toEqual(id);
+    expect(sala.capacidad).toEqual(capacidad);
   });
 
   test("deberia crear correctamente mas de una sala y devolver el resultado de cada una", async () => {
-    const sala: Sala = await agregarSalaComando.ejecutar(creacionSalaDTO);
-    expect(sala.obtenerId()).toEqual(id);
-    expect(sala.obtenerCapacidad()).toEqual(capacidad);
+    const sala: SalaDTO = await agregarSalaComando.ejecutar(creacionSalaDTO);
+    expect(sala.id).toEqual(id);
+    expect(sala.capacidad).toEqual(capacidad);
 
     const id2: number = 2;
     const capacidad2: number = 100;
@@ -48,9 +49,9 @@ describe("AgregarSalaComando", () => {
     };
     const mockSala2: Sala = new Sala(id2, capacidad2);
     mockRepositorioSala.guardar.mockResolvedValue(mockSala2);
-    const sala2: Sala = await agregarSalaComando.ejecutar(creacionSalaDTO2);
-    expect(sala2.obtenerId()).toEqual(id2);
-    expect(sala2.obtenerCapacidad()).toEqual(capacidad2);
+    const sala2: SalaDTO = await agregarSalaComando.ejecutar(creacionSalaDTO2);
+    expect(sala2.id).toEqual(id2);
+    expect(sala2.capacidad).toEqual(capacidad2);
   });
 
   test("deberia devolver un error si la capacidad es igual o menor que 0", async() => {
