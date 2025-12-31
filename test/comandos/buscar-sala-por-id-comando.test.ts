@@ -3,6 +3,7 @@ import BuscarSalaPorIdComando from "../../app/comandos/buscar-sala-por-id-comand
 import RepositorioSala from "../../app/dominio/puerto-repositorio-sala";
 import Sala from "../../app/dominio/sala";
 import SalaNoEncontradaError from "../../app/errores/sala-no-encontrada-error";
+import IdDTO from "../../app/dtos/id-dto";
 
 describe("BuscarSalaPorIdComando", () => {
   const mockRepositorioSala: Mock<RepositorioSala> = mock<RepositorioSala>();
@@ -17,7 +18,9 @@ describe("BuscarSalaPorIdComando", () => {
     const sala: Sala = new Sala(id, capacidad);
 
     mockRepositorioSala.recuperar.mockResolvedValue(sala);
-    const salaRecuperada: Sala = await obtenerSalaPorIdComando.ejecutar(id);
+    const idDTO: IdDTO = { id: id };
+
+    const salaRecuperada: Sala = await obtenerSalaPorIdComando.ejecutar(idDTO);
 
     expect(salaRecuperada).toBeInstanceOf(Sala);
     expect(salaRecuperada.obtenerId()).toEqual(sala.obtenerId());
@@ -31,7 +34,9 @@ describe("BuscarSalaPorIdComando", () => {
       const capacidadActual: number = i * 10;
       const salaActual: Sala = new Sala(idActual, capacidadActual);
       mockRepositorioSala.recuperar.mockResolvedValue(salaActual);
-      const salaRecuperada: Sala = await obtenerSalaPorIdComando.ejecutar(idActual);
+      const idDTO: IdDTO = { id: idActual };
+
+      const salaRecuperada: Sala = await obtenerSalaPorIdComando.ejecutar(idDTO);
 
       expect(salaRecuperada).toBeInstanceOf(Sala);
       expect(salaRecuperada.obtenerId()).toEqual(salaActual.obtenerId());
@@ -41,7 +46,8 @@ describe("BuscarSalaPorIdComando", () => {
 
   test("deberia devolver la un error SalaNoEncontradaError si no se encuentra ninguna sala con el id pasado por parametro", async () => {
     const idInexistente: number = 999;
+    const idDTO: IdDTO = { id: idInexistente };
     mockRepositorioSala.recuperar.mockRejectedValue(new SalaNoEncontradaError());
-    await expect(obtenerSalaPorIdComando.ejecutar(idInexistente)).rejects.toThrow(SalaNoEncontradaError);
+    await expect(obtenerSalaPorIdComando.ejecutar(idDTO)).rejects.toThrow(SalaNoEncontradaError);
   });
 });

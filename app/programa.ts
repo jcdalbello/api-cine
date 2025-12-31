@@ -168,8 +168,11 @@ function validarDatosDeBusquedaDeSalaPorId(idComoString: string | undefined): vo
 app.get("/salas/:id", async (req: Request, res: Response) => {
   try {
     validarDatosDeBusquedaDeSalaPorId(req.params.id);
+    const idDTO: IdDTO = {
+      id: parseInt(req.params.id!),
+    };
     const obtenerSalaPorIdComando: BuscarSalaPorIdComando = new BuscarSalaPorIdComando(repositorioSala);
-    const sala: Sala = await obtenerSalaPorIdComando.ejecutar(parseInt(req.params.id!));
+    const sala: Sala = await obtenerSalaPorIdComando.ejecutar(idDTO);
     res.status(200).json(sala);
   } catch (error) {
     if (error instanceof CampoIncorrectoSalaError) {

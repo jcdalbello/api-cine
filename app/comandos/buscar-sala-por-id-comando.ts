@@ -1,4 +1,5 @@
 import RepositorioSala from "../dominio/puerto-repositorio-sala";
+import IdDTO from "../dtos/id-dto";
 import Sala from "../dominio/sala";
 
 export default class BuscarSalaPorIdComando {
@@ -6,7 +7,7 @@ export default class BuscarSalaPorIdComando {
     private readonly repositorioSala: RepositorioSala
   ) {}
 
-  public ejecutar(id: number): Promise<Sala> {
-    return this.repositorioSala.recuperar(id);
+  public ejecutar(idDTO: IdDTO): Promise<Sala> {
+    return this.repositorioSala.recuperar(idDTO.id);
   }
 }
