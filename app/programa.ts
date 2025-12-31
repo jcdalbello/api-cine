@@ -25,6 +25,10 @@ import ListaPeliculasDTO from './dtos/lista-peliculas-dto';
 import FiltrosBusquedaSalasDTO from './dtos/filtros-busqueda-salas-dto';
 import ListaSalasDTO from './dtos/lista-salas-dto';
 import FuncionDTO from './dtos/funcion-dto';
+import CreacionFuncionDTO from './dtos/creacion-funcion-dto';
+import AgregarFuncionComando from './comandos/agregar-funcion-comando';
+import RepositorioFuncion from './dominio/puerto-repositorio-funcion';
+import RepositorioFuncionPostgreSQL from './adaptadores/repositorio-funcion-postgresql';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -39,8 +43,13 @@ function crearRepositorioSala(): RepositorioSala {
   return new RepositorioSalaPostgreSQL();
 }
 
+function crearRepositorioFuncion(): RepositorioFuncion {
+  return new RepositorioFuncionPostgreSQL();
+}
+
 const repositorioPelicula: RepositorioPelicula = crearRepositorioPelicula();
 const repositorioSala: RepositorioSala = crearRepositorioSala();
+const repositorioFuncion: RepositorioFuncion = crearRepositorioFuncion();
 
 app.get("/", (req: Request, res: Response) => {
   res
@@ -199,7 +208,22 @@ app.get("/salas/:id", async (req: Request, res: Response) => {
   }
 });
 
-app.post("/funciones", (req: Request, res: Response) => {
+app.post("/funciones", async (req: Request, res: Response) => {
+  const idSala = req.body.idSala as number;
+  const idPelicula = req.body.idPelicula as number;
+  const creacionFuncionDTO: CreacionFuncionDTO = {
+    idSala: idSala,
+    idPelicula: idPelicula,
+  };
+  const agregarFuncionComando: AgregarFuncionComando = new AgregarFuncionComando(
+    repositorioSala,
+    repositorioPelicula,
+    repositorioFuncion
+  );
+  const funcion: FuncionDTO = await agregarFuncionComando.ejecutar(creacionFuncionDTO);
+  res.status(201).json(funcion);
+
+  /*
   const idFuncion: number = 1;
   
   const salaDTO: SalaDTO = {
@@ -220,6 +244,7 @@ app.post("/funciones", (req: Request, res: Response) => {
   };
 
   res.status(201).json(funcionDTO);
+  */
 });
 
 const server = app

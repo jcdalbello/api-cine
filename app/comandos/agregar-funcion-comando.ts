@@ -17,8 +17,6 @@ export default class AgregarFuncionComando {
   ) {}
 
   public async ejecutar(creacionFuncionDTO: CreacionFuncionDTO): Promise<FuncionDTO> {
-    const idFuncion: number = 1;
-
     const sala: Sala = await this.repositorioSala.recuperar(creacionFuncionDTO.idSala);
     const pelicula: Pelicula = await this.repositorioPelicula.recuperar(creacionFuncionDTO.idPelicula);
 
@@ -33,7 +31,7 @@ export default class AgregarFuncionComando {
       genero: pelicula.obtenerGenero(),
     };
 
-    const funcion: Funcion = await this.repositorioFuncion.guardar(new Funcion(idFuncion, sala, pelicula));
+    const funcion: Funcion = await this.repositorioFuncion.guardar(new Funcion(0, sala, pelicula));
   
     const funcionDTO: FuncionDTO = {
       id: funcion.obtenerId(),

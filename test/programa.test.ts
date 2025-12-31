@@ -17,6 +17,7 @@ enum CodigosHTTP {
 afterEach(async () => {
   await pool.query("TRUNCATE TABLE peliculas RESTART IDENTITY CASCADE");
   await pool.query("TRUNCATE TABLE salas RESTART IDENTITY CASCADE");
+  await pool.query("TRUNCATE TABLE funciones RESTART IDENTITY CASCADE");
 });
 
 afterAll(async () => {
@@ -562,7 +563,7 @@ describe("POST /funciones", () => {
     expect(respuesta.body.pelicula).toEqual(respuestaPostPelicula.body);
   });
 
-  test.skip("deberia devolver los datos de mas de una funcion creada", async () => {
+  test("deberia devolver los datos de mas de una funcion creada", async () => {
     const respuesta = await requestWithSupertest.post("/funciones").send(creacionFuncionDTO);
     expect(respuesta.status).toEqual(CodigosHTTP.CreacionExitosa);
     expect(respuesta.body.id).toEqual(idFuncion);
