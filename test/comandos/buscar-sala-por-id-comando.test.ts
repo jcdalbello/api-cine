@@ -4,6 +4,7 @@ import RepositorioSala from "../../app/dominio/puerto-repositorio-sala";
 import Sala from "../../app/dominio/sala";
 import SalaNoEncontradaError from "../../app/errores/sala-no-encontrada-error";
 import IdDTO from "../../app/dtos/id-dto";
+import SalaDTO from "../../app/dtos/sala-dto";
 
 describe("BuscarSalaPorIdComando", () => {
   const mockRepositorioSala: Mock<RepositorioSala> = mock<RepositorioSala>();
@@ -20,11 +21,10 @@ describe("BuscarSalaPorIdComando", () => {
     mockRepositorioSala.recuperar.mockResolvedValue(sala);
     const idDTO: IdDTO = { id: id };
 
-    const salaRecuperada: Sala = await obtenerSalaPorIdComando.ejecutar(idDTO);
+    const salaRecuperada: SalaDTO = await obtenerSalaPorIdComando.ejecutar(idDTO);
 
-    expect(salaRecuperada).toBeInstanceOf(Sala);
-    expect(salaRecuperada.obtenerId()).toEqual(sala.obtenerId());
-    expect(salaRecuperada.obtenerCapacidad()).toEqual(sala.obtenerCapacidad());
+    expect(salaRecuperada.id).toEqual(sala.obtenerId());
+    expect(salaRecuperada.capacidad).toEqual(sala.obtenerCapacidad());
   });
 
   test("deberia devolver la sala correspondiente al id pasado por parametro con varias salas", async () => {
@@ -36,11 +36,10 @@ describe("BuscarSalaPorIdComando", () => {
       mockRepositorioSala.recuperar.mockResolvedValue(salaActual);
       const idDTO: IdDTO = { id: idActual };
 
-      const salaRecuperada: Sala = await obtenerSalaPorIdComando.ejecutar(idDTO);
+      const salaRecuperada: SalaDTO = await obtenerSalaPorIdComando.ejecutar(idDTO);
 
-      expect(salaRecuperada).toBeInstanceOf(Sala);
-      expect(salaRecuperada.obtenerId()).toEqual(salaActual.obtenerId());
-      expect(salaRecuperada.obtenerCapacidad()).toEqual(salaActual.obtenerCapacidad());
+      expect(salaRecuperada.id).toEqual(salaActual.obtenerId());
+      expect(salaRecuperada.capacidad).toEqual(salaActual.obtenerCapacidad());
     }
   });
 

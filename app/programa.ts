@@ -172,7 +172,7 @@ app.get("/salas/:id", async (req: Request, res: Response) => {
       id: parseInt(req.params.id!),
     };
     const obtenerSalaPorIdComando: BuscarSalaPorIdComando = new BuscarSalaPorIdComando(repositorioSala);
-    const sala: Sala = await obtenerSalaPorIdComando.ejecutar(idDTO);
+    const sala: SalaDTO = await obtenerSalaPorIdComando.ejecutar(idDTO);
     res.status(200).json(sala);
   } catch (error) {
     if (error instanceof CampoIncorrectoSalaError) {
