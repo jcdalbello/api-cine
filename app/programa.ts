@@ -9,7 +9,6 @@ import BuscarPeliculaPorIdComando from './comandos/buscar-pelicula-por-id-comand
 import PeliculaNoEncontradaError from './errores/pelicula-no-encontrada-error';
 import MensajesDeErrorDePelicula from './errores/i-mensajes-de-error-de-pelicula';
 import CampoIncorrectoSalaError from './errores/campo-incorrecto-sala-error';
-import Sala from './dominio/sala';
 import MensajesDeErrorDeSala from './errores/i-mensajes-de-error-de-sala';
 import RepositorioSala from './dominio/puerto-repositorio-sala';
 import AgregarSalaComando from './comandos/agregar-sala-comando';
@@ -24,6 +23,7 @@ import IdDTO from './dtos/id-dto';
 import FiltrosBusquedaPeliculasDTO from './dtos/filtros-busqueda-peliculas-dto';
 import ListaPeliculasDTO from './dtos/lista-peliculas-dto';
 import FiltrosBusquedaSalasDTO from './dtos/filtros-busqueda-salas-dto';
+import ListaSalasDTO from './dtos/lista-salas-dto';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -147,8 +147,8 @@ app.get("/salas", async (req: Request, res: Response) => {
       capacidad: capacidad!,
     };
     const obtenerSalasComando: BuscarSalasComando = new BuscarSalasComando(repositorioSala);
-    const salas: Sala[] = await obtenerSalasComando.ejectuar(filtros);
-    res.status(200).json(salas);
+    const salas: ListaSalasDTO = await obtenerSalasComando.ejectuar(filtros);
+    res.status(200).json(salas.salas);
   } catch(error) {
     if (error instanceof CampoIncorrectoSalaError) {
       res.status(400).json(error);
