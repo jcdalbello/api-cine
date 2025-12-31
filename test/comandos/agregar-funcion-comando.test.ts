@@ -8,6 +8,7 @@ import Pelicula from "../../app/dominio/pelicula";
 import Funcion from "../../app/dominio/funcion";
 import FuncionDTO from "../../app/dtos/funcion-dto";
 import CreacionFuncionDTO from "../../app/dtos/creacion-funcion-dto";
+import SalaNoEncontradaError from "../../app/errores/sala-no-encontrada-error";
 
 describe("AgregarFuncionComando", () => {
   const mockRepositorioSala: Mock<RepositorioSala> = mock<RepositorioSala>();
@@ -83,5 +84,19 @@ describe("AgregarFuncionComando", () => {
       expect(funcionActualDTO.sala).toEqual(salaActual);
       expect(funcionActualDTO.pelicula).toEqual(peliculaActual);
     }
+  });
+
+  test("deberia devolver un error SalaNoEncontradaError si no se encuentra la sala con el id pasado por parametro", async () => {
+    const idSalaInexistente: number = 9999;
+    const idPelicula: number = 1;
+    const tituloPelicula: string = "pelicula1";
+    const generoPelicula: string = "genero1";
+    const creacionFuncionDTO: CreacionFuncionDTO = {
+      idSala: idSalaInexistente,
+      idPelicula: idPelicula,
+    };
+    mockRepositorioSala.recuperar.mockRejectedValue(new SalaNoEncontradaError());
+    mockRepositorioPelicula.recuperar.mockResolvedValue(new Pelicula(1, tituloPelicula, generoPelicula));
+    await expect(agregarFuncionComando.ejecutar(creacionFuncionDTO)).rejects.toThrow(SalaNoEncontradaError);
   });
 });

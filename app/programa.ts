@@ -210,7 +210,10 @@ app.get("/salas/:id", async (req: Request, res: Response) => {
   }
 });
 
-function validarDatosDeCreacionDeFuncion(idSalaComoString: string | undefined, idPeliculaComoString: string | undefined): void {
+function validarDatosNumericosDeCreacionDeFuncion(
+  idSalaComoString: string | undefined,
+  idPeliculaComoString: string | undefined
+): void {
   const mensajes: MensajesDeErrorDeFuncion = {};
 
   const idSalaParseado: number = Number(idSalaComoString);
@@ -233,7 +236,7 @@ app.post("/funciones", async (req: Request, res: Response) => {
   const idPeliculaComoString = req.body.idPelicula as string | undefined;
 
   try {
-    validarDatosDeCreacionDeFuncion(idSalaComoString, idPeliculaComoString);
+    validarDatosNumericosDeCreacionDeFuncion(idSalaComoString, idPeliculaComoString);
     const creacionFuncionDTO: CreacionFuncionDTO = {
       idSala: parseInt(idSalaComoString!),
       idPelicula: parseInt(idPeliculaComoString!),
@@ -248,6 +251,12 @@ app.post("/funciones", async (req: Request, res: Response) => {
   } catch (error) {
     if (error instanceof CampoIncorrectoFuncionError) {
       res.status(400).json(error);
+    }
+    if (error instanceof SalaNoEncontradaError) {
+      const mensajes: MensajesDeErrorDeFuncion = {
+        idSala: error.id,
+      };
+      res.status(404).json(mensajes);
     }
   }
 });
