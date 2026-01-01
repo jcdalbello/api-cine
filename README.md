@@ -103,7 +103,7 @@ TypeScript | Principal lenguaje de programación
 Yarn       | Gestor de proyectos para TypeScript
 Jest       | Pruebas unitarias para TypeScript                                  
 Docker     | Simulación de entorno para la ejecución del programa y las pruebas 
-PostgreSQL | Gestión de base de datos
+PostgreSQL | Gestor de base de datos
 
 ## Creditos
 
