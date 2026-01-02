@@ -68,4 +68,17 @@ describe("BuscarFuncionesComando", () => {
     expect(funciones.funciones).not.toContainEqual(funcion2);
     expect(mockRepositorioFunciones.buscarFunciones).toHaveBeenCalled();    
   });
+
+  test("deberia devolver una lista con todas las funciones que cumplan con el parametro de busqueda por id de pelicula", async () => {
+    const pelicula2: Pelicula = new Pelicula(2, tituloPelicula + 2, generoPelicula + 2);
+    const funcion2: Funcion = new Funcion(4, sala, pelicula2);
+    mockRepositorioFunciones.buscarFunciones.mockResolvedValue([funcion]);
+    const filtros: FiltrosBusquedaFuncionesDTO = {
+      idPelicula: pelicula.obtenerId(),
+    };
+    const funciones: ListaFuncionesDTO = await buscarFuncionesComando.ejecutar(filtros);
+    expect(funciones.funciones).toContainEqual(funcion);
+    expect(funciones.funciones).not.toContainEqual(funcion2);
+    expect(mockRepositorioFunciones.buscarFunciones).toHaveBeenCalled();    
+  });
 });

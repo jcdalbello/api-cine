@@ -12,7 +12,10 @@ export default class BuscarFuncionesComando {
   ) {}
 
   public async ejecutar(filtros: FiltrosBusquedaFuncionesDTO): Promise<ListaFuncionesDTO> {
-    const funciones: Funcion[] = await this.repositorioFuncion.buscarFunciones(filtros.idSala);
+    const funciones: Funcion[] = await this.repositorioFuncion.buscarFunciones(
+      filtros.idSala,
+      filtros.idPelicula,
+    );
     const funcionesDTOs: FuncionDTO[] = funciones.map((funcion: Funcion) => {
       const salaDTO: SalaDTO = {
         id: funcion.sala.obtenerId(),

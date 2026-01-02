@@ -37,7 +37,7 @@ export default class RepositorioFuncionPostgreSQL implements RepositorioFuncion 
     );
   }
 
-  public async buscarFunciones(idSala?: number): Promise<Funcion[]> {
+  public async buscarFunciones(idSala?: number, idPelicula?: number): Promise<Funcion[]> {
     let query: string = `
       SELECT * FROM funciones WHERE 1=1
     `;
@@ -45,9 +45,16 @@ export default class RepositorioFuncionPostgreSQL implements RepositorioFuncion 
     let contadorParametros: number = 1;
 
     if (idSala) {
-      const condicionSala: string = ` AND id_sala = $${contadorParametros}`;
-      query += condicionSala;
+      const condicionIdSala: string = ` AND id_sala = $${contadorParametros}`;
+      query += condicionIdSala;
       valores.push(idSala);
+      contadorParametros++;
+    }
+
+    if (idPelicula) {
+      const condicionIdPelicula: string = ` AND id_pelicula = $${contadorParametros}`;
+      query += condicionIdPelicula;
+      valores.push(idPelicula);
       contadorParametros++;
     }
 

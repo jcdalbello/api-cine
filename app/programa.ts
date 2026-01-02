@@ -275,9 +275,12 @@ app.post("/funciones", async (req: Request, res: Response) => {
 
 app.get("/funciones", async (req: Request, res: Response) => {
   const idSalaComoString = req.query.idSala as string;
+  const idPeliculaComoString = req.query.idPelicula as string;
   const idSala: number = parseInt(idSalaComoString);
+  const idPelicula: number = parseInt(idPeliculaComoString);
   const filtros: FiltrosBusquedaFuncionesDTO = {
     idSala: idSala,
+    idPelicula: idPelicula,
   };
   const buscarFuncionesComando: BuscarFuncionesComando = new BuscarFuncionesComando(repositorioFuncion);
   const funciones: ListaFuncionesDTO = await buscarFuncionesComando.ejecutar(filtros);

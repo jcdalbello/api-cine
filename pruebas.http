@@ -213,3 +213,9 @@ GET {{host}}/funciones/
 Content-Type: application/json
 
 {}
+
+### Obtener todas las funciones que tengan asiganadas la sala con el id pasado (inicialmente una lista vacia) (200)
+GET {{host}}/funciones?idSala=1
+Content-Type: application/json
+
+{}

@@ -133,5 +133,30 @@ describe("RepositorioFuncionPostgresql", () => {
       expect(funciones).toContainEqual(funcionGuardada);
       expect(funciones).not.toContainEqual(funcionGuardada2);
     });
+
+    test("deberia devolver una lista con todas las funciones que coincidan con el id de pelicula", async () => {
+      const salaParaGuardar: Sala = new Sala(0, capacidadSala);
+      const salaGuardada: Sala = await repositorioSalaPostgreSQL.guardar(salaParaGuardar);
+
+      const salaParaGuardar2: Sala = new Sala(0, capacidadSala + 1);
+      const salaGuardada2: Sala = await repositorioSalaPostgreSQL.guardar(salaParaGuardar2);
+
+      const peliculaParaGuardar: Pelicula = new Pelicula(0, tituloPelicula, generoPelicula);
+      const peliculaGuardada: Pelicula = await repositorioPeliculaPostgreSQL.guardar(peliculaParaGuardar);
+
+      const peliculaParaGuardar2: Pelicula = new Pelicula(0, tituloPelicula + "2", generoPelicula + "2");
+      const peliculaGuardada2: Pelicula = await repositorioPeliculaPostgreSQL.guardar(peliculaParaGuardar2);
+
+      const funcionParaGuardar: Funcion = new Funcion(0, salaGuardada, peliculaGuardada);
+      const funcionGuardada: Funcion = await repositorioFuncionPostgresql.guardar(funcionParaGuardar);
+
+      const funcionParaGuardar2: Funcion = new Funcion(0, salaGuardada2, peliculaGuardada2);
+      const funcionGuardada2: Funcion = await repositorioFuncionPostgresql.guardar(funcionParaGuardar2);
+
+      const funciones: Funcion[] = await repositorioFuncionPostgresql.buscarFunciones(undefined, peliculaGuardada.obtenerId());
+      expect(funciones.length).toEqual(1);
+      expect(funciones).toContainEqual(funcionGuardada);
+      expect(funciones).not.toContainEqual(funcionGuardada2);
+    });
   });
 });
