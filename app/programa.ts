@@ -273,30 +273,42 @@ app.post("/funciones", async (req: Request, res: Response) => {
   }
 });
 
-function validarDatosDeBusquedaDeFuncionesPorFiltros(idSala: number | undefined): void {
+function validarDatosDeBusquedaDeFuncionesPorFiltros(
+  idSala: number | undefined,
+  idPelicula: number | undefined
+): void {
   const mensajesSala: MensajesDeErrorDeSala = {};
+  const mensajesPelicula: MensajesDeErrorDePelicula = {};
 
   if (idSala !== undefined && Number.isNaN(idSala)) {
     mensajesSala.id = "El id de sala debe ser un numero valido";
   }
 
+  if (idPelicula !== undefined && Number.isNaN(idPelicula)) {
+    mensajesPelicula.id = "El id de pelicula debe ser un numero valido";
+  }
+
   if (Object.keys(mensajesSala).length > 0) {
     throw new CampoIncorrectoSalaError(mensajesSala);
+  }
+
+  if (Object.keys(mensajesPelicula).length > 0) {
+    throw new CampoIncorrectoPeliculaError(mensajesPelicula);
   }
 }
 
 app.get("/funciones", async (req: Request, res: Response) => {
   const idSalaComoString = req.query.idSala as string | undefined;
-  const idPeliculaComoString = req.query.idPelicula as string;
+  const idPeliculaComoString = req.query.idPelicula as string | undefined;
 
   const idSala: number | undefined = idSalaComoString !== undefined ? parseInt(idSalaComoString) : undefined;
+  const idPelicula: number | undefined = idPeliculaComoString !== undefined ? parseInt(idPeliculaComoString) : undefined;
 
   try {
-    validarDatosDeBusquedaDeFuncionesPorFiltros(idSala);
-    const idPelicula: number = parseInt(idPeliculaComoString);
+    validarDatosDeBusquedaDeFuncionesPorFiltros(idSala, idPelicula);
     const filtros: FiltrosBusquedaFuncionesDTO = {
       idSala: idSala!,
-      idPelicula: idPelicula,
+      idPelicula: idPelicula!,
     };
     const buscarFuncionesComando: BuscarFuncionesComando = new BuscarFuncionesComando(repositorioFuncion);
     const funciones: ListaFuncionesDTO = await buscarFuncionesComando.ejecutar(filtros);
@@ -305,6 +317,12 @@ app.get("/funciones", async (req: Request, res: Response) => {
     if (error instanceof CampoIncorrectoSalaError) {
       const mensajes: MensajesDeErrorDeFuncion = {
         idSala: error.id!,
+      };
+      res.status(400).json(mensajes);
+    }
+    if (error instanceof CampoIncorrectoPeliculaError) {
+      const mensajes: MensajesDeErrorDeFuncion = {
+        idPelicula: error.id!,
       };
       res.status(400).json(mensajes);
     }
