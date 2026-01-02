@@ -31,4 +31,8 @@ export default class RepositorioFuncionPostgreSQL implements RepositorioFuncion 
       pelicula
     );
   }
+
+  public buscarFunciones(): Funcion[] {
+    return [];
+  }
 }
