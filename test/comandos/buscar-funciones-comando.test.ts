@@ -45,4 +45,13 @@ describe("BuscarFuncionesComando", () => {
     expect(funciones.funciones).toContainEqual(funcion);
     expect(mockRepositorioFunciones.buscarFunciones).toHaveBeenCalled();    
   });
+
+  test("deberia devolver una lista con todas las funciones si no se pasar ningun parametro de busqueda", () => {
+    const funcion2: Funcion = new Funcion(4, sala, pelicula);
+    mockRepositorioFunciones.buscarFunciones.mockReturnValue([funcion, funcion2]);
+    const funciones: ListaFuncionesDTO = buscarFuncionesComando.ejecutar({});
+    expect(funciones.funciones).toContainEqual(funcion);
+    expect(funciones.funciones).toContainEqual(funcion2);
+    expect(mockRepositorioFunciones.buscarFunciones).toHaveBeenCalled();    
+  });
 });
