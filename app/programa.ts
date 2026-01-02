@@ -273,7 +273,7 @@ app.get("/funciones", (req: Request, res: Response) => {
   const filtros: FiltrosBusquedaFuncionesDTO = {};
   const buscarFuncionesComando: BuscarFuncionesComando = new BuscarFuncionesComando();
   const funciones = buscarFuncionesComando.ejecutar(filtros);
-  res.status(200).json(funciones);
+  res.status(200).json(funciones.funciones);
 });
 
 const server = app
