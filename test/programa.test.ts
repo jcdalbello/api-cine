@@ -785,4 +785,11 @@ describe("GET /funciones", () => {
     expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
     expect(respuesta.body.length).toEqual(cantidadDeFuncionesPelicula1);
   });
+
+  test("deberia devolver un error 400 si el parametro de id de sala no es un valor numerico", async () => {
+    const idSalaNoNumerico: string = "idSalaNoNumerico";
+    const respuesta = await requestWithSupertest.get("/funciones" + "?" + "idSala=" + idSalaNoNumerico);
+    expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
+    expect(respuesta.body.idSala).toEqual("El id de sala debe ser un numero valido");
+  });
 });

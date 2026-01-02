@@ -273,18 +273,42 @@ app.post("/funciones", async (req: Request, res: Response) => {
   }
 });
 
+function validarDatosDeBusquedaDeFuncionesPorFiltros(idSala: number | undefined): void {
+  const mensajesSala: MensajesDeErrorDeSala = {};
+
+  if (idSala !== undefined && Number.isNaN(idSala)) {
+    mensajesSala.id = "El id de sala debe ser un numero valido";
+  }
+
+  if (Object.keys(mensajesSala).length > 0) {
+    throw new CampoIncorrectoSalaError(mensajesSala);
+  }
+}
+
 app.get("/funciones", async (req: Request, res: Response) => {
-  const idSalaComoString = req.query.idSala as string;
+  const idSalaComoString = req.query.idSala as string | undefined;
   const idPeliculaComoString = req.query.idPelicula as string;
-  const idSala: number = parseInt(idSalaComoString);
-  const idPelicula: number = parseInt(idPeliculaComoString);
-  const filtros: FiltrosBusquedaFuncionesDTO = {
-    idSala: idSala,
-    idPelicula: idPelicula,
-  };
-  const buscarFuncionesComando: BuscarFuncionesComando = new BuscarFuncionesComando(repositorioFuncion);
-  const funciones: ListaFuncionesDTO = await buscarFuncionesComando.ejecutar(filtros);
-  res.status(200).json(funciones.funciones);
+
+  const idSala: number | undefined = idSalaComoString !== undefined ? parseInt(idSalaComoString) : undefined;
+
+  try {
+    validarDatosDeBusquedaDeFuncionesPorFiltros(idSala);
+    const idPelicula: number = parseInt(idPeliculaComoString);
+    const filtros: FiltrosBusquedaFuncionesDTO = {
+      idSala: idSala!,
+      idPelicula: idPelicula,
+    };
+    const buscarFuncionesComando: BuscarFuncionesComando = new BuscarFuncionesComando(repositorioFuncion);
+    const funciones: ListaFuncionesDTO = await buscarFuncionesComando.ejecutar(filtros);
+    res.status(200).json(funciones.funciones);
+  } catch (error) {
+    if (error instanceof CampoIncorrectoSalaError) {
+      const mensajes: MensajesDeErrorDeFuncion = {
+        idSala: error.id!,
+      };
+      res.status(400).json(mensajes);
+    }
+  }
 });
 
 const server = app

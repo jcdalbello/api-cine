@@ -219,3 +219,10 @@ GET {{host}}/funciones?idSala=1
 Content-Type: application/json
 
 {}
+
+### Intentar buscar salas con un valor no numerico como id de sala (400)
+GET {{host}}/funciones?idSala=valorNoNumerico
+Content-Type: application/json
+
+{}
+
