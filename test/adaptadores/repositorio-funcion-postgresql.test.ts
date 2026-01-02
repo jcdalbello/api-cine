@@ -9,7 +9,10 @@ import Sala from "../../app/dominio/sala";
 describe("RepositorioFuncionPostgresql", () => {
   const repositorioPeliculaPostgreSQL: RepositorioPeliculaPostgreSQL = new RepositorioPeliculaPostgreSQL();
   const repositorioSalaPostgreSQL: RepositorioSalaPostgreSQL = new RepositorioSalaPostgreSQL();
-  const repositorioFuncionPostgresql: RepositorioFuncionPostgreSQL = new RepositorioFuncionPostgreSQL();
+  const repositorioFuncionPostgresql: RepositorioFuncionPostgreSQL = new RepositorioFuncionPostgreSQL(
+    repositorioSalaPostgreSQL,
+    repositorioPeliculaPostgreSQL,
+  );
 
   const idFuncion: number = 1;
 
@@ -66,5 +69,27 @@ describe("RepositorioFuncionPostgresql", () => {
       expect(funcionGuardadaActual.obtenerSala()).toEqual(salaGuardadaActual);
       expect(funcionGuardadaActual.obtenerPelicula()).toEqual(peliculaGuardadaActual);
     }
+  });
+
+  describe("buscarFunciones", () => {
+    test("deberia devolver una lista vacia si no hay funciones guardadas", async () => {
+      const funciones: Funcion[] = await repositorioFuncionPostgresql.buscarFunciones();
+      expect(funciones.length).toEqual(0);
+    });
+
+    test("deberia devolver una lista con la unica funcion guardada sin pasar ningun parametro de busqueda", async () => {
+      const salaParaGuardar: Sala = new Sala(0, capacidadSala);
+      const salaGuardada: Sala = await repositorioSalaPostgreSQL.guardar(salaParaGuardar);
+
+      const peliculaParaGuardar: Pelicula = new Pelicula(0, tituloPelicula, generoPelicula);
+      const peliculaGuardada: Pelicula = await repositorioPeliculaPostgreSQL.guardar(peliculaParaGuardar);
+
+      const funcionParaGuardar: Funcion = new Funcion(0, salaGuardada, peliculaGuardada);
+      const funcionGuardada: Funcion = await repositorioFuncionPostgresql.guardar(funcionParaGuardar);
+
+      const funciones: Funcion[] = await repositorioFuncionPostgresql.buscarFunciones();
+      expect(funciones.length).toEqual(1);
+      expect(funciones[0]).toEqual(funcionGuardada);
+    });
   });
 });

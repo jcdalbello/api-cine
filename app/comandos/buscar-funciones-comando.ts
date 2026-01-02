@@ -12,8 +12,8 @@ export default class BuscarFuncionesComando {
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public ejecutar(filtros: FiltrosBusquedaFuncionesDTO): ListaFuncionesDTO {
-    const funciones: Funcion[] = this.repositorioFuncion.buscarFunciones();
+  public async ejecutar(filtros: FiltrosBusquedaFuncionesDTO): Promise<ListaFuncionesDTO> {
+    const funciones: Funcion[] = await this.repositorioFuncion.buscarFunciones();
     const funcionesDTOs: FuncionDTO[] = funciones.map((funcion: Funcion) => {
       const salaDTO: SalaDTO = {
         id: funcion.sala.obtenerId(),

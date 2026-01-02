@@ -4,11 +4,16 @@ import Funcion from "../dominio/funcion";
 import RepositorioFuncion from "../dominio/puerto-repositorio-funcion";
 import Sala from "../dominio/sala";
 import Pelicula from "../dominio/pelicula";
+import RepositorioSala from "../dominio/puerto-repositorio-sala";
+import RepositorioPelicula from "../dominio/puerto-repositorio-pelicula";
 
 export default class RepositorioFuncionPostgreSQL implements RepositorioFuncion {
   private readonly pool: Pool;
 
-  constructor() {
+  constructor(
+    private readonly repositorioSala: RepositorioSala,
+    private readonly repositorioPelicula: RepositorioPelicula,
+  ) {
     this.pool = pool;
   }
 
@@ -32,7 +37,22 @@ export default class RepositorioFuncionPostgreSQL implements RepositorioFuncion 
     );
   }
 
-  public buscarFunciones(): Funcion[] {
-    return [];
+  public async buscarFunciones(): Promise<Funcion[]> {
+    const query: string = `
+      SELECT * FROM funciones;
+    `;
+
+    const resultado = await this.pool.query(query);
+    
+    if (resultado.rowCount === 0) {
+      return [];
+    }
+
+    const idSala: number = resultado.rows[0].id_sala;
+    const idPelicula: number  = resultado.rows[0].id_pelicula;
+
+    const sala: Sala = await this.repositorioSala.recuperar(idSala);
+    const pelicula: Pelicula = await this.repositorioPelicula.recuperar(idPelicula);
+    return [new Funcion(idSala, sala, pelicula)];
   }
 }

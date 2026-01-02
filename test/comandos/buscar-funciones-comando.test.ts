@@ -33,23 +33,23 @@ describe("BuscarFuncionesComando", () => {
     expect(buscarFuncionesComando).toBeInstanceOf(BuscarFuncionesComando);
   });
 
-  test("deberia devolver una lista vacia si no hay funciones guardadas", () => {
-    mockRepositorioFunciones.buscarFunciones.mockReturnValue([]);
-    const funciones: ListaFuncionesDTO = buscarFuncionesComando.ejecutar({});
+  test("deberia devolver una lista vacia si no hay funciones guardadas", async () => {
+    mockRepositorioFunciones.buscarFunciones.mockResolvedValue([]);
+    const funciones: ListaFuncionesDTO = await buscarFuncionesComando.ejecutar({});
     expect(funciones.funciones.length).toEqual(0);
   });
 
-  test("deberia devolver una lista con la unica funcion guardada sin pasar ningun parametro de busqueda", () => {
-    mockRepositorioFunciones.buscarFunciones.mockReturnValue([funcion]);
-    const funciones: ListaFuncionesDTO = buscarFuncionesComando.ejecutar({});
+  test("deberia devolver una lista con la unica funcion guardada sin pasar ningun parametro de busqueda", async () => {
+    mockRepositorioFunciones.buscarFunciones.mockResolvedValue([funcion]);
+    const funciones: ListaFuncionesDTO = await buscarFuncionesComando.ejecutar({});
     expect(funciones.funciones).toContainEqual(funcion);
     expect(mockRepositorioFunciones.buscarFunciones).toHaveBeenCalled();    
   });
 
-  test("deberia devolver una lista con todas las funciones si no se pasar ningun parametro de busqueda", () => {
+  test("deberia devolver una lista con todas las funciones si no se pasar ningun parametro de busqueda", async () => {
     const funcion2: Funcion = new Funcion(4, sala, pelicula);
-    mockRepositorioFunciones.buscarFunciones.mockReturnValue([funcion, funcion2]);
-    const funciones: ListaFuncionesDTO = buscarFuncionesComando.ejecutar({});
+    mockRepositorioFunciones.buscarFunciones.mockResolvedValue([funcion, funcion2]);
+    const funciones: ListaFuncionesDTO = await buscarFuncionesComando.ejecutar({});
     expect(funciones.funciones).toContainEqual(funcion);
     expect(funciones.funciones).toContainEqual(funcion2);
     expect(mockRepositorioFunciones.buscarFunciones).toHaveBeenCalled();    
