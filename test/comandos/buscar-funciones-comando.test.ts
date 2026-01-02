@@ -5,6 +5,7 @@ import RepositorioFuncion from "../../app/dominio/puerto-repositorio-funcion";
 import Sala from "../../app/dominio/sala";
 import Pelicula from "../../app/dominio/pelicula";
 import Funcion from "../../app/dominio/funcion";
+import FiltrosBusquedaFuncionesDTO from "../../app/dtos/filtros-busqueda-funciones-dto";
 
 describe("BuscarFuncionesComando", () => {
   const mockRepositorioFunciones: Mock<RepositorioFuncion> = mock<RepositorioFuncion>();
@@ -52,6 +53,19 @@ describe("BuscarFuncionesComando", () => {
     const funciones: ListaFuncionesDTO = await buscarFuncionesComando.ejecutar({});
     expect(funciones.funciones).toContainEqual(funcion);
     expect(funciones.funciones).toContainEqual(funcion2);
+    expect(mockRepositorioFunciones.buscarFunciones).toHaveBeenCalled();    
+  });
+
+  test("deberia devolver una lista con todas las funciones que cumplan con el parametro de busqueda por id de sala", async () => {
+    const sala2: Sala = new Sala(2, capacidadSala);
+    const funcion2: Funcion = new Funcion(4, sala2, pelicula);
+    mockRepositorioFunciones.buscarFunciones.mockResolvedValue([funcion]);
+    const filtros: FiltrosBusquedaFuncionesDTO = {
+      idSala: sala.obtenerId(),
+    };
+    const funciones: ListaFuncionesDTO = await buscarFuncionesComando.ejecutar(filtros);
+    expect(funciones.funciones).toContainEqual(funcion);
+    expect(funciones.funciones).not.toContainEqual(funcion2);
     expect(mockRepositorioFunciones.buscarFunciones).toHaveBeenCalled();    
   });
 });

@@ -37,12 +37,23 @@ export default class RepositorioFuncionPostgreSQL implements RepositorioFuncion 
     );
   }
 
-  public async buscarFunciones(): Promise<Funcion[]> {
-    const query: string = `
-      SELECT * FROM funciones;
+  public async buscarFunciones(idSala?: number): Promise<Funcion[]> {
+    let query: string = `
+      SELECT * FROM funciones WHERE 1=1
     `;
+    const valores: number[] = [];
+    let contadorParametros: number = 1;
 
-    const resultado = await this.pool.query(query);
+    if (idSala) {
+      const condicionSala: string = ` AND id_sala = $${contadorParametros}`;
+      query += condicionSala;
+      valores.push(idSala);
+      contadorParametros++;
+    }
+
+    query += ";";
+
+    const resultado = await this.pool.query(query, valores);
     
     if (resultado.rowCount === 0) {
       return [];
@@ -60,7 +71,7 @@ export default class RepositorioFuncionPostgreSQL implements RepositorioFuncion 
       const funcion: Funcion = new Funcion(idSala, sala, pelicula);
       funciones.push(funcion);
     }
-    
+
     return funciones;
   }
 }

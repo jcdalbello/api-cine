@@ -707,4 +707,42 @@ describe("GET /funciones", () => {
     expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
     expect(respuesta.body.length).toEqual(cantidadDeFunciones);
   });
+
+  test("deberia devolver solo las funciones que cumplan con el filtro de busqueda por id de sala", async () => {
+    const idSala1: number = 1;
+    const idSala2: number = 2;
+    const idPelicula: number = 1;
+    const cantidadDeFuncionesSala1: number = 2;
+    const cantidadDeFuncionesSala2: number = 3;
+
+    const creacionSalaDTO: CreacionSalaDTO = { capacidad: 50 };
+    await requestWithSupertest.post("/salas").send(creacionSalaDTO);
+    await requestWithSupertest.post("/salas").send(creacionSalaDTO);
+
+    const creacionPeliculaDTO: CreacionPeliculaDTO = {
+      titulo: "pelicula",
+      genero: "genero",
+    }
+    await requestWithSupertest.post("/peliculas").send(creacionPeliculaDTO);
+
+    for (let i = 1; i <= cantidadDeFuncionesSala1; i++) {
+      const creacionFuncionActualDTO: CreacionFuncionDTO = {
+        idSala: idSala1,
+        idPelicula: idPelicula,
+      };
+      await requestWithSupertest.post("/funciones").send(creacionFuncionActualDTO);
+    }
+
+    for (let i = 1; i <= cantidadDeFuncionesSala2; i++) {
+      const creacionFuncionActualDTO: CreacionFuncionDTO = {
+        idSala: idSala2,
+        idPelicula: idPelicula,
+      };
+      await requestWithSupertest.post("/funciones").send(creacionFuncionActualDTO);
+    }
+
+    const respuesta = await requestWithSupertest.get("/funciones?idSala=" + idSala1);
+    expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
+    expect(respuesta.body.length).toEqual(cantidadDeFuncionesSala1);
+  });
 });

@@ -274,7 +274,11 @@ app.post("/funciones", async (req: Request, res: Response) => {
 });
 
 app.get("/funciones", async (req: Request, res: Response) => {
-  const filtros: FiltrosBusquedaFuncionesDTO = {};
+  const idSalaComoString = req.query.idSala as string;
+  const idSala: number = parseInt(idSalaComoString);
+  const filtros: FiltrosBusquedaFuncionesDTO = {
+    idSala: idSala,
+  };
   const buscarFuncionesComando: BuscarFuncionesComando = new BuscarFuncionesComando(repositorioFuncion);
   const funciones: ListaFuncionesDTO = await buscarFuncionesComando.ejecutar(filtros);
   res.status(200).json(funciones.funciones);

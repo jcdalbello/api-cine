@@ -1,2 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export default interface FiltrosBusquedaFuncionesDTO {}
+export default interface FiltrosBusquedaFuncionesDTO {
+  readonly idSala: number,
+}
