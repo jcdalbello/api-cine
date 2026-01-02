@@ -33,6 +33,7 @@ import MensajesDeErrorDeFuncion from './errores/i-mensajes-de-error-de-funcion';
 import CampoIncorrectoFuncionError from './errores/campo-incorrecto-funcion-error';
 import FiltrosBusquedaFuncionesDTO from './dtos/filtros-busqueda-funciones-dto';
 import BuscarFuncionesComando from './comandos/buscar-funciones-comando';
+import ListaFuncionesDTO from './dtos/lista-funciones-dto';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -275,7 +276,7 @@ app.post("/funciones", async (req: Request, res: Response) => {
 app.get("/funciones", async (req: Request, res: Response) => {
   const filtros: FiltrosBusquedaFuncionesDTO = {};
   const buscarFuncionesComando: BuscarFuncionesComando = new BuscarFuncionesComando(repositorioFuncion);
-  const funciones = await buscarFuncionesComando.ejecutar(filtros);
+  const funciones: ListaFuncionesDTO = await buscarFuncionesComando.ejecutar(filtros);
   res.status(200).json(funciones.funciones);
 });
 

@@ -91,5 +91,22 @@ describe("RepositorioFuncionPostgresql", () => {
       expect(funciones.length).toEqual(1);
       expect(funciones[0]).toEqual(funcionGuardada);
     });
+
+    test("deberia devolver una lista con todas las funciones si no se pasar ningun parametro de busqueda", async () => {
+      const cantidadDeFunciones: number = 5;
+      for (let i = 1; i <= cantidadDeFunciones; i++) {
+        const salaParaGuardarActual: Sala = new Sala(0, capacidadSala + i);
+        const salaGuardadaActual: Sala = await repositorioSalaPostgreSQL.guardar(salaParaGuardarActual);
+
+        const peliculaParaGuardarActual: Pelicula = new Pelicula(0, tituloPelicula + i, generoPelicula + i);
+        const peliculaGuardadaActual: Pelicula = await repositorioPeliculaPostgreSQL.guardar(peliculaParaGuardarActual);
+
+        const funcionParaGuardarActual: Funcion = new Funcion(0, salaGuardadaActual, peliculaGuardadaActual);
+        await repositorioFuncionPostgresql.guardar(funcionParaGuardarActual);
+      }
+
+      const funciones: Funcion[] = await repositorioFuncionPostgresql.buscarFunciones();
+      expect(funciones.length).toEqual(cantidadDeFunciones);
+    });
   });
 });

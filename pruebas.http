@@ -189,3 +189,27 @@ GET {{host}}/salas/idInvalido
 Content-Type: application/json
 
 {}
+
+### Crear una funcion (asumiendo una sala y una pelicula ya creadads) (200)
+POST {{host}}/funciones/
+Content-Type: application/json
+
+{
+  "idSala": 1,
+  "idPelicula": 1
+}
+
+### Crear una funcion (asumiendo una sala y una pelicula ya creadads) (200)
+POST {{host}}/funciones/
+Content-Type: application/json
+
+{
+  "idSala": 2,
+  "idPelicula": 2
+}
+
+### Obtener todas las funciones sin pasar parametros (inicialmente una lista vacia) (200)
+GET {{host}}/funciones/
+Content-Type: application/json
+
+{}

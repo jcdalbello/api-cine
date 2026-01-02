@@ -48,11 +48,19 @@ export default class RepositorioFuncionPostgreSQL implements RepositorioFuncion 
       return [];
     }
 
-    const idSala: number = resultado.rows[0].id_sala;
-    const idPelicula: number  = resultado.rows[0].id_pelicula;
+    const funciones: Funcion[] = [];
 
-    const sala: Sala = await this.repositorioSala.recuperar(idSala);
-    const pelicula: Pelicula = await this.repositorioPelicula.recuperar(idPelicula);
-    return [new Funcion(idSala, sala, pelicula)];
+    for (const row of resultado.rows) {
+      const idSala: number = row.id_sala;
+      const idPelicula: number = row.id_pelicula;
+
+      const sala: Sala = await this.repositorioSala.recuperar(idSala);
+      const pelicula: Pelicula = await this.repositorioPelicula.recuperar(idPelicula);
+
+      const funcion: Funcion = new Funcion(idSala, sala, pelicula);
+      funciones.push(funcion);
+    }
+    
+    return funciones;
   }
 }

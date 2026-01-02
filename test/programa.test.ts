@@ -685,4 +685,26 @@ describe("GET /funciones", () => {
     expect(respuesta.body[0].sala).toEqual(respuestaPostSala.body);
     expect(respuesta.body[0].pelicula).toEqual(respuestaPostPelicula.body);
   });
+
+  test("deberia devolver una lista con todas las funciones guardadas si no se pasa ningun parametro", async () => {
+    const cantidadDeFunciones: number = 5;
+    for (let i = 1; i <= cantidadDeFunciones; i++) {
+      const creacionSalaActualDTO: CreacionSalaDTO = { capacidad: i * 10 };
+      const creacionPeliculaActualDTO: CreacionPeliculaDTO = {
+        titulo: "pelicula" + i,
+        genero: "genero" + i,
+      };
+      const creacionFuncionActualDTO: CreacionFuncionDTO = {
+        idSala: i,
+        idPelicula: i,
+      };
+      await requestWithSupertest.post("/salas").send(creacionSalaActualDTO);
+      await requestWithSupertest.post("/peliculas").send(creacionPeliculaActualDTO);
+      await requestWithSupertest.post("/funciones").send(creacionFuncionActualDTO);
+    }
+
+    const respuesta = await requestWithSupertest.get("/funciones");
+    expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
+    expect(respuesta.body.length).toEqual(cantidadDeFunciones);
+  });
 });
