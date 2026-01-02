@@ -48,7 +48,10 @@ function crearRepositorioSala(): RepositorioSala {
 }
 
 function crearRepositorioFuncion(): RepositorioFuncion {
-  return new RepositorioFuncionPostgreSQL();
+  return new RepositorioFuncionPostgreSQL(
+    crearRepositorioSala(),
+    crearRepositorioPelicula(),
+  );
 }
 
 const repositorioPelicula: RepositorioPelicula = crearRepositorioPelicula();
@@ -269,10 +272,10 @@ app.post("/funciones", async (req: Request, res: Response) => {
   }
 });
 
-app.get("/funciones", (req: Request, res: Response) => {
+app.get("/funciones", async (req: Request, res: Response) => {
   const filtros: FiltrosBusquedaFuncionesDTO = {};
   const buscarFuncionesComando: BuscarFuncionesComando = new BuscarFuncionesComando(repositorioFuncion);
-  const funciones = buscarFuncionesComando.ejecutar(filtros);
+  const funciones = await buscarFuncionesComando.ejecutar(filtros);
   res.status(200).json(funciones.funciones);
 });
 

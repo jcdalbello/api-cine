@@ -674,7 +674,7 @@ describe("GET /funciones", () => {
     expect(respuesta.body.length).toEqual(0);
   });
 
-  test.skip("deberia devolver una lista con una sola funcion si solo se agrego una", async () => {
+  test("deberia devolver una lista con una sola funcion si solo se agrego una", async () => {
     const respuestaPostSala = await requestWithSupertest.post("/salas").send(creacionSalaDTO);
     const respuestaPostPelicula = await requestWithSupertest.post("/peliculas").send(creacionPeliculaDTO);
     await requestWithSupertest.post("/funciones").send(creacionFuncionDTO);
