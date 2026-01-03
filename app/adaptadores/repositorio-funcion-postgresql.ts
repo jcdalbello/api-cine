@@ -69,13 +69,18 @@ export default class RepositorioFuncionPostgreSQL implements RepositorioFuncion 
     const funciones: Funcion[] = [];
 
     for (const row of resultado.rows) {
+      const idGenerado: number = row.id;
       const idSala: number = row.id_sala;
       const idPelicula: number = row.id_pelicula;
 
       const sala: Sala = await this.repositorioSala.recuperar(idSala);
       const pelicula: Pelicula = await this.repositorioPelicula.recuperar(idPelicula);
 
-      const funcion: Funcion = new Funcion(idSala, sala, pelicula);
+      const funcion: Funcion = new Funcion(
+        idGenerado,
+        sala,
+        pelicula
+      );
       funciones.push(funcion);
     }
 

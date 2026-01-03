@@ -92,6 +92,25 @@ describe("RepositorioFuncionPostgresql", () => {
       expect(funciones[0]).toEqual(funcionGuardada);
     });
 
+    test("deberia devolver una lista con todas las funciones guardadas con los datos correctos de cada una", async () => {
+      const salaParaGuardar: Sala = new Sala(0, capacidadSala);
+      const salaGuardada: Sala = await repositorioSalaPostgreSQL.guardar(salaParaGuardar);
+
+      const peliculaParaGuardar: Pelicula = new Pelicula(0, tituloPelicula, generoPelicula);
+      const peliculaGuardada: Pelicula = await repositorioPeliculaPostgreSQL.guardar(peliculaParaGuardar);
+
+      const funcionParaGuardar: Funcion = new Funcion(0, salaGuardada, peliculaGuardada);
+      const funcionGuardada: Funcion = await repositorioFuncionPostgresql.guardar(funcionParaGuardar);
+
+      const funcionParaGuardar2: Funcion = new Funcion(0, salaGuardada, peliculaGuardada);
+      const funcionGuardada2: Funcion = await repositorioFuncionPostgresql.guardar(funcionParaGuardar2);
+
+      const funciones: Funcion[] = await repositorioFuncionPostgresql.buscarFunciones();
+      expect(funciones.length).toEqual(2);
+      expect(funciones).toContainEqual(funcionGuardada);
+      expect(funciones).toContainEqual(funcionGuardada2);
+    });
+
     test("deberia devolver una lista con todas las funciones si no se pasar ningun parametro de busqueda", async () => {
       const cantidadDeFunciones: number = 5;
       for (let i = 1; i <= cantidadDeFunciones; i++) {

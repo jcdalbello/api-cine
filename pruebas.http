@@ -220,9 +220,20 @@ Content-Type: application/json
 
 {}
 
+### Obtener todas las funciones que tengan asiganadas la pelicula con el id pasado (inicialmente una lista vacia) (200)
+GET {{host}}/funciones?idPelicula=1
+Content-Type: application/json
+
+{}
+
 ### Intentar buscar salas con un valor no numerico como id de sala (400)
 GET {{host}}/funciones?idSala=valorNoNumerico
 Content-Type: application/json
 
 {}
 
+### Intentar buscar salas con un valor no numerico como id de pelicula (400)
+GET {{host}}/funciones?idPelicula=valorNoNumerico
+Content-Type: application/json
+
+{}

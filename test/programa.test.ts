@@ -708,6 +708,22 @@ describe("GET /funciones", () => {
     expect(respuesta.body.length).toEqual(cantidadDeFunciones);
   });
 
+  test("deberia devolver todas las funciones guardadas con los datos correctos de cada una", async () => {
+    await requestWithSupertest.post("/salas").send(creacionSalaDTO);
+    await requestWithSupertest.post("/peliculas").send(creacionPeliculaDTO);
+    const respuestaPostFuncinon1 = await requestWithSupertest.post("/funciones").send(creacionFuncionDTO);
+    const respuestaPostFuncinon2 = await requestWithSupertest.post("/funciones").send(creacionFuncionDTO);
+    const respuestaPostFuncinon3 = await requestWithSupertest.post("/funciones").send(creacionFuncionDTO);
+
+    const respuestaGetFunciones = await requestWithSupertest.get("/funciones");
+
+    expect(respuestaGetFunciones.status).toEqual(CodigosHTTP.OperacionExitosa);
+    expect(respuestaGetFunciones.body.length).toEqual(3);
+    expect(respuestaGetFunciones.body).toContainEqual(respuestaPostFuncinon1.body);
+    expect(respuestaGetFunciones.body).toContainEqual(respuestaPostFuncinon2.body);
+    expect(respuestaGetFunciones.body).toContainEqual(respuestaPostFuncinon3.body);
+  });
+
   test("deberia devolver solo las funciones que cumplan con el filtro de busqueda por id de sala", async () => {
     const idSala1: number = 1;
     const idSala2: number = 2;
