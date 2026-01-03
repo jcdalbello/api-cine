@@ -882,8 +882,6 @@ describe("GET /salas/:id", () => {
     for (let i = 1; i <= cantidadDeFunciones; i++) {
       const respuesta = await requestWithSupertest.get("/funciones/" + i);
       expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
-      console.log(respuesta.body);
-      console.log("ITERACION:" + i);
       expect(respuesta.body.id).toEqual(i);
       expect(salasGeneradas).toContainEqual(respuesta.body.sala);
       expect(peliculasGeneradas).toContainEqual(respuesta.body.pelicula);

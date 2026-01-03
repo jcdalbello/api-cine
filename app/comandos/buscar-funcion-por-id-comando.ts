@@ -1,4 +1,7 @@
+import Funcion from "../dominio/funcion";
+import Pelicula from "../dominio/pelicula";
 import RepositorioFuncion from "../dominio/puerto-repositorio-funcion";
+import Sala from "../dominio/sala";
 import FuncionDTO from "../dtos/funcion-dto";
 import IdDTO from "../dtos/id-dto";
 import PeliculaDTO from "../dtos/pelicula-dto";
@@ -10,29 +13,24 @@ export default class BuscarFuncionPorIdComando {
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public ejecutar(idDTO: IdDTO): FuncionDTO {
-    const idFuncion: number = 1;
-    
-    const idSala: number = 1;
-    const idPelicula: number = 1;
-  
-    const capacidadSala: number = 50;
-    const tituloPelicula: string = "pelicula1";
-    const generoPelicula: string = "genero1";
+  public async ejecutar(idDTO: IdDTO): Promise<FuncionDTO> {
+    const funcionRecuperada: Funcion = await this.repositorioFuncion.recuperar(idDTO.id);
+    const sala: Sala = funcionRecuperada.obtenerSala();
+    const pelicula: Pelicula = funcionRecuperada.obtenerPelicula();
 
     const salaDTO: SalaDTO = {
-      id: idSala,
-      capacidad: capacidadSala,
+      id: sala.obtenerId(),
+      capacidad: sala.obtenerCapacidad(),
     };
-    
+
     const peliculaDTO: PeliculaDTO = {
-      id: idPelicula,
-      titulo: tituloPelicula,
-      genero: generoPelicula,
+      id: pelicula.obtenerId(),
+      titulo: pelicula.obtenerTitulo(),
+      genero: pelicula.obtenerGenero(),
     };
 
     const funcionDTO: FuncionDTO = {
-      id: idFuncion,
+      id: funcionRecuperada.obtenerId(),
       sala: salaDTO,
       pelicula: peliculaDTO,
     };

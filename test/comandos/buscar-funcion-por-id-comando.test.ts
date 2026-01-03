@@ -40,4 +40,23 @@ describe("BuscarFuncionPorIdComando", () => {
     expect(funcionDTO.sala).toEqual(sala);
     expect(funcionDTO.pelicula).toEqual(pelicula);
   });
+
+  test("deberia devolver la funcion correspondiente al id pasado por parametro con varias funciones", async () => {
+    const cantidadDeFuncionesAGenerar: number = 5;
+    for (let i = 1; i <= cantidadDeFuncionesAGenerar; i++) {
+      const idActual: number = i;
+      const salaActual: Sala = new Sala(idActual, i * 10);
+      const peliculaActual: Pelicula = new Pelicula(idActual, "pelicula" + idActual, "genero" + idActual);
+      const funcionActual: Funcion = new Funcion(idActual, salaActual, peliculaActual);
+
+      const idDTO: IdDTO = { id: idActual };
+
+      mockRepositorioFuncion.recuperar.mockResolvedValue(funcionActual);
+      const funcionRecuperada: FuncionDTO = await buscarFuncionPorIdComando.ejecutar(idDTO);
+
+      expect(funcionRecuperada.id).toEqual(funcionActual.obtenerId());
+      expect(funcionRecuperada.sala).toEqual(funcionActual.obtenerSala());
+      expect(funcionRecuperada.pelicula).toEqual(funcionActual.obtenerPelicula());
+    }
+  });
 });
