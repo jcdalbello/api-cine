@@ -816,3 +816,41 @@ describe("GET /funciones", () => {
     expect(respuesta.body.idPelicula).toEqual("El id de pelicula debe ser un numero valido");
   });
 });
+
+describe("GET /salas/:id", () => {
+  const idFuncion: number = 1;
+
+  const idSala: number = 1;
+  const idPelicula: number = 1;
+
+  const capacidadSala: number = 50;
+  const tituloPelicula: string = "pelicula1";
+  const generoPelicula: string = "genero1";
+
+  const creacionSalaDTO: CreacionSalaDTO = { capacidad: capacidadSala };
+
+  const creacionPeliculaDTO: CreacionPeliculaDTO ={
+    titulo: tituloPelicula,
+    genero: generoPelicula,
+  };
+
+  const creacionFuncionDTO: CreacionFuncionDTO = {
+    idSala: idSala,
+    idPelicula: idPelicula,
+  };
+
+  let respuestaPostSala: supertest.Response;
+  let respuestaPostPelicula: supertest.Response;
+
+  test("deberia devolver un codigo 200 y la sala con ese id si existe", async () => {
+    respuestaPostSala = await requestWithSupertest.post("/salas").send(creacionSalaDTO);
+    respuestaPostPelicula = await requestWithSupertest.post("/peliculas").send(creacionPeliculaDTO);
+    await requestWithSupertest.post("/funciones").send(creacionFuncionDTO);
+
+    const respuesta = await requestWithSupertest.get("/funciones/" + idFuncion);
+    expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
+    expect(respuesta.body.id).toEqual(idFuncion);
+    expect(respuesta.body.sala).toEqual(respuestaPostSala.body);
+    expect(respuesta.body.pelicula).toEqual(respuestaPostPelicula.body);
+  });
+});

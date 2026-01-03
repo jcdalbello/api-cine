@@ -329,6 +329,36 @@ app.get("/funciones", async (req: Request, res: Response) => {
   }
 });
 
+app.get("/funciones/:id", (req: Request, res: Response) => {
+  const idFuncion: number = 1;
+
+  const idSala: number = 1;
+  const idPelicula: number = 1;
+
+  const capacidadSala: number = 50;
+  const tituloPelicula: string = "pelicula1";
+  const generoPelicula: string = "genero1";
+
+  const salaDTO: SalaDTO = {
+    id: idSala,
+    capacidad: capacidadSala,
+  };
+
+  const peliculaDTO: PeliculaDTO = {
+    id: idPelicula,
+    titulo: tituloPelicula,
+    genero: generoPelicula,
+  };
+
+  const funcion: FuncionDTO = {
+    id: idFuncion,
+    sala: salaDTO,
+    pelicula: peliculaDTO,
+  };
+
+  res.status(200).json(funcion);
+});
+
 const server = app
   .listen(puerto, (): void => {
     console.log(`Servidor corriendo en http://localhost:${puerto}`);
