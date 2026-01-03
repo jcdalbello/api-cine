@@ -86,4 +86,11 @@ export default class RepositorioFuncionPostgreSQL implements RepositorioFuncion 
 
     return funciones;
   }
+
+  public recuperar(id: number): Promise<Funcion> {
+    const sala: Sala = new Sala(1, 50);
+    const pelicula: Pelicula = new Pelicula(1, "pelicula", "genero");
+    const funcion: Funcion = new Funcion(id, sala, pelicula);
+    return Promise.resolve(funcion);
+  }
 }

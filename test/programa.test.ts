@@ -4,6 +4,8 @@ import { pool } from "../app/adaptadores/pool-postgresql";
 import CreacionFuncionDTO from "../app/dtos/creacion-funcion-dto";
 import CreacionSalaDTO from "../app/dtos/creacion-sala-dto";
 import CreacionPeliculaDTO from "../app/dtos/creacion-pelicula-dto";
+import SalaDTO from "../app/dtos/sala-dto";
+import PeliculaDTO from "../app/dtos/pelicula-dto";
 
 const requestWithSupertest = supertest(app);
 
@@ -852,5 +854,39 @@ describe("GET /salas/:id", () => {
     expect(respuesta.body.id).toEqual(idFuncion);
     expect(respuesta.body.sala).toEqual(respuestaPostSala.body);
     expect(respuesta.body.pelicula).toEqual(respuestaPostPelicula.body);
+  });
+
+  test.skip("deberia devolver la sala correspondiente al id pasado por parametro en cada iteracion", async () => {
+    const cantidadDeFunciones: number = 5;
+    const salasGeneradas: SalaDTO[] = [];
+    const peliculasGeneradas: PeliculaDTO[] = [];
+
+    for (let i = 1; i <= cantidadDeFunciones; i++) {
+      const cracionSalaDTO: CreacionSalaDTO = { capacidad: i * 10 };
+      const creacionPeliculaDTO: CreacionPeliculaDTO = {
+        titulo: "pelicula" + i,
+        genero: "genero" + i,
+      };
+      const creacionFuncionDTO: CreacionFuncionDTO = {
+        idSala: i,
+        idPelicula: i,
+      };
+      const respuestaPostSala = await requestWithSupertest.post("/salas").send(cracionSalaDTO);
+      const respuestaPostPelicula = await requestWithSupertest.post("/peliculas").send(creacionPeliculaDTO);
+      await requestWithSupertest.post("/funciones").send(creacionFuncionDTO);
+
+      salasGeneradas.push(respuestaPostSala.body as SalaDTO);
+      peliculasGeneradas.push(respuestaPostPelicula.body as PeliculaDTO);
+    }
+
+    for (let i = 1; i <= cantidadDeFunciones; i++) {
+      const respuesta = await requestWithSupertest.get("/funciones/" + i);
+      expect(respuesta.status).toEqual(CodigosHTTP.OperacionExitosa);
+      console.log(respuesta.body);
+      console.log("ITERACION:" + i);
+      expect(respuesta.body.id).toEqual(i);
+      expect(salasGeneradas).toContainEqual(respuesta.body.sala);
+      expect(peliculasGeneradas).toContainEqual(respuesta.body.pelicula);
+    }
   });
 });
