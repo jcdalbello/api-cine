@@ -199,5 +199,30 @@ describe("RepositorioFuncionPostgresql", () => {
       expect(funcionRecuperada.obtenerSala()).toEqual(salaGuardada);
       expect(funcionRecuperada.obtenerPelicula()).toEqual(peliculaGuardada);
     });
+
+    test("deberia recuperar multiples salas por sus ids correspondientes", async () => {
+      const cantidadDeFunciones: number = 5;
+      for (let i = 1; i <= cantidadDeFunciones; i++) {
+        const idFuncionActual: number = i;
+
+        const capacidad: number = i * 10;
+        const salaParaGuardar: Sala = new Sala(0, capacidad);
+        const salaGuardada: Sala = await repositorioSalaPostgreSQL.guardar(salaParaGuardar);
+
+        const titulo: string = "titulo" + i;
+        const genero: string = "genero" + i;
+        const peliculaParaGuardar: Pelicula = new Pelicula(0, titulo, genero);
+        const peliculaGuardada: Pelicula = await repositorioPeliculaPostgreSQL.guardar(peliculaParaGuardar);
+
+        const funcionParaGuardar: Funcion = new Funcion(0, salaGuardada, peliculaGuardada);
+        await repositorioFuncionPostgresql.guardar(funcionParaGuardar);
+
+        const funcionRecuperada: Funcion = await repositorioFuncionPostgresql.recuperar(idFuncionActual);
+
+        expect(funcionRecuperada.obtenerId()).toEqual(idFuncionActual);
+        expect(funcionRecuperada.obtenerSala()).toEqual(salaGuardada);
+        expect(funcionRecuperada.obtenerPelicula()).toEqual(peliculaGuardada);
+      }
+    });
   });
 });
