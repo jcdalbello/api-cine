@@ -237,3 +237,11 @@ GET {{host}}/funciones?idPelicula=valorNoNumerico
 Content-Type: application/json
 
 {}
+
+
+
+### Buscar sala por id
+GET {{host}}/funciones/2
+Content-Type: application/json
+
+{}

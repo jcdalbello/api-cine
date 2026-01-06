@@ -856,7 +856,7 @@ describe("GET /salas/:id", () => {
     expect(respuesta.body.pelicula).toEqual(respuestaPostPelicula.body);
   });
 
-  test.skip("deberia devolver la sala correspondiente al id pasado por parametro en cada iteracion", async () => {
+  test("deberia devolver la sala correspondiente al id pasado por parametro en cada iteracion", async () => {
     const cantidadDeFunciones: number = 5;
     const salasGeneradas: SalaDTO[] = [];
     const peliculasGeneradas: PeliculaDTO[] = [];
