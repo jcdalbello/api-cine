@@ -12,7 +12,6 @@ export default class BuscarFuncionPorIdComando {
     private readonly repositorioFuncion: RepositorioFuncion,
   ) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async ejecutar(idDTO: IdDTO): Promise<FuncionDTO> {
     const funcionRecuperada: Funcion = await this.repositorioFuncion.recuperar(idDTO.id);
     const sala: Sala = funcionRecuperada.obtenerSala();

@@ -34,7 +34,6 @@ describe("BuscarFuncionPorIdComando", () => {
       id: idFuncion,
     };
 
-    // eslint-disable-next-line @typescript-eslint/await-thenable
     const funcionDTO: FuncionDTO = await buscarFuncionPorIdComando.ejecutar(idDTO);
     expect(funcionDTO.id).toEqual(idFuncion);
     expect(funcionDTO.sala).toEqual(sala);

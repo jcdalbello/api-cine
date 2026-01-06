@@ -87,10 +87,26 @@ export default class RepositorioFuncionPostgreSQL implements RepositorioFuncion 
     return funciones;
   }
 
-  public recuperar(id: number): Promise<Funcion> {
-    const sala: Sala = new Sala(1, 50);
-    const pelicula: Pelicula = new Pelicula(1, "pelicula", "genero");
-    const funcion: Funcion = new Funcion(id, sala, pelicula);
-    return Promise.resolve(funcion);
+  public async recuperar(id: number): Promise<Funcion> {
+    const query: string = `
+      SELECT * FROM funciones
+      WHERE id = $1;
+    `;
+    const values: number[] = [id];
+
+    const resultado = await this.pool.query(query, values);
+    
+    const idRecuperado: number = resultado.rows[0].id;
+    const idSala: number = resultado.rows[0].id_sala;
+    const idPelicula: number = resultado.rows[0].id_pelicula;
+
+    const salaRecuperada: Sala = await this.repositorioSala.recuperar(idSala);
+    const peliculaRecuperada: Pelicula = await this.repositorioPelicula.recuperar(idPelicula);
+
+    return new Funcion(
+      idRecuperado,
+      salaRecuperada,
+      peliculaRecuperada
+    );
   }
 }

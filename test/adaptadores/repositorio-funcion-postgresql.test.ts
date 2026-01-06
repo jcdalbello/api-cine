@@ -178,4 +178,26 @@ describe("RepositorioFuncionPostgresql", () => {
       expect(funciones).not.toContainEqual(funcionGuardada2);
     });
   });
+
+  describe("recuperar", () => {
+    test("deberia recuperar una sala por su id", async () => {
+      const capacidad: number = 50;
+      const salaParaGuardar: Sala = new Sala(0, capacidad);
+
+      const titulo: string = "titulo";
+      const genero: string = "genero";
+      const peliculaParaGuardar: Pelicula = new Pelicula(0, titulo, genero);
+
+      const salaGuardada: Sala = await repositorioSalaPostgreSQL.guardar(salaParaGuardar);
+      const peliculaGuardada: Pelicula = await repositorioPeliculaPostgreSQL.guardar(peliculaParaGuardar);
+
+      const funcionParaGuardar: Funcion = new Funcion(0, salaGuardada, peliculaGuardada);
+      await repositorioFuncionPostgresql.guardar(funcionParaGuardar);
+
+      const funcionRecuperada: Funcion = await repositorioFuncionPostgresql.recuperar(idFuncion);
+      expect(funcionRecuperada.obtenerId()).toEqual(idFuncion);
+      expect(funcionRecuperada.obtenerSala()).toEqual(salaGuardada);
+      expect(funcionRecuperada.obtenerPelicula()).toEqual(peliculaGuardada);
+    });
+  });
 });
