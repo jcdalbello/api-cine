@@ -238,10 +238,20 @@ Content-Type: application/json
 
 {}
 
+### Buscar una funcion por id (asumiendo que la funcion existe) (200)
+GET {{host}}/funciones/1
+Content-Type: application/json
 
+{}
 
-### Buscar sala por id
-GET {{host}}/funciones/2
+### Intentar buscar una funcion con un id que no existe (asumiendo que la funcion no existe) (404)
+GET {{host}}/funciones/99999
+Content-Type: application/json
+
+{}
+
+### Intentar buscar una funcion con un valor no numerico como id (400)
+GET {{host}}/funciones/idNoNumerico
 Content-Type: application/json
 
 {}
