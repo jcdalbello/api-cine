@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
   title: API de Peliculas y Salas
-  description: Documentacion generada basada en tests de Supertest
-  version: 1.1.0
+  description: Documentacion generada basada en tests de Supertest y codigo fuente.
+  version: 1.2.0
 servers:
   - url: http://localhost:3000
     description: Servidor Local
@@ -63,16 +63,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CampoIncorrectoPeliculaError'
-              examples:
-                faltanDatos:
-                  summary: Errores en los campos de Pelicula
-                  value:
-                    titulo: "El titulo es un campo obligatorio"
-                    genero: "El genero es un campo obligatorio"
-                excesoCaracteres:
-                  summary: Exceso de caracteres
-                  value:
-                    titulo: "El titulo no puede superar el limite de caracteres"
 
   /peliculas/{id}:
     get:
@@ -97,8 +87,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PeliculaNoEncontradaError'
-              example:
-                id: "no se encontro ninguna pelicula con el id indicado"
 
   /salas:
     get:
@@ -112,7 +100,7 @@ paths:
           description: Filtra salas con capacidad igual o mayor a la indicada.
       responses:
         '200':
-          description: Lista de salas obtenida exitosamente (puede estar vacia).
+          description: Lista de salas obtenida exitosamente.
           content:
             application/json:
               schema:
@@ -120,7 +108,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Sala'
         '400':
-          description: Error de validacion en los parametros de busqueda.
+          description: Error de validacion en los parametros de busqueda (ej. capacidad no numerica).
           content:
             application/json:
               schema:
@@ -148,8 +136,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CampoIncorrectoSalaError'
-              example:
-                capacidad: "La capacidad es un campo obligatorio"
 
   /salas/{id}:
     get:
@@ -174,19 +160,108 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CampoIncorrectoSalaError'
-              example:
-                id: "El id debe ser un numero valido"
         '404':
           description: Sala no encontrada.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SalaNoEncontradaError'
-              example:
-                id: "no se encontro ninguna sala con el id indicado"
+
+  /funciones:
+    get:
+      summary: Obtener lista de funciones
+      description: Devuelve un array con todas las funciones. Permite filtrar por sala o por pelicula.
+      parameters:
+        - in: query
+          name: idSala
+          schema:
+            type: integer
+          description: Filtrar funciones por ID de sala.
+        - in: query
+          name: idPelicula
+          schema:
+            type: integer
+          description: Filtrar funciones por ID de pelicula.
+      responses:
+        '200':
+          description: Lista de funciones obtenida exitosamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Funcion'
+        '400':
+          description: Error de validacion (IDs no numericos en query params).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampoIncorrectoFuncionError'
+
+    post:
+      summary: Crear una nueva funcion
+      description: Crea una funcion asignando una pelicula a una sala.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FuncionInput'
+      responses:
+        '201':
+          description: Funcion creada exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Funcion'
+        '400':
+          description: Datos incorrectos (IDs no numericos o faltantes).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampoIncorrectoFuncionError'
+        '404':
+          description: Sala o Pelicula no encontrada para crear la funcion.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/SalaNoEncontradaError'
+                  - $ref: '#/components/schemas/PeliculaNoEncontradaError'
+
+  /funciones/{id}:
+    get:
+      summary: Obtener una funcion por ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID numerico de la funcion.
+      responses:
+        '200':
+          description: Funcion encontrada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Funcion'
+        '400':
+          description: ID invalido (formato no numerico).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampoIncorrectoFuncionError'
+        '404':
+          description: Funcion no encontrada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FuncionNoEncontradaError'
 
 components:
   schemas:
+    # --- Esquemas de Pelicula ---
     Pelicula:
       type: object
       properties:
@@ -195,10 +270,10 @@ components:
           example: 1
         titulo:
           type: string
-          example: "pelicula1"
+          example: "Terminator"
         genero:
           type: string
-          example: "genero1"
+          example: "Accion"
     
     PeliculaInput:
       type: object
@@ -209,32 +284,30 @@ components:
         titulo:
           type: string
           maxLength: 70
-          example: "pelicula1"
+          example: "Terminator"
         genero:
           type: string
           maxLength: 70
-          example: "genero1"
+          example: "Accion"
     
     CampoIncorrectoPeliculaError:
       type: object
       properties:
         id:
           type: string
-          description: Mensaje de error relacionado con el id
         titulo:
           type: string
-          description: Mensaje de error relacionado con el titulo
         genero:
           type: string
-          description: Mensaje de error relacionado con el genero
     
     PeliculaNoEncontradaError:
       type: object
       properties:
         id:
           type: string
-          description: Mensaje explicando que el ID no existe
+          example: "no se encontro ninguna pelicula con el id indicado"
 
+    # --- Esquemas de Sala ---
     Sala:
       type: object
       properties:
@@ -260,14 +333,56 @@ components:
       properties:
         id:
           type: string
-          description: Mensaje de error si el ID no es numerico
         capacidad:
           type: string
-          description: Mensaje de error si la capacidad es invalida o falta
 
     SalaNoEncontradaError:
       type: object
       properties:
         id:
           type: string
-          description: Mensaje explicando que la Sala con ese ID no existe
+          example: "no se encontro ninguna sala con el id indicado"
+
+    # --- Esquemas de Funcion ---
+    Funcion:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        idSala:
+          type: integer
+          example: 10
+        idPelicula:
+          type: integer
+          example: 5
+    
+    FuncionInput:
+      type: object
+      required:
+        - idSala
+        - idPelicula
+      properties:
+        idSala:
+          type: integer
+          example: 1
+        idPelicula:
+          type: integer
+          example: 1
+    
+    CampoIncorrectoFuncionError:
+      type: object
+      properties:
+        id:
+          type: string
+        idSala:
+          type: string
+        idPelicula:
+          type: string
+
+    FuncionNoEncontradaError:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "No se encontro ninguna funcion con el id indicado"
