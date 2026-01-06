@@ -6,6 +6,7 @@ import Sala from "../dominio/sala";
 import Pelicula from "../dominio/pelicula";
 import RepositorioSala from "../dominio/puerto-repositorio-sala";
 import RepositorioPelicula from "../dominio/puerto-repositorio-pelicula";
+import FuncionNoEncontradaError from "../errores/funcion-no-encontrada-error";
 
 export default class RepositorioFuncionPostgreSQL implements RepositorioFuncion {
   private readonly pool: Pool;
@@ -95,6 +96,10 @@ export default class RepositorioFuncionPostgreSQL implements RepositorioFuncion 
     const values: number[] = [id];
 
     const resultado = await this.pool.query(query, values);
+
+    if (resultado.rowCount === 0) {
+      throw new FuncionNoEncontradaError();
+    }
     
     const idRecuperado: number = resultado.rows[0].id;
     const idSala: number = resultado.rows[0].id_sala;

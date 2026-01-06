@@ -35,6 +35,7 @@ import FiltrosBusquedaFuncionesDTO from './dtos/filtros-busqueda-funciones-dto';
 import BuscarFuncionesComando from './comandos/buscar-funciones-comando';
 import ListaFuncionesDTO from './dtos/lista-funciones-dto';
 import BuscarFuncionPorIdComando from './comandos/buscar-funcion-por-id-comando';
+import FuncionNoEncontradaError from './errores/funcion-no-encontrada-error';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -336,10 +337,15 @@ app.get("/funciones/:id", async (req: Request, res: Response) => {
     id: idFuncion,
   }
 
-  const buscarFuncionPorIdComando: BuscarFuncionPorIdComando = new BuscarFuncionPorIdComando(repositorioFuncion);
-  const funcion: FuncionDTO = await buscarFuncionPorIdComando.ejecutar(idDTO);
-
-  res.status(200).json(funcion);
+  try {
+    const buscarFuncionPorIdComando: BuscarFuncionPorIdComando = new BuscarFuncionPorIdComando(repositorioFuncion);
+    const funcion: FuncionDTO = await buscarFuncionPorIdComando.ejecutar(idDTO);
+    res.status(200).json(funcion);
+  } catch (error) {
+    if (error instanceof FuncionNoEncontradaError) {
+      res.status(404).json(error);
+    }
+  }
 });
 
 const server = app

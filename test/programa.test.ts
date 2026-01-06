@@ -887,4 +887,11 @@ describe("GET /salas/:id", () => {
       expect(peliculasGeneradas).toContainEqual(respuesta.body.pelicula);
     }
   });
+
+  test("deberia devolver un error 404 si no existe ninguna funcion con el id indicado", async () => {
+    const idDesconocido: number = 99999;
+    const respuesta = await requestWithSupertest.get("/funciones" + "/" + idDesconocido.toString());
+    expect(respuesta.status).toEqual(CodigosHTTP.RecursoNoEncontrado);
+    expect(respuesta.body.id).toEqual("No se encontro ninguna funcion con el id indicado");
+  });
 });

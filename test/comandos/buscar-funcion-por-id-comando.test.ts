@@ -6,6 +6,7 @@ import RepositorioFuncion from "../../app/dominio/puerto-repositorio-funcion";
 import Sala from "../../app/dominio/sala";
 import FuncionDTO from "../../app/dtos/funcion-dto";
 import IdDTO from "../../app/dtos/id-dto";
+import FuncionNoEncontradaError from "../../app/errores/funcion-no-encontrada-error";
 
 describe("BuscarFuncionPorIdComando", () => {
   const mockRepositorioFuncion: Mock<RepositorioFuncion> = mock<RepositorioFuncion>();
@@ -57,5 +58,12 @@ describe("BuscarFuncionPorIdComando", () => {
       expect(funcionRecuperada.sala).toEqual(funcionActual.obtenerSala());
       expect(funcionRecuperada.pelicula).toEqual(funcionActual.obtenerPelicula());
     }
+  });
+
+  test("deberia devolver un error FuncionNoEncontradaError si no existe ninguna funcion con el id indicado", async () => {
+    const idDesconocido: number = 99999;
+    const idDTO: IdDTO = { id: idDesconocido };
+    mockRepositorioFuncion.recuperar.mockRejectedValue(new FuncionNoEncontradaError());
+    await expect(buscarFuncionPorIdComando.ejecutar(idDTO)).rejects.toThrow(FuncionNoEncontradaError);
   });
 });

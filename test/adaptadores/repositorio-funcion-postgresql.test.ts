@@ -5,6 +5,7 @@ import RepositorioSalaPostgreSQL from "../../app/adaptadores/repositorio-sala-po
 import Funcion from "../../app/dominio/funcion";
 import Pelicula from "../../app/dominio/pelicula";
 import Sala from "../../app/dominio/sala";
+import FuncionNoEncontradaError from "../../app/errores/funcion-no-encontrada-error";
 
 describe("RepositorioFuncionPostgresql", () => {
   const repositorioPeliculaPostgreSQL: RepositorioPeliculaPostgreSQL = new RepositorioPeliculaPostgreSQL();
@@ -223,6 +224,11 @@ describe("RepositorioFuncionPostgresql", () => {
         expect(funcionRecuperada.obtenerSala()).toEqual(salaGuardada);
         expect(funcionRecuperada.obtenerPelicula()).toEqual(peliculaGuardada);
       }
+    });
+
+    test("deberia devolver un error FuncionNoEncontradaError si no existe ninguna funcion con el id indicado", async () => {
+      const idDesconocido: number = 99999;
+      await expect(repositorioFuncionPostgresql.recuperar(idDesconocido)).rejects.toThrow(FuncionNoEncontradaError);
     });
   });
 });
