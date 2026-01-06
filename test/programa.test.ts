@@ -894,4 +894,11 @@ describe("GET /salas/:id", () => {
     expect(respuesta.status).toEqual(CodigosHTTP.RecursoNoEncontrado);
     expect(respuesta.body.id).toEqual("No se encontro ninguna funcion con el id indicado");
   });
+
+  test("deberia devolver un error 400 si se pasa un valor no numerico como id de funcion", async () => {
+    const idNoNumerico: string = "idNoNumerico";
+    const respuesta = await requestWithSupertest.get("/funciones" + "/" + idNoNumerico);
+    expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
+    expect(respuesta.body.id).toEqual("El id de funcion debe ser un numero valido");
+  });
 });

@@ -331,17 +331,35 @@ app.get("/funciones", async (req: Request, res: Response) => {
   }
 });
 
-app.get("/funciones/:id", async (req: Request, res: Response) => {
-  const idFuncion: number = parseInt(req.params.id!);
-  const idDTO: IdDTO = {
-    id: idFuncion,
+function validarDatosDeBusquedaDeFuncionPorId(idComoString: string | undefined): void {
+  const mensajes: MensajesDeErrorDeFuncion = {};
+
+  const idParseado: number = Number(idComoString);
+  if (Number.isNaN(idParseado)) {
+    mensajes.id = "El id de funcion debe ser un numero valido";
   }
 
+  if (Object.keys(mensajes).length > 0) {
+    throw new CampoIncorrectoFuncionError(mensajes);
+  }
+}
+
+app.get("/funciones/:id", async (req: Request, res: Response) => {
+  const idComoString: string | undefined = req.params.id;
   try {
+    validarDatosDeBusquedaDeFuncionPorId(idComoString);
+    const idFuncion: number = parseInt(idComoString!);
+    const idDTO: IdDTO = {
+      id: idFuncion,
+    };
+
     const buscarFuncionPorIdComando: BuscarFuncionPorIdComando = new BuscarFuncionPorIdComando(repositorioFuncion);
     const funcion: FuncionDTO = await buscarFuncionPorIdComando.ejecutar(idDTO);
     res.status(200).json(funcion);
   } catch (error) {
+    if (error instanceof CampoIncorrectoFuncionError) {
+      res.status(400).json(error);
+    }
     if (error instanceof FuncionNoEncontradaError) {
       res.status(404).json(error);
     }
