@@ -1,9 +1,9 @@
 import { app, server } from "../app/programa";
 import supertest from "supertest";
 import { pool } from "../app/adaptadores/pool-postgresql";
-import CreacionFuncionDTO from "../app/dtos/creacion-funcion-dto";
-import CreacionSalaDTO from "../app/dtos/creacion-sala-dto";
 import CreacionPeliculaDTO from "../app/dtos/creacion-pelicula-dto";
+import CreacionSalaDTO from "../app/dtos/creacion-sala-dto";
+import CreacionFuncionDTO from "../app/dtos/creacion-funcion-dto";
 import SalaDTO from "../app/dtos/sala-dto";
 import PeliculaDTO from "../app/dtos/pelicula-dto";
 
@@ -36,29 +36,18 @@ describe("GET /", () => {
 });
 
 describe("POST /peliculas", () => {
-  interface DatosCreacionPelicula {
-    titulo: string;
-    genero: string;
-  }
-
-  interface DatosDePelicula {
-    id: number;
-    titulo: string;
-    genero: string;
-  }
-
   const urlPeliculas: string = "/peliculas";
   const id: number = 1;
   const titulo: string = "pelicula1";
   const genero: string = "genero1";
   const cantidadMaximaDeCaracteres: number = 70;
 
-  const datosCreacionPelicula: DatosCreacionPelicula = {
+  const datosCreacionPelicula: CreacionPeliculaDTO = {
     titulo: titulo,
     genero: genero,
   }
 
-  const datosDePelicula: DatosDePelicula = {
+  const datosDePelicula: PeliculaDTO = {
     id: id,
     titulo: titulo,
     genero: genero,
@@ -71,7 +60,7 @@ describe("POST /peliculas", () => {
 
   test("deberia devolver los datos de la pelicula creada", async () => {
     const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosDePelicula);
-    const peliculaCreada: DatosDePelicula = respuesta.body;
+    const peliculaCreada: PeliculaDTO = respuesta.body;
 
     expect(peliculaCreada.id).toEqual(id);
     expect(peliculaCreada.titulo).toEqual(titulo);
@@ -83,20 +72,20 @@ describe("POST /peliculas", () => {
     const titulo2: string = "pelicula2";
     const genero2: string = "genero2";
 
-    const datosPelicula2: DatosDePelicula = {
+    const datosPelicula2: PeliculaDTO = {
       id: id2,
       titulo: titulo2,
       genero: genero2,
     }
 
     const respuesta1 = await requestWithSupertest.post(urlPeliculas).send(datosDePelicula);
-    const peliculaCreada1: DatosDePelicula = respuesta1.body;
+    const peliculaCreada1: PeliculaDTO = respuesta1.body;
     expect(peliculaCreada1.id).toEqual(id);
     expect(peliculaCreada1.titulo).toEqual(titulo);
     expect(peliculaCreada1.genero).toEqual(genero);
 
     const respuesta2 = await requestWithSupertest.post(urlPeliculas).send(datosPelicula2);
-    const peliculaCreada2: DatosDePelicula = respuesta2.body;
+    const peliculaCreada2: PeliculaDTO = respuesta2.body;
     expect(peliculaCreada2.id).toEqual(id2);
     expect(peliculaCreada2.titulo).toEqual(titulo2);
     expect(peliculaCreada2.genero).toEqual(genero2);
@@ -104,7 +93,7 @@ describe("POST /peliculas", () => {
 
   test("deberia devolver un codigo 400 cuando se usa un titulo demasiado largo", async () => {
     const tituloDemasiadoLargo: string = "a".repeat(cantidadMaximaDeCaracteres + 1);
-    const datosDePeliculaTituloLargo: DatosDePelicula = { ...datosDePelicula, titulo: tituloDemasiadoLargo }
+    const datosDePeliculaTituloLargo: PeliculaDTO = { ...datosDePelicula, titulo: tituloDemasiadoLargo }
 
     const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosDePeliculaTituloLargo);
 
@@ -115,7 +104,7 @@ describe("POST /peliculas", () => {
   test("deberia devolver un codigo 400 cuando se usa un genero demasiado largo", async () => {
     const generoDemasiadoLargo: string = "a".repeat(cantidadMaximaDeCaracteres + 1);
 
-    const datosPeliculaGeneroLargo: DatosDePelicula = { ...datosDePelicula, genero: generoDemasiadoLargo };
+    const datosPeliculaGeneroLargo: PeliculaDTO = { ...datosDePelicula, genero: generoDemasiadoLargo };
 
     const respuesta = await requestWithSupertest.post(urlPeliculas).send(datosPeliculaGeneroLargo);
 
@@ -146,11 +135,6 @@ describe("POST /peliculas", () => {
 });
 
 describe("GET /peliculas", () => {
-  interface DatosCreacionPelicula {
-    titulo: string;
-    genero: string;
-  }
-
   const urlPeliculas: string = "/peliculas";
   const id: number = 1;
   const titulo: string = "pelicula1";
@@ -159,12 +143,12 @@ describe("GET /peliculas", () => {
   const titulo2: string = "pelicula2";
   const genero2: string = "genero2";
 
-  const datosCreacionPelicula: DatosCreacionPelicula = {
+  const datosCreacionPelicula: CreacionPeliculaDTO = {
     titulo: titulo,
     genero: genero,
   }
 
-  const datosCreacionPelicula2: DatosCreacionPelicula = {
+  const datosCreacionPelicula2: CreacionPeliculaDTO = {
     titulo: titulo2,
     genero: genero2,
   }
@@ -213,7 +197,7 @@ describe("GET /peliculas", () => {
   test("deberia recuperar una lista con las peliculas que coincidan con el parametro de titulo y genero al mismo tiempo", async () => {
     const titulo3: string = "pelicula3";
     const genero3: string = "genero3";
-    const datosCreacionPelicula3: DatosCreacionPelicula = {
+    const datosCreacionPelicula3: CreacionPeliculaDTO = {
       titulo: titulo3,
       genero: genero3,
     }
@@ -256,19 +240,14 @@ describe("GET /peliculas", () => {
   });
 });
 
-describe("GET /peliculas/{id}", () => {
+describe("GET /peliculas/:id", () => {
   const urlPeliculasPorId: string = "/peliculas/";
 
   const id: number = 1;
   const titulo: string = "pelicula1";
   const genero: string = "genero1";
-  
-  interface DatosCreacionPelicula {
-    titulo: string;
-    genero: string;
-  }
 
-  const datosCreacionPelicula: DatosCreacionPelicula = {
+  const datosCreacionPelicula: CreacionPeliculaDTO = {
     titulo: titulo,
     genero: genero,
   }
@@ -294,7 +273,7 @@ describe("GET /peliculas/{id}", () => {
     const titulo2: string = "pelicula2";
     const genero2: string = "genero2";
 
-    const datosCreacionPelicula2: DatosCreacionPelicula = {
+    const datosCreacionPelicula2: CreacionPeliculaDTO = {
       titulo: titulo2,
       genero: genero2,
     }
@@ -313,7 +292,7 @@ describe("GET /peliculas/{id}", () => {
       const tituloActual: string = "pelicula" + i;
       const generoActual: string = "genero" + i;
 
-      const datosCreacionPeliculaActual: DatosCreacionPelicula = {
+      const datosCreacionPeliculaActual: CreacionPeliculaDTO = {
         titulo: tituloActual,
         genero: generoActual,
       }
@@ -346,14 +325,10 @@ describe("GET /peliculas/{id}", () => {
 describe("POST /salas", () => {
   const urlSalas: string = "/salas";
 
-  interface DatosCreacionDeSala {
-    capacidad: number;
-  }
-
   const id: number = 1;
   const capacidad: number = 50;
 
-  const datosCreacionDeSala: DatosCreacionDeSala = {
+  const datosCreacionDeSala: CreacionSalaDTO = {
     capacidad: capacidad,
   }
 
@@ -375,7 +350,7 @@ describe("POST /salas", () => {
 
     const id2: number = 2;
     const capacidad2: number = 100;
-    const datosCreacionDeSala2: DatosCreacionDeSala = {
+    const datosCreacionDeSala2: CreacionSalaDTO = {
       capacidad: capacidad2,
     };
     const respuesta2 = await requestWithSupertest.post(urlSalas).send(datosCreacionDeSala2);
@@ -384,7 +359,7 @@ describe("POST /salas", () => {
   });
 
   test("deberia devolver un error 400 si la capacidad es igual o menor que 0", async () => {
-    const datosCreacionDeSalaCapacidadInvalida: DatosCreacionDeSala = {
+    const datosCreacionDeSalaCapacidadInvalida: CreacionSalaDTO = {
       capacidad: 0,
     };
 
@@ -404,14 +379,10 @@ describe("POST /salas", () => {
 describe("GET /salas", () => {
   const urlSalas: string = "/salas";
 
-  interface DatosCreacionDeSala {
-    capacidad: number;
-  }
-
   const id: number = 1;
   const capacidad: number = 50;
 
-  const datosCreacionDeSala: DatosCreacionDeSala = {
+  const datosCreacionDeSala: CreacionSalaDTO = {
     capacidad: capacidad,
   }
 
@@ -435,8 +406,8 @@ describe("GET /salas", () => {
 
   test("deberia devolver una lista solamente con las salas que tengan una capacidad igual o mayor a la pasada por parametro", async () => {
     const capacidadMinima: number = capacidad;
-    const datosCreacionDeSalaCapacidadInsuficiente: DatosCreacionDeSala = { capacidad: capacidadMinima - 1 };
-    const datosCreacionDeSalaCapacidadSuficiente: DatosCreacionDeSala = { capacidad: capacidadMinima + 1 };
+    const datosCreacionDeSalaCapacidadInsuficiente: CreacionSalaDTO = { capacidad: capacidadMinima - 1 };
+    const datosCreacionDeSalaCapacidadSuficiente: CreacionSalaDTO = { capacidad: capacidadMinima + 1 };
     await requestWithSupertest.post(urlSalas).send(datosCreacionDeSala);
     await requestWithSupertest.post(urlSalas).send(datosCreacionDeSalaCapacidadInsuficiente);
     await requestWithSupertest.post(urlSalas).send(datosCreacionDeSalaCapacidadSuficiente);
@@ -473,11 +444,7 @@ describe("GET /salas/:id", () => {
   const capacidad: number = 50;
   const urlSalaPorId: string = "/salas/";
 
-  interface DatosCreacionDeSala {
-    capacidad: number;
-  }
-  
-  const datosCreacionDeSala: DatosCreacionDeSala = {
+  const datosCreacionDeSala: CreacionSalaDTO = {
     capacidad: capacidad,
   }
   test("deberia devolver un codigo 200 y la sala con ese id si existe", async () => {
@@ -494,7 +461,7 @@ describe("GET /salas/:id", () => {
       const idActual: number = i;
       const capacidadActual: number = i * 10;
       
-      const datosCreacionDeSalaActual: DatosCreacionDeSala = {
+      const datosCreacionDeSalaActual: CreacionSalaDTO = {
         capacidad: capacidadActual,
       };
 
