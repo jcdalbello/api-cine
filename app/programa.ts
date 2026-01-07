@@ -128,7 +128,7 @@ app.get("/peliculas/:id", async (req: Request, res: Response) => {
   }
 });
 
-function validadDatosVaciosDePelicula(capacidad: number | undefined): void {
+function validarDatosVaciosDeSala(capacidad: number | undefined): void {
   const mensajes: MensajesDeErrorDeSala = {};
   if (capacidad === undefined) {
     mensajes.capacidad = "La capacidad es un campo obligatorio";
@@ -142,7 +142,7 @@ function validadDatosVaciosDePelicula(capacidad: number | undefined): void {
 app.post("/salas", async (req: Request, res: Response) => {
   const capacidad = req.body.capacidad as number;
   try {
-    validadDatosVaciosDePelicula(capacidad);
+    validarDatosVaciosDeSala(capacidad);
     const creacionSalaDTO: CreacionSalaDTO = {
       capacidad: capacidad,
     };

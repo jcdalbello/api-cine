@@ -819,7 +819,7 @@ describe("GET /funciones", () => {
   });
 });
 
-describe("GET /salas/:id", () => {
+describe("GET /funciones/:id", () => {
   const idFuncion: number = 1;
 
   const idSala: number = 1;
@@ -844,7 +844,7 @@ describe("GET /salas/:id", () => {
   let respuestaPostSala: supertest.Response;
   let respuestaPostPelicula: supertest.Response;
 
-  test("deberia devolver un codigo 200 y la sala con ese id si existe", async () => {
+  test("deberia devolver un codigo 200 y la funcion con ese id si existe", async () => {
     respuestaPostSala = await requestWithSupertest.post("/salas").send(creacionSalaDTO);
     respuestaPostPelicula = await requestWithSupertest.post("/peliculas").send(creacionPeliculaDTO);
     await requestWithSupertest.post("/funciones").send(creacionFuncionDTO);
@@ -856,7 +856,7 @@ describe("GET /salas/:id", () => {
     expect(respuesta.body.pelicula).toEqual(respuestaPostPelicula.body);
   });
 
-  test("deberia devolver la sala correspondiente al id pasado por parametro en cada iteracion", async () => {
+  test("deberia devolver la funcion correspondiente al id pasado por parametro en cada iteracion", async () => {
     const cantidadDeFunciones: number = 5;
     const salasGeneradas: SalaDTO[] = [];
     const peliculasGeneradas: PeliculaDTO[] = [];
