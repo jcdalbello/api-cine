@@ -1,8 +1,9 @@
 import Sala from "../dominio/sala";
 import CreacionSalaDTO from "../dtos/creacion-sala-dto";
 import SalaDTO from "../dtos/sala-dto";
+import MapperSalaDTOPuerto from "./mapper-sala-dto-puerto";
 
-export default class SalaMapper {
+export default class MapperSalaDTO implements MapperSalaDTOPuerto {
   constructor() {}
 
   public DTOASalaParaGuardar(dtoSala: CreacionSalaDTO): Sala {

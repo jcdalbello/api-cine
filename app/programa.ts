@@ -36,6 +36,8 @@ import BuscarFuncionesComando from './comandos/buscar-funciones-comando';
 import ListaFuncionesDTO from './dtos/lista-funciones-dto';
 import BuscarFuncionPorIdComando from './comandos/buscar-funcion-por-id-comando';
 import FuncionNoEncontradaError from './errores/funcion-no-encontrada-error';
+import MapperSalaDTO from './mappers/mapper-sala-dto';
+import MapperSalaDTOPuerto from './mappers/mapper-sala-dto-puerto';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -60,6 +62,12 @@ function crearRepositorioFuncion(): RepositorioFuncion {
 const repositorioPelicula: RepositorioPelicula = crearRepositorioPelicula();
 const repositorioSala: RepositorioSala = crearRepositorioSala();
 const repositorioFuncion: RepositorioFuncion = crearRepositorioFuncion();
+
+function crearMapperSalaDTO(): MapperSalaDTOPuerto {
+  return new MapperSalaDTO();
+}
+
+const mapperSalaDTO: MapperSalaDTOPuerto = crearMapperSalaDTO();
 
 app.get("/", (req: Request, res: Response) => {
   res
@@ -146,7 +154,10 @@ app.post("/salas", async (req: Request, res: Response) => {
     const creacionSalaDTO: CreacionSalaDTO = {
       capacidad: capacidad,
     };
-    const agregarSalaComando: AgregarSalaComando = new AgregarSalaComando(repositorioSala);
+    const agregarSalaComando: AgregarSalaComando = new AgregarSalaComando(
+      repositorioSala,
+      mapperSalaDTO
+    );
     const sala: SalaDTO = await agregarSalaComando.ejecutar(creacionSalaDTO);
     res.status(201).json(sala);
   } catch (error) {

@@ -5,10 +5,15 @@ import CreacionSalaDTO from "../../app/dtos/creacion-sala-dto";
 import SalaDTO from "../../app/dtos/sala-dto";
 import CampoIncorrectoSalaError from "../../app/errores/campo-incorrecto-sala-error";
 import { Mock, mock } from "ts-jest-mocker";
+import MapperSalaDTOPuerto from "../../app/mappers/mapper-sala-dto-puerto";
 
 describe("AgregarSalaComando", () => {
   const mockRepositorioSala: Mock<RepositorioSala> = mock<RepositorioSala>();
-  const agregarSalaComando: AgregarSalaComando = new AgregarSalaComando(mockRepositorioSala);
+  const mockMapperSalaDTO: Mock<MapperSalaDTOPuerto> = mock<MapperSalaDTOPuerto>();
+  const agregarSalaComando: AgregarSalaComando = new AgregarSalaComando(
+    mockRepositorioSala,
+    mockMapperSalaDTO,    
+  );
 
   const id: number = 1;
   const capacidad: number = 50;
@@ -17,11 +22,19 @@ describe("AgregarSalaComando", () => {
     capacidad: capacidad,
   };
 
+  const mockSalaDTO: SalaDTO = {
+    id: id,
+    capacidad: capacidad,
+  };
+
+  const mockSalaParaGuardar: Sala = new Sala(0, capacidad);
   const mockSala: Sala = new Sala(id, capacidad);
 
   beforeEach(() => {
     jest.clearAllMocks();
     mockRepositorioSala.guardar.mockResolvedValue(mockSala);
+    mockMapperSalaDTO.DTOASalaParaGuardar.mockReturnValue(mockSalaParaGuardar);
+    mockMapperSalaDTO.SalaADTO.mockReturnValue(mockSalaDTO);
   });
 
   test("deberia crear un objeto AgregarSalaComando", () => {
@@ -45,7 +58,14 @@ describe("AgregarSalaComando", () => {
       capacidad: capacidad2,
     };
     const mockSala2: Sala = new Sala(id2, capacidad2);
+    const mockSalaParaGuardar2: Sala = new Sala(0, capacidad2);
+    const mockSalaDTO2: SalaDTO = {
+      id: id2,
+      capacidad: capacidad2,
+    };
     mockRepositorioSala.guardar.mockResolvedValue(mockSala2);
+    mockMapperSalaDTO.DTOASalaParaGuardar.mockReturnValue(mockSalaParaGuardar2);
+    mockMapperSalaDTO.SalaADTO.mockReturnValue(mockSalaDTO2);
     const sala2: SalaDTO = await agregarSalaComando.ejecutar(creacionSalaDTO2);
     expect(sala2.id).toEqual(id2);
     expect(sala2.capacidad).toEqual(capacidad2);
@@ -56,6 +76,7 @@ describe("AgregarSalaComando", () => {
     const creacionSalaDTOCapacidadInvalida: CreacionSalaDTO = {
       capacidad: capacidadIncorrecta,
     };
+    mockMapperSalaDTO.DTOASalaParaGuardar.mockImplementation(() => { throw new CampoIncorrectoSalaError({}) });
     await expect(agregarSalaComando.ejecutar(creacionSalaDTOCapacidadInvalida)).rejects.toThrow(CampoIncorrectoSalaError);
   });
 

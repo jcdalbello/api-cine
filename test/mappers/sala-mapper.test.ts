@@ -1,13 +1,13 @@
 import Sala from "../../app/dominio/sala";
 import CreacionSalaDTO from "../../app/dtos/creacion-sala-dto";
 import SalaDTO from "../../app/dtos/sala-dto";
-import SalaMapper from "../../app/mappers/sala-mapper";
+import MapperSalaDTO from "../../app/mappers/mapper-sala-dto";
 
 describe("SalaMapper", () => {
-  const salaMapper: SalaMapper = new SalaMapper();
+  const salaMapper: MapperSalaDTO = new MapperSalaDTO();
 
   test("deberia crear un objeto SalaMapper", () => {
-    expect(salaMapper).toBeInstanceOf(SalaMapper);
+    expect(salaMapper).toBeInstanceOf(MapperSalaDTO);
   });
 
   describe("DTOASalaParaGuardar", () => {
