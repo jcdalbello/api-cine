@@ -12,14 +12,7 @@ export default class BuscarSalaPorIdComando {
 
   public async ejecutar(idDTO: IdDTO): Promise<SalaDTO> {
     const salas: Sala = await this.repositorioSala.recuperar(idDTO.id);
-    /*
-    const salaDTO: SalaDTO = {
-      id: salas.obtenerId(),
-      capacidad: salas.obtenerCapacidad(),
-    };
-    */
     const salaDTO: SalaDTO = this.salaMapper.SalaADTO(salas);
-
     return salaDTO;
   }
 }

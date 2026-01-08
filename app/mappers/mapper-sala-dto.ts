@@ -1,5 +1,6 @@
 import Sala from "../dominio/sala";
 import CreacionSalaDTO from "../dtos/creacion-sala-dto";
+import ListaSalasDTO from "../dtos/lista-salas-dto";
 import SalaDTO from "../dtos/sala-dto";
 import MapperSalaDTOPuerto from "./mapper-sala-dto-puerto";
 
@@ -18,5 +19,14 @@ export default class MapperSalaDTO implements MapperSalaDTOPuerto {
     };
 
     return salaDTO;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public listaSalasADTO(salas: Sala[]): ListaSalasDTO {
+    const listaSalasDTO: ListaSalasDTO = {
+      salas: [],
+    };
+
+    return listaSalasDTO;
   }
 }
