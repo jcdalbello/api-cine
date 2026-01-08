@@ -107,6 +107,6 @@ PostgreSQL | Gestor de base de datos
 
 ## Creditos
 
-Hecho por Dal Bello Juan Cruz, estudiante de Ingeniería en Computación UNTREF.
+Hecho por Dal Bello Juan Cruz.
 
 Basado en el proyecto final de la materia Ingeniería de Software I.
