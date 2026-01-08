@@ -5,13 +5,15 @@ import RepositorioPelicula from "../../app/dominio/puerto-repositorio-pelicula";
 import CampoIncorrectoPeliculaError from "../../app/errores/campo-incorrecto-pelicula-error";
 import CreacionPeliculaDTO from "../../app/dtos/creacion-pelicula-dto";
 import PeliculaDTO from "../../app/dtos/pelicula-dto";
-
-let mockRepositorioPelicula: Mock<RepositorioPelicula>;
-let agregarPeliculaComando: AgregarPeliculaComando;
+import MapperPeliculaDTOPuerto from "../../app/mappers/mapper-pelicula-dto-puerto";
 
 describe("AgregarPeliculaComando", () => {
-  mockRepositorioPelicula = mock<RepositorioPelicula>();
-  agregarPeliculaComando = new AgregarPeliculaComando(mockRepositorioPelicula);
+  const mockRepositorioPelicula: Mock<RepositorioPelicula> = mock<RepositorioPelicula>();
+  const mockMapperPeliculaDTO: Mock<MapperPeliculaDTOPuerto> = mock<MapperPeliculaDTOPuerto>();
+  const agregarPeliculaComando: AgregarPeliculaComando = new AgregarPeliculaComando(
+    mockRepositorioPelicula,
+    mockMapperPeliculaDTO,
+  );
 
   const id: number = 1;
   const titulo: string = "pelicula1";
@@ -20,6 +22,11 @@ describe("AgregarPeliculaComando", () => {
     titulo: titulo,
     genero: genero,
   };
+  const peliculaSinGuardar: Pelicula = new Pelicula(
+    0,
+    creacionPeliculaDTO.titulo,
+    creacionPeliculaDTO.genero
+  );
   const mockPelicula: Pelicula = new Pelicula(id, titulo, genero);
 
   beforeEach(() => {
@@ -32,6 +39,8 @@ describe("AgregarPeliculaComando", () => {
 
   test("deberia crear una pelicula con los datos correctos", async () => {
     mockRepositorioPelicula.guardar.mockResolvedValue(mockPelicula);
+    mockMapperPeliculaDTO.DTOAPeliculaParaGuardar.mockReturnValue(peliculaSinGuardar);
+
     const pelicula: PeliculaDTO = await agregarPeliculaComando.ejecutar(creacionPeliculaDTO);
     expect(pelicula.id).toEqual(id);
     expect(pelicula.titulo).toEqual(titulo);
@@ -40,6 +49,7 @@ describe("AgregarPeliculaComando", () => {
 
   test("deberia crear dos peliculas con los datos correctos", async () => {
     mockRepositorioPelicula.guardar.mockResolvedValue(mockPelicula);
+    mockMapperPeliculaDTO.DTOAPeliculaParaGuardar.mockReturnValue(peliculaSinGuardar);
     const pelicula: PeliculaDTO = await agregarPeliculaComando.ejecutar(creacionPeliculaDTO);
     expect(pelicula.id).toEqual(id);
     expect(pelicula.titulo).toEqual(titulo);
@@ -62,6 +72,7 @@ describe("AgregarPeliculaComando", () => {
       ...creacionPeliculaDTO,
       titulo: tituloDemasiadoLargo,
     };
+    mockMapperPeliculaDTO.DTOAPeliculaParaGuardar.mockImplementation(() => { throw new CampoIncorrectoPeliculaError({}); });
     await expect(agregarPeliculaComando.ejecutar(creacionPeliculaDTOTituloDemasiadoLargo)).rejects.toThrow(CampoIncorrectoPeliculaError);
   });
   
@@ -72,6 +83,7 @@ describe("AgregarPeliculaComando", () => {
       ...creacionPeliculaDTO,
       genero: generoDemasiadoLargo,
     };
+    mockMapperPeliculaDTO.DTOAPeliculaParaGuardar.mockImplementation(() => { throw new CampoIncorrectoPeliculaError({}); });
     await expect(agregarPeliculaComando.ejecutar(creacionPeliculaDTOTituloDemasiadoLargo)).rejects.toThrow(CampoIncorrectoPeliculaError);
   });
 });

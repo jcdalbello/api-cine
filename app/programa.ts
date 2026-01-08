@@ -38,6 +38,8 @@ import BuscarFuncionPorIdComando from './comandos/buscar-funcion-por-id-comando'
 import FuncionNoEncontradaError from './errores/funcion-no-encontrada-error';
 import MapperSalaDTO from './mappers/mapper-sala-dto';
 import MapperSalaDTOPuerto from './mappers/mapper-sala-dto-puerto';
+import MapperPeliculaDTOPuerto from './mappers/mapper-pelicula-dto-puerto';
+import MapperPeliculaDTO from './mappers/mapper-pelicula-dto';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -67,7 +69,12 @@ function crearMapperSalaDTO(): MapperSalaDTOPuerto {
   return new MapperSalaDTO();
 }
 
+function crearMapperPeliculaDTO(): MapperPeliculaDTOPuerto {
+  return new MapperPeliculaDTO();
+}
+
 const mapperSalaDTO: MapperSalaDTOPuerto = crearMapperSalaDTO();
+const mapperPeliculaDTO: MapperPeliculaDTOPuerto = crearMapperPeliculaDTO();
 
 app.get("/", (req: Request, res: Response) => {
   res
@@ -110,7 +117,10 @@ app.post("/peliculas", async (req: Request, res: Response) => {
       titulo: titulo!,
       genero: genero!,
     };
-    const agregarPeliculaComando: AgregarPeliculaComando = new AgregarPeliculaComando(repositorioPelicula);
+    const agregarPeliculaComando: AgregarPeliculaComando = new AgregarPeliculaComando(
+      repositorioPelicula,
+      mapperPeliculaDTO,
+    );
     const pelicula: PeliculaDTO = await agregarPeliculaComando.ejecutar(creacionPeliculaDTO);
     res.status(201).json(pelicula);
   } catch (error) {
