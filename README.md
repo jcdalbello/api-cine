@@ -29,6 +29,16 @@ Iniciar docker:
 $ docker compose up
 ```
 
+Crear un archivo `.env` con valores para las variables de entorno de la base de datos. Ejemplo:
+``` sh
+# .env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=usuario
+DB_PASSWORD=password
+DB_NAME=api_cine_db
+```
+
 Iniciar el servicio de forma local en el puerto 3000 con el host `http://localhost:3000`:
 ```
 $ yarn start
@@ -109,4 +119,4 @@ PostgreSQL | Gestor de base de datos
 
 Hecho por Dal Bello Juan Cruz.
 
-Basado en el proyecto final de la materia Ingeniería de Software I.
+Basado en el proyecto final de la materia Ingeniería de Software I de la Universidad Nacional de Tres de Febrero (UNTREF) 2025C2.
