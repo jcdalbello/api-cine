@@ -12,13 +12,6 @@ export default class BuscarPeliculaPorIdComando {
 
   public async ejecutar(idDTO: IdDTO): Promise<PeliculaDTO> {
     const pelicula: Pelicula = await this.repositorioPelicula.recuperar(idDTO.id);
-    /*
-    const peliculaDTO: PeliculaDTO = {
-      id: pelicula.obtenerId(),
-      titulo: pelicula.obtenerTitulo(),
-      genero: pelicula.obtenerGenero(),
-    };
-    */
     const peliculaDTO: PeliculaDTO = this.mapperPelicula.PeliculaADTO(pelicula);
     return peliculaDTO;
   }
