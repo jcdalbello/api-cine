@@ -5,10 +5,15 @@ import Sala from "../../app/dominio/sala";
 import SalaNoEncontradaError from "../../app/errores/sala-no-encontrada-error";
 import IdDTO from "../../app/dtos/id-dto";
 import SalaDTO from "../../app/dtos/sala-dto";
+import MapperSalaDTOPuerto from "../../app/mappers/mapper-sala-dto-puerto";
 
 describe("BuscarSalaPorIdComando", () => {
   const mockRepositorioSala: Mock<RepositorioSala> = mock<RepositorioSala>();
-  const obtenerSalaPorIdComando: BuscarSalaPorIdComando = new BuscarSalaPorIdComando(mockRepositorioSala);
+  const mockMapperSalaDTO: Mock<MapperSalaDTOPuerto> = mock<MapperSalaDTOPuerto>();
+  const obtenerSalaPorIdComando: BuscarSalaPorIdComando = new BuscarSalaPorIdComando(
+    mockRepositorioSala,
+    mockMapperSalaDTO,    
+  );
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -23,8 +28,14 @@ describe("BuscarSalaPorIdComando", () => {
     const capacidad: number = 50;
     const sala: Sala = new Sala(id, capacidad);
 
-    mockRepositorioSala.recuperar.mockResolvedValue(sala);
     const idDTO: IdDTO = { id: id };
+    const salaDTO: SalaDTO = {
+      id: id,
+      capacidad: capacidad
+    };
+
+    mockRepositorioSala.recuperar.mockResolvedValue(sala);
+    mockMapperSalaDTO.SalaADTO.mockReturnValue(salaDTO);
 
     const salaRecuperada: SalaDTO = await obtenerSalaPorIdComando.ejecutar(idDTO);
 
@@ -38,10 +49,16 @@ describe("BuscarSalaPorIdComando", () => {
       const idActual: number = i;
       const capacidadActual: number = i * 10;
       const salaActual: Sala = new Sala(idActual, capacidadActual);
-      mockRepositorioSala.recuperar.mockResolvedValue(salaActual);
-      const idDTO: IdDTO = { id: idActual };
+      const idDTOActual: IdDTO = { id: idActual };
+      const salaDTOActual: SalaDTO = {
+        id: idActual,
+        capacidad: capacidadActual
+      };
 
-      const salaRecuperada: SalaDTO = await obtenerSalaPorIdComando.ejecutar(idDTO);
+      mockRepositorioSala.recuperar.mockResolvedValue(salaActual);
+      mockMapperSalaDTO.SalaADTO.mockReturnValue(salaDTOActual);
+
+      const salaRecuperada: SalaDTO = await obtenerSalaPorIdComando.ejecutar(idDTOActual);
 
       expect(salaRecuperada.id).toEqual(salaActual.obtenerId());
       expect(salaRecuperada.capacidad).toEqual(salaActual.obtenerCapacidad());

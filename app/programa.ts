@@ -216,7 +216,10 @@ app.get("/salas/:id", async (req: Request, res: Response) => {
     const idDTO: IdDTO = {
       id: parseInt(req.params.id!),
     };
-    const obtenerSalaPorIdComando: BuscarSalaPorIdComando = new BuscarSalaPorIdComando(repositorioSala);
+    const obtenerSalaPorIdComando: BuscarSalaPorIdComando = new BuscarSalaPorIdComando(
+      repositorioSala,
+      mapperSalaDTO,
+    );
     const sala: SalaDTO = await obtenerSalaPorIdComando.ejecutar(idDTO);
     res.status(200).json(sala);
   } catch (error) {
