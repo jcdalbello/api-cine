@@ -2,6 +2,7 @@ import RepositorioSala from "../dominio/puerto-repositorio-sala";
 import CreacionSalaDTO from "../dtos/creacion-sala-dto";
 import SalaDTO from "../dtos/sala-dto";
 import Sala from "../dominio/sala";
+import SalaMapper from "../mappers/sala-mapper";
 
 export default class AgregarSalaComando {
   constructor(
@@ -9,7 +10,8 @@ export default class AgregarSalaComando {
   ) {}
 
   public async ejecutar(creacionSalaDTO: CreacionSalaDTO): Promise<SalaDTO> {
-    const salaSinGuardar: Sala = new Sala(0, creacionSalaDTO.capacidad);
+    const salaMapper: SalaMapper = new SalaMapper();
+    const salaSinGuardar: Sala = salaMapper.DTOASalaParaGuardar(creacionSalaDTO);
     const salaGuardada: Sala = await this.repositorioSala.guardar(salaSinGuardar);
     const salaDTO: SalaDTO = {
       id: salaGuardada.obtenerId(),
