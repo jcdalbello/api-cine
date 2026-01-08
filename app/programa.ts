@@ -285,7 +285,8 @@ app.post("/funciones", async (req: Request, res: Response) => {
     const agregarFuncionComando: AgregarFuncionComando = new AgregarFuncionComando(
       repositorioSala,
       repositorioPelicula,
-      repositorioFuncion
+      repositorioFuncion,
+      mapperSalaDTO,
     );
     const funcion: FuncionDTO = await agregarFuncionComando.ejecutar(creacionFuncionDTO);
     res.status(201).json(funcion);

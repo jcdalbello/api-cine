@@ -8,22 +8,20 @@ import FuncionDTO from "../dtos/funcion-dto";
 import PeliculaDTO from "../dtos/pelicula-dto";
 import SalaDTO from "../dtos/sala-dto";
 import Funcion from "../dominio/funcion";
+import MapperSalaDTO from "../mappers/mapper-sala-dto";
 
 export default class AgregarFuncionComando {
   constructor(
     private readonly repositorioSala: RepositorioSala,
     private readonly repositorioPelicula: RepositorioPelicula,
-    private readonly repositorioFuncion: RepositorioFuncion
+    private readonly repositorioFuncion: RepositorioFuncion,
+    private readonly mapperSala: MapperSalaDTO,
   ) {}
 
   public async ejecutar(creacionFuncionDTO: CreacionFuncionDTO): Promise<FuncionDTO> {
     const sala: Sala = await this.repositorioSala.recuperar(creacionFuncionDTO.idSala);
     const pelicula: Pelicula = await this.repositorioPelicula.recuperar(creacionFuncionDTO.idPelicula);
-
-    const salaDTO: SalaDTO = {
-      id: sala.obtenerId(),
-      capacidad: sala.obtenerCapacidad(),
-    };
+    const salaDTO: SalaDTO = this.mapperSala.SalaADTO(sala);
 
     const peliculaDTO: PeliculaDTO = {
       id: pelicula.obtenerId(),
