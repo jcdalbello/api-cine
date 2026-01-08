@@ -28,6 +28,11 @@ describe("AgregarPeliculaComando", () => {
     creacionPeliculaDTO.genero
   );
   const mockPelicula: Pelicula = new Pelicula(id, titulo, genero);
+  const peliculaDTO: PeliculaDTO = {
+    id: id,
+    titulo: titulo,
+    genero: genero,
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -40,6 +45,7 @@ describe("AgregarPeliculaComando", () => {
   test("deberia crear una pelicula con los datos correctos", async () => {
     mockRepositorioPelicula.guardar.mockResolvedValue(mockPelicula);
     mockMapperPeliculaDTO.DTOAPeliculaParaGuardar.mockReturnValue(peliculaSinGuardar);
+    mockMapperPeliculaDTO.PeliculaADTO.mockReturnValue(peliculaDTO);
 
     const pelicula: PeliculaDTO = await agregarPeliculaComando.ejecutar(creacionPeliculaDTO);
     expect(pelicula.id).toEqual(id);
@@ -50,6 +56,8 @@ describe("AgregarPeliculaComando", () => {
   test("deberia crear dos peliculas con los datos correctos", async () => {
     mockRepositorioPelicula.guardar.mockResolvedValue(mockPelicula);
     mockMapperPeliculaDTO.DTOAPeliculaParaGuardar.mockReturnValue(peliculaSinGuardar);
+    mockMapperPeliculaDTO.PeliculaADTO.mockReturnValue(peliculaDTO);
+
     const pelicula: PeliculaDTO = await agregarPeliculaComando.ejecutar(creacionPeliculaDTO);
     expect(pelicula.id).toEqual(id);
     expect(pelicula.titulo).toEqual(titulo);
@@ -58,11 +66,23 @@ describe("AgregarPeliculaComando", () => {
     const id2: number = 2;
     const titulo2: string = "pelicula2";
     const genero2: string = "genero2";
-    mockRepositorioPelicula.guardar.mockResolvedValue(new Pelicula(id2, titulo2, genero2));
-    const pelicula2: PeliculaDTO = await agregarPeliculaComando.ejecutar(creacionPeliculaDTO);
-    expect(pelicula2.id).toEqual(id2);
-    expect(pelicula2.titulo).toEqual(titulo2);
-    expect(pelicula2.genero).toEqual(genero2);
+    const pelicula2: Pelicula = new Pelicula(id2, titulo2, genero2);
+    const creacionPelicula2DTO: CreacionPeliculaDTO = {
+      titulo: titulo2,
+      genero: genero2,
+    };
+    const pelicula2DTO: PeliculaDTO = {
+      id: id2,
+      titulo: titulo2,
+      genero: genero2,
+    };
+    mockRepositorioPelicula.guardar.mockResolvedValue(pelicula2);
+    mockMapperPeliculaDTO.DTOAPeliculaParaGuardar.mockReturnValue(peliculaSinGuardar);
+    mockMapperPeliculaDTO.PeliculaADTO.mockReturnValue(pelicula2DTO);
+    const pelicula2GuardadaDTO: PeliculaDTO = await agregarPeliculaComando.ejecutar(creacionPelicula2DTO);
+    expect(pelicula2GuardadaDTO.id).toEqual(id2);
+    expect(pelicula2GuardadaDTO.titulo).toEqual(titulo2);
+    expect(pelicula2GuardadaDTO.genero).toEqual(genero2);
   });
 
   test("deberia devolver un error al pasar un titulo demasiado largo", async () => {
