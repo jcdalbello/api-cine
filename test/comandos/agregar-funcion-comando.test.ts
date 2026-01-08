@@ -10,19 +10,23 @@ import FuncionDTO from "../../app/dtos/funcion-dto";
 import CreacionFuncionDTO from "../../app/dtos/creacion-funcion-dto";
 import SalaNoEncontradaError from "../../app/errores/sala-no-encontrada-error";
 import PeliculaNoEncontradaError from "../../app/errores/pelicula-no-encontrada-error";
-import MapperSalaDTO from "../../app/mappers/mapper-sala-dto";
 import SalaDTO from "../../app/dtos/sala-dto";
+import MapperPeliculaDTOPuerto from "../../app/mappers/mapper-pelicula-dto-puerto";
+import MapperSalaDTOPuerto from "../../app/mappers/mapper-sala-dto-puerto";
+import PeliculaDTO from "../../app/dtos/pelicula-dto";
 
 describe("AgregarFuncionComando", () => {
   const mockRepositorioSala: Mock<RepositorioSala> = mock<RepositorioSala>();
   const mockRepositorioPelicula: Mock<RepositorioPelicula> = mock<RepositorioPelicula>();
   const mockRepositorioFuncion: Mock<RepositorioFuncion> = mock<RepositorioFuncion>();
-  const mockMapperSala: Mock<MapperSalaDTO> = mock<MapperSalaDTO>();
+  const mockMapperSala: Mock<MapperSalaDTOPuerto> = mock<MapperSalaDTOPuerto>();
+  const mockMapperPelicula: Mock<MapperPeliculaDTOPuerto> = mock<MapperPeliculaDTOPuerto>();
   const agregarFuncionComando: AgregarFuncionComando = new AgregarFuncionComando(
     mockRepositorioSala,
     mockRepositorioPelicula,
     mockRepositorioFuncion,
     mockMapperSala,
+    mockMapperPelicula,
   );
 
   const idSala: number = 1;
@@ -35,9 +39,15 @@ describe("AgregarFuncionComando", () => {
     idPelicula: idPelicula
   };
 
-  const salaDTO: SalaDTO = {
+  const mcokSalaDTO: SalaDTO = {
     id: idSala,
     capacidad: capacidadSala
+  };
+
+  const mockPeliculaDTO: PeliculaDTO = {
+    id: idPelicula,
+    titulo: tituloPelicula,
+    genero: generoPelicula
   };
 
   beforeEach(() => {
@@ -58,7 +68,8 @@ describe("AgregarFuncionComando", () => {
     mockRepositorioSala.recuperar.mockResolvedValue(mockSala);
     mockRepositorioPelicula.recuperar.mockResolvedValue(mockPelicula);
     mockRepositorioFuncion.guardar.mockResolvedValue(mockFuncion);
-    mockMapperSala.SalaADTO.mockReturnValue(salaDTO);
+    mockMapperSala.SalaADTO.mockReturnValue(mcokSalaDTO);
+    mockMapperPelicula.PeliculaADTO.mockReturnValue(mockPeliculaDTO);
     
     const funcionDTO: FuncionDTO = await agregarFuncionComando.ejecutar(creacionFuncionDTO);
 
@@ -78,6 +89,11 @@ describe("AgregarFuncionComando", () => {
         id: idSalaActual,
         capacidad: capacidadSalaActual,
       };
+      const peliculaDTOActual: PeliculaDTO = {
+        id: i,
+        titulo: tituloPelicula + i,
+        genero: generoPelicula + i,
+      };
 
       const idPeliculaActual: number = i;
       const tituloPeliculaActual: string = "pelicula" + i;
@@ -91,6 +107,7 @@ describe("AgregarFuncionComando", () => {
       mockRepositorioPelicula.recuperar.mockResolvedValue(peliculaActual);
       mockRepositorioFuncion.guardar.mockResolvedValue(funcionActual);
       mockMapperSala.SalaADTO.mockReturnValue(salaDTOActual);
+      mockMapperPelicula.PeliculaADTO.mockReturnValue(peliculaDTOActual);
 
       const creacionFuncionActualDTO: CreacionFuncionDTO = {
         idSala: idSalaActual,
