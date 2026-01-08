@@ -13,10 +13,7 @@ export default class AgregarSalaComando {
     const salaMapper: SalaMapper = new SalaMapper();
     const salaSinGuardar: Sala = salaMapper.DTOASalaParaGuardar(creacionSalaDTO);
     const salaGuardada: Sala = await this.repositorioSala.guardar(salaSinGuardar);
-    const salaDTO: SalaDTO = {
-      id: salaGuardada.obtenerId(),
-      capacidad: salaGuardada.obtenerCapacidad(),
-    };
+    const salaDTO: SalaDTO = salaMapper.SalaADTO(salaGuardada);
     return salaDTO;
   }
 }

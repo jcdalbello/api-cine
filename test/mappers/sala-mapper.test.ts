@@ -1,5 +1,6 @@
 import Sala from "../../app/dominio/sala";
 import CreacionSalaDTO from "../../app/dtos/creacion-sala-dto";
+import SalaDTO from "../../app/dtos/sala-dto";
 import SalaMapper from "../../app/mappers/sala-mapper";
 
 describe("SalaMapper", () => {
@@ -36,6 +37,17 @@ describe("SalaMapper", () => {
       expect(sala2).toBeInstanceOf(Sala);
       expect(sala2.obtenerId()).toEqual(0);
       expect(sala2.obtenerCapacidad()).toEqual(capacidad2);
+    });
+  });
+
+  describe("SalaADTO", () => {
+    test("deberia crear un dto de sala con los datos de la sala", () => {
+      const id: number = 1;
+      const capacidad: number = 50;
+      const sala: Sala = new Sala(id, capacidad);
+      const salaDTO: SalaDTO = salaMapper.SalaADTO(sala);
+      expect(salaDTO.id).toEqual(id);
+      expect(salaDTO.capacidad).toEqual(capacidad);
     });
   });
 });
