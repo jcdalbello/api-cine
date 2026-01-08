@@ -119,4 +119,4 @@ PostgreSQL | Gestor de base de datos
 
 Hecho por Dal Bello Juan Cruz.
 
-Basado en el proyecto final de la materia Ingeniería de Software I.
+Basado en el proyecto final de la materia Ingeniería de Software I de la Universidad Nacional de Tres de Febrero (UNTREF) 2025C2.
