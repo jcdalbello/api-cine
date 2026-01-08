@@ -21,18 +21,26 @@ describe("AgregarFuncionComando", () => {
     mockRepositorioFuncion
   );
 
+  const idSala: number = 1;
+  const capacidadSala: number = 50;
+  const idPelicula: number = 1;
+  const tituloPelicula: string = "pelicula";
+  const generoPelicula: string = "genero";
+  const creacionFuncionDTO = {
+    idSala: idSala,
+    idPelicula: idPelicula
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test("deberia crear un objeto AgregarFuncionComando", () => {
     expect(agregarFuncionComando).toBeInstanceOf(AgregarFuncionComando);
   });
 
-  test("deberia crear una funcion con los datos correctos", async () => {
-    const idSala: number = 1;
-    const capacidadSala: number = 50;
+  test("deberia crear una funcion con los datos correctos", async () => {   
     const mockSala: Sala = new Sala(idSala, capacidadSala);
-
-    const idPelicula: number = 1;
-    const tituloPelicula: string = "pelicula1";
-    const generoPelicula: string = "genero1";
     const mockPelicula: Pelicula = new Pelicula(idPelicula, tituloPelicula, generoPelicula);
     
     const idFuncion: number = 1;
@@ -41,11 +49,6 @@ describe("AgregarFuncionComando", () => {
     mockRepositorioSala.recuperar.mockResolvedValue(mockSala);
     mockRepositorioPelicula.recuperar.mockResolvedValue(mockPelicula);
     mockRepositorioFuncion.guardar.mockResolvedValue(mockFuncion);
-
-    const creacionFuncionDTO: CreacionFuncionDTO = {
-      idSala: idSala,
-      idPelicula: idPelicula,
-    };
     
     const funcionDTO: FuncionDTO = await agregarFuncionComando.ejecutar(creacionFuncionDTO);
 
@@ -88,29 +91,26 @@ describe("AgregarFuncionComando", () => {
   });
 
   test("deberia devolver un error SalaNoEncontradaError si no se encuentra la sala con el id pasado por parametro", async () => {
-    const idSalaInexistente: number = 9999;
-    const idPelicula: number = 1;
-    const tituloPelicula: string = "pelicula1";
-    const generoPelicula: string = "genero1";
-    const creacionFuncionDTO: CreacionFuncionDTO = {
+    const idSalaInexistente: number = 99999;
+    const creacionFuncionSalaInexistenteDTO: CreacionFuncionDTO = {
+      ...creacionFuncionDTO,
       idSala: idSalaInexistente,
-      idPelicula: idPelicula,
     };
     mockRepositorioSala.recuperar.mockRejectedValue(new SalaNoEncontradaError());
     mockRepositorioPelicula.recuperar.mockResolvedValue(new Pelicula(1, tituloPelicula, generoPelicula));
-    await expect(agregarFuncionComando.ejecutar(creacionFuncionDTO)).rejects.toThrow(SalaNoEncontradaError);
+    await expect(agregarFuncionComando.ejecutar(creacionFuncionSalaInexistenteDTO)).rejects.toThrow(SalaNoEncontradaError);
   });
 
   test("deberia devolver un error PeliculaNoEncontradaError si no se encuentra la pelicula con el id pasado por parametro", async () => {
-    const idPeliculaInexistente: number = 9999;
-    const idSala: number = 1;
+    const idPeliculaInexistente: number = 99999;
+    
     const capacidadSala: number = 50;
-    const creacionFuncionDTO: CreacionFuncionDTO = {
-      idSala: idSala,
+    const creacionFuncionPeliculaInexistenteDTO: CreacionFuncionDTO = {
+      ...creacionFuncionDTO,
       idPelicula: idPeliculaInexistente,
     };
     mockRepositorioSala.recuperar.mockResolvedValue(new Sala(idSala, capacidadSala));
     mockRepositorioPelicula.recuperar.mockRejectedValue(new PeliculaNoEncontradaError());
-    await expect(agregarFuncionComando.ejecutar(creacionFuncionDTO)).rejects.toThrow(PeliculaNoEncontradaError);
+    await expect(agregarFuncionComando.ejecutar(creacionFuncionPeliculaInexistenteDTO)).rejects.toThrow(PeliculaNoEncontradaError);
   });
 });

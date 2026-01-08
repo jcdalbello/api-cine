@@ -9,6 +9,11 @@ import ListaSalasDTO from "../../app/dtos/lista-salas-dto";
 describe("BuscarSalasComando", () => {
   const mockRepositorioSala: Mock<RepositorioSala> = mock<RepositorioSala>();
   const obtenerSalasComando: BuscarSalasComando = new BuscarSalasComando(mockRepositorioSala);
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test("deberia crear un objeto ObtenerSalasComando", () => {
     expect(obtenerSalasComando).toBeInstanceOf(BuscarSalasComando);
   });

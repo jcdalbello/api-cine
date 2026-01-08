@@ -6,12 +6,9 @@ import SalaDTO from "../../app/dtos/sala-dto";
 import CampoIncorrectoSalaError from "../../app/errores/campo-incorrecto-sala-error";
 import { Mock, mock } from "ts-jest-mocker";
 
-let mockRepositorioSala: Mock<RepositorioSala>;
-let agregarSalaComando: AgregarSalaComando;
-
 describe("AgregarSalaComando", () => {
-  mockRepositorioSala = mock<RepositorioSala>();
-  agregarSalaComando = new AgregarSalaComando(mockRepositorioSala);
+  const mockRepositorioSala: Mock<RepositorioSala> = mock<RepositorioSala>();
+  const agregarSalaComando: AgregarSalaComando = new AgregarSalaComando(mockRepositorioSala);
 
   const id: number = 1;
   const capacidad: number = 50;

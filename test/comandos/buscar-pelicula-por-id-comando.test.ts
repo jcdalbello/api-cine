@@ -6,12 +6,13 @@ import PeliculaNoEncontradaError from "../../app/errores/pelicula-no-encontrada-
 import IdDTO from "../../app/dtos/id-dto";
 import PeliculaDTO from "../../app/dtos/pelicula-dto";
 
-let mockRepositorioPeliculas: Mock<RepositorioPelicula>;
-let obtenerPeliculaPorIdComando: BuscarPeliculaPorIdComando;
-
 describe("BuscarPeliculaPorIdComando", () => {
-  mockRepositorioPeliculas = mock<RepositorioPelicula>();
-  obtenerPeliculaPorIdComando = new BuscarPeliculaPorIdComando(mockRepositorioPeliculas);
+  const mockRepositorioPeliculas: Mock<RepositorioPelicula> = mock<RepositorioPelicula>();
+  const obtenerPeliculaPorIdComando: BuscarPeliculaPorIdComando = new BuscarPeliculaPorIdComando(mockRepositorioPeliculas);
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
   test("deberia crear un objeto ObtenerPeliculaPorIdComando", () => {
     expect(obtenerPeliculaPorIdComando).toBeInstanceOf(BuscarPeliculaPorIdComando);

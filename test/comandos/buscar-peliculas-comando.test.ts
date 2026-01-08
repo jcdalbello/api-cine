@@ -5,17 +5,18 @@ import RepositorioPelicula from "../../app/dominio/puerto-repositorio-pelicula";
 import FiltrosBusquedaPeliculasDTO from "../../app/dtos/filtros-busqueda-peliculas-dto";
 import ListaPeliculasDTO from "../../app/dtos/lista-peliculas-dto";
 
-let mockRepositorioPelicula: Mock<RepositorioPelicula>;
-let obtenerPeliculasComando: BuscarPeliculasComando;
-
 describe("BuscarPeliculasComando", () => {
-  mockRepositorioPelicula = mock<RepositorioPelicula>();
-  obtenerPeliculasComando = new BuscarPeliculasComando(mockRepositorioPelicula);
+  const mockRepositorioPelicula: Mock<RepositorioPelicula> = mock<RepositorioPelicula>();
+  const obtenerPeliculasComando: BuscarPeliculasComando = new BuscarPeliculasComando(mockRepositorioPelicula);
 
   const id: number = 1;
   const titulo: string = "pelicula1";
   const genero: string = "genero1";
   const mockPelicula: Pelicula = new Pelicula(id, titulo, genero);
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
   test("deberia crear un objeto ObtenerPeliculasComando", () => {
     expect(obtenerPeliculasComando).toBeInstanceOf(BuscarPeliculasComando);

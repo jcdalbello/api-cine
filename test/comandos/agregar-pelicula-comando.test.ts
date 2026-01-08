@@ -22,6 +22,10 @@ describe("AgregarPeliculaComando", () => {
   };
   const mockPelicula: Pelicula = new Pelicula(id, titulo, genero);
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test("deberia crear un objeto AgregarPeliculaComando", () => {
     expect(agregarPeliculaComando).toBeInstanceOf(AgregarPeliculaComando);
   });

@@ -11,6 +11,11 @@ import FuncionNoEncontradaError from "../../app/errores/funcion-no-encontrada-er
 describe("BuscarFuncionPorIdComando", () => {
   const mockRepositorioFuncion: Mock<RepositorioFuncion> = mock<RepositorioFuncion>();
   const buscarFuncionPorIdComando: BuscarFuncionPorIdComando = new BuscarFuncionPorIdComando(mockRepositorioFuncion);
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test("deberia crear un objeto BuscarFuncionPorIdComando", () => {
     expect(buscarFuncionPorIdComando).toBeInstanceOf(BuscarFuncionPorIdComando);
   });

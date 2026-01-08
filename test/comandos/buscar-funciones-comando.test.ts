@@ -25,9 +25,13 @@ describe("BuscarFuncionesComando", () => {
   let funcion: Funcion;
 
   beforeEach(() => {
+    jest.clearAllMocks();
+
     pelicula = new Pelicula(idPelicula, tituloPelicula, generoPelicula);
     sala = new Sala(idSala, capacidadSala);
     funcion = new Funcion(idFuncion, sala, pelicula);
+
+    mockRepositorioFunciones.buscarFunciones.mockResolvedValue([funcion]);
   });
 
   test("deberia crear un objeto BuscarFuncionesComando", () => {
@@ -41,7 +45,7 @@ describe("BuscarFuncionesComando", () => {
   });
 
   test("deberia devolver una lista con la unica funcion guardada sin pasar ningun parametro de busqueda", async () => {
-    mockRepositorioFunciones.buscarFunciones.mockResolvedValue([funcion]);
+    
     const funciones: ListaFuncionesDTO = await buscarFuncionesComando.ejecutar({});
     expect(funciones.funciones).toContainEqual(funcion);
     expect(mockRepositorioFunciones.buscarFunciones).toHaveBeenCalled();    
@@ -59,7 +63,7 @@ describe("BuscarFuncionesComando", () => {
   test("deberia devolver una lista con todas las funciones que cumplan con el parametro de busqueda por id de sala", async () => {
     const sala2: Sala = new Sala(2, capacidadSala);
     const funcion2: Funcion = new Funcion(4, sala2, pelicula);
-    mockRepositorioFunciones.buscarFunciones.mockResolvedValue([funcion]);
+
     const filtros: FiltrosBusquedaFuncionesDTO = {
       idSala: sala.obtenerId(),
     };
@@ -72,7 +76,7 @@ describe("BuscarFuncionesComando", () => {
   test("deberia devolver una lista con todas las funciones que cumplan con el parametro de busqueda por id de pelicula", async () => {
     const pelicula2: Pelicula = new Pelicula(2, tituloPelicula + 2, generoPelicula + 2);
     const funcion2: Funcion = new Funcion(4, sala, pelicula2);
-    mockRepositorioFunciones.buscarFunciones.mockResolvedValue([funcion]);
+
     const filtros: FiltrosBusquedaFuncionesDTO = {
       idPelicula: pelicula.obtenerId(),
     };

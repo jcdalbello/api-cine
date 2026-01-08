@@ -9,6 +9,11 @@ import SalaDTO from "../../app/dtos/sala-dto";
 describe("BuscarSalaPorIdComando", () => {
   const mockRepositorioSala: Mock<RepositorioSala> = mock<RepositorioSala>();
   const obtenerSalaPorIdComando: BuscarSalaPorIdComando = new BuscarSalaPorIdComando(mockRepositorioSala);
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+  
   test("deberia crear un objeto ObtenerSalaPorIdComando", () => {
     expect(obtenerSalaPorIdComando).toBeInstanceOf(BuscarSalaPorIdComando);
   });
