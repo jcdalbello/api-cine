@@ -14,7 +14,6 @@ export default class AgregarPeliculaComando {
     const peliculaSinGuardar: Pelicula = this.mapperPelicula.DTOAPeliculaParaGuardar(creacionPeliculaDTO);
     const peliculaGuardada: Pelicula = await this.repositorioPelicula.guardar(peliculaSinGuardar);
     const peliculaDTO = this.mapperPelicula.PeliculaADTO(peliculaGuardada);
-
     return peliculaDTO;
   }
 }
