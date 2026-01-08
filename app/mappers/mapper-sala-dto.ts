@@ -21,12 +21,16 @@ export default class MapperSalaDTO implements MapperSalaDTOPuerto {
     return salaDTO;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public listaSalasADTO(salas: Sala[]): ListaSalasDTO {
-    const listaSalasDTO: ListaSalasDTO = {
-      salas: [],
-    };
+    const salasComoDTOs: SalaDTO[] = salas.map((sala: Sala) => {
+      return {
+        id: sala.obtenerId(),
+        capacidad: sala.obtenerCapacidad(),
+      };
+    });
 
+    const listaSalasDTO: ListaSalasDTO = { salas: salasComoDTOs };
+    
     return listaSalasDTO;
   }
 }

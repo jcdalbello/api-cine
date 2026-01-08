@@ -7,12 +7,14 @@ import MapperSalaDTO from "../../app/mappers/mapper-sala-dto";
 describe("SalaMapper", () => {
   const salaMapper: MapperSalaDTO = new MapperSalaDTO();
 
+  const id: number = 1;
+  const capacidad: number = 50;
+
   test("deberia crear un objeto SalaMapper", () => {
     expect(salaMapper).toBeInstanceOf(MapperSalaDTO);
   });
 
   describe("DTOASalaParaGuardar", () => {
-    const capacidad: number = 50;
     const creacionSalaDTO: CreacionSalaDTO = {
       capacidad: capacidad,
     }
@@ -43,8 +45,6 @@ describe("SalaMapper", () => {
 
   describe("SalaADTO", () => {
     test("deberia crear un dto de sala con los datos de la sala", () => {
-      const id: number = 1;
-      const capacidad: number = 50;
       const sala: Sala = new Sala(id, capacidad);
       const salaDTO: SalaDTO = salaMapper.SalaADTO(sala);
       expect(salaDTO.id).toEqual(id);
@@ -58,6 +58,26 @@ describe("SalaMapper", () => {
       const salasDTO: ListaSalasDTO = salaMapper.listaSalasADTO(salas);
       expect(salasDTO.salas.length).toEqual(0);
       expect(salasDTO.salas).toEqual([]);
+    });
+
+    test("deberia devolver un DTO con una sola sala si se le pasa una sola sala", () => {
+      const cantidadDeSalas: number = 1;
+      const sala: Sala = new Sala(id, capacidad);
+      const salas: Sala[] = [sala];
+      const salasDTO: ListaSalasDTO = salaMapper.listaSalasADTO(salas);
+      expect(salasDTO.salas.length).toEqual(cantidadDeSalas);
+      expect(salasDTO.salas[0]).toEqual(salas[0]);
+    });
+
+    test("deberia devolver un DTO con todas las salas que se le pasen", () => {
+      const cantidadDeSalas: number = 2;
+      const sala: Sala = new Sala(id, capacidad);
+      const sala2: Sala = new Sala(id + 1, capacidad + 1);
+      const salas: Sala[] = [sala, sala2];
+      const salasDTO: ListaSalasDTO = salaMapper.listaSalasADTO(salas);
+      expect(salasDTO.salas.length).toEqual(cantidadDeSalas);
+      expect(salasDTO.salas).toContainEqual(sala);
+      expect(salasDTO.salas).toContainEqual(sala2);
     });
   });
 });
