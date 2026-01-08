@@ -6,6 +6,7 @@ import MapperPeliculaDTO from "../../app/mappers/mapper-pelicula-dto";
 describe("MapperPeliculaDTO", () => {
   const mapperPeliculaDTO: MapperPeliculaDTO = new MapperPeliculaDTO();
 
+  const id: number = 1;
   const titulo: string = "pelicula";
   const genero: string = "genero";
   
@@ -14,14 +15,24 @@ describe("MapperPeliculaDTO", () => {
     genero: genero,
   };
 
+  const peliculaDTO: PeliculaDTO = {
+    id: id,
+    titulo: titulo,
+    genero: genero,
+  };
+
+  const pelicula: Pelicula = new Pelicula(
+    peliculaDTO.id,
+    peliculaDTO.titulo,
+    peliculaDTO.genero
+  );
+
   test("deberia crear un objeto MapperPeliculaDTO", () => {
     expect(mapperPeliculaDTO).toBeInstanceOf(MapperPeliculaDTO);
   });
 
   describe("DTOAPeliculaParaGuardar", () => {
     test("deberia crear un pelicula con los datos de la pelicula", () => {
-      
-
       const pelicula: Pelicula = mapperPeliculaDTO.DTOAPeliculaParaGuardar(creacionPeliculaDTO);
       expect(pelicula.obtenerId()).toEqual(0);
       expect(pelicula.obtenerTitulo()).toEqual(titulo);
@@ -47,20 +58,32 @@ describe("MapperPeliculaDTO", () => {
 
   describe("PeliculaADTO", () => {
     test("deberia devolver un dto con los datos de la pelicula", () => {
-      const peliculaDTO: PeliculaDTO = {
-        id: 1,
-        titulo: titulo,
-        genero: genero,
+      const peliculaADTO: PeliculaDTO = mapperPeliculaDTO.PeliculaADTO(pelicula);
+      expect(peliculaADTO.id).toEqual(peliculaDTO.id);
+      expect(peliculaADTO.titulo).toEqual(peliculaDTO.titulo);
+      expect(peliculaADTO.genero).toEqual(peliculaDTO.genero);
+    });
+
+    test("deberia devolver un dto con los datos de cada pelicula", () => {
+      const pelicula2DTO: PeliculaDTO = {
+        id: id + 1,
+        titulo: titulo + "1",
+        genero: genero + "1",
       };
-      const pelicula: Pelicula = new Pelicula(
-        peliculaDTO.id,
-        peliculaDTO.titulo,
-        peliculaDTO.genero
+      const pelicula2: Pelicula = new Pelicula(
+        pelicula2DTO.id,
+        pelicula2DTO.titulo,
+        pelicula2DTO.genero
       );
       const peliculaADTO: PeliculaDTO = mapperPeliculaDTO.PeliculaADTO(pelicula);
       expect(peliculaADTO.id).toEqual(peliculaDTO.id);
       expect(peliculaADTO.titulo).toEqual(peliculaDTO.titulo);
       expect(peliculaADTO.genero).toEqual(peliculaDTO.genero);
+
+      const pelicula2ADTO: PeliculaDTO = mapperPeliculaDTO.PeliculaADTO(pelicula2);
+      expect(pelicula2ADTO.id).toEqual(pelicula2DTO.id);
+      expect(pelicula2ADTO.titulo).toEqual(pelicula2DTO.titulo);
+      expect(pelicula2ADTO.genero).toEqual(pelicula2DTO.genero);
     });
   });
 });
