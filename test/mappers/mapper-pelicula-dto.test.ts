@@ -1,5 +1,6 @@
 import Pelicula from "../../app/dominio/pelicula";
 import CreacionPeliculaDTO from "../../app/dtos/creacion-pelicula-dto";
+import ListaPeliculasDTO from "../../app/dtos/lista-peliculas-dto";
 import PeliculaDTO from "../../app/dtos/pelicula-dto";
 import MapperPeliculaDTO from "../../app/mappers/mapper-pelicula-dto";
 
@@ -84,6 +85,15 @@ describe("MapperPeliculaDTO", () => {
       expect(pelicula2ADTO.id).toEqual(pelicula2DTO.id);
       expect(pelicula2ADTO.titulo).toEqual(pelicula2DTO.titulo);
       expect(pelicula2ADTO.genero).toEqual(pelicula2DTO.genero);
+    });
+  });
+
+  describe("listaPeliculasADTO", () => {
+    test("deberia devolver un DTO con una lista vacia si se le pasa una lista vacia", () => {
+      const peliculas: Pelicula[] = [];
+      const peliculasDTO: ListaPeliculasDTO = mapperPeliculaDTO.listaPeliculasADTO(peliculas);
+      expect(peliculasDTO.peliculas.length).toEqual(0);
+      expect(peliculasDTO.peliculas).toEqual([]);
     });
   });
 });
