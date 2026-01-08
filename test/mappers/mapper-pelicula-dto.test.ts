@@ -95,5 +95,38 @@ describe("MapperPeliculaDTO", () => {
       expect(peliculasDTO.peliculas.length).toEqual(0);
       expect(peliculasDTO.peliculas).toEqual([]);
     });
+
+    test("deberia devolver un DTO con una sola pelicula si se le pasa una sola sala", () => {
+      const cantidadDePeliculas: number = 1;
+      const pelicula: Pelicula = new Pelicula(
+        id,
+        titulo,
+        genero,
+      );
+      const peliculas: Pelicula[] = [pelicula];
+      const peliculasDTO: ListaPeliculasDTO = mapperPeliculaDTO.listaPeliculasADTO(peliculas);
+      expect(peliculasDTO.peliculas.length).toEqual(cantidadDePeliculas);
+      expect(peliculasDTO.peliculas[0]).toEqual(peliculas[0]);
+    });
+
+    test("deberia devolver un DTO con todas las peliculas que se le pasen", () => {
+      const cantidadDePeliculas: number = 2;
+      const pelicula: Pelicula = new Pelicula(
+        id,
+        titulo,
+        genero,
+      );
+
+      const pelicula2: Pelicula = new Pelicula(
+        id + 1,
+        titulo + "2",
+        genero + "2",
+      );
+      const peliculas: Pelicula[] = [pelicula, pelicula2];
+      const peliculasDTO: ListaPeliculasDTO = mapperPeliculaDTO.listaPeliculasADTO(peliculas);
+      expect(peliculasDTO.peliculas.length).toEqual(cantidadDePeliculas);
+      expect(peliculasDTO.peliculas).toContainEqual(pelicula);
+      expect(peliculasDTO.peliculas).toContainEqual(pelicula2);
+    });
   });
 });

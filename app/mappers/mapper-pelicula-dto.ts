@@ -24,11 +24,19 @@ export default class MapperPeliculaDTO implements MapperPeliculaDTOPuerto {
     return peliculaDTO;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public listaPeliculasADTO(peliculas: Pelicula[]): ListaPeliculasDTO {
+    const listaPeliculas: PeliculaDTO[] = peliculas.map((pelicula: Pelicula) => {
+      return {
+        id: pelicula.obtenerId(),
+        titulo: pelicula.obtenerTitulo(),
+        genero: pelicula.obtenerGenero(),
+      };
+    });
+
     const listaPeliculasDTO: ListaPeliculasDTO = {
-      peliculas: [],
+      peliculas: listaPeliculas,
     };
+
     return listaPeliculasDTO;
   }
 }
