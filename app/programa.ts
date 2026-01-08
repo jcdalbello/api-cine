@@ -187,7 +187,10 @@ app.get("/salas", async (req: Request, res: Response) => {
     const filtros: FiltrosBusquedaSalasDTO = {
       capacidad: capacidad!,
     };
-    const obtenerSalasComando: BuscarSalasComando = new BuscarSalasComando(repositorioSala);
+    const obtenerSalasComando: BuscarSalasComando = new BuscarSalasComando(
+      repositorioSala,
+      mapperSalaDTO,
+    );
     const salas: ListaSalasDTO = await obtenerSalasComando.ejectuar(filtros);
     res.status(200).json(salas.salas);
   } catch(error) {
