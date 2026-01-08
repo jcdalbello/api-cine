@@ -89,7 +89,10 @@ app.get("/peliculas", async (req: Request, res: Response) => {
     titulo: titulo!,
     genero: genero!,
   };
-  const obtenerPeliculas: BuscarPeliculasComando = new BuscarPeliculasComando(repositorioPelicula);
+  const obtenerPeliculas: BuscarPeliculasComando = new BuscarPeliculasComando(
+    repositorioPelicula,
+    mapperPeliculaDTO,
+  );
   const listaPeliculas: ListaPeliculasDTO = await obtenerPeliculas.ejecutar(filtros);
   res.status(200).send(listaPeliculas.peliculas);
 });
