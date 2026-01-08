@@ -5,10 +5,15 @@ import { mock, Mock } from "ts-jest-mocker";
 import PeliculaNoEncontradaError from "../../app/errores/pelicula-no-encontrada-error";
 import IdDTO from "../../app/dtos/id-dto";
 import PeliculaDTO from "../../app/dtos/pelicula-dto";
+import MapperPeliculaDTOPuerto from "../../app/mappers/mapper-pelicula-dto-puerto";
 
 describe("BuscarPeliculaPorIdComando", () => {
   const mockRepositorioPeliculas: Mock<RepositorioPelicula> = mock<RepositorioPelicula>();
-  const obtenerPeliculaPorIdComando: BuscarPeliculaPorIdComando = new BuscarPeliculaPorIdComando(mockRepositorioPeliculas);
+  const mockMapperPeliculaDTO: Mock<MapperPeliculaDTOPuerto> = mock<MapperPeliculaDTOPuerto>();
+  const obtenerPeliculaPorIdComando: BuscarPeliculaPorIdComando = new BuscarPeliculaPorIdComando(
+    mockRepositorioPeliculas,
+    mockMapperPeliculaDTO,    
+  );
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -23,7 +28,14 @@ describe("BuscarPeliculaPorIdComando", () => {
     const titulo: string = "pelicula1";
     const genero: string = "genero1";
     const pelicula: Pelicula = new Pelicula(id, titulo, genero);
+    const peliculaDTO: PeliculaDTO = {
+      id: id,
+      titulo: titulo,
+      genero: genero,
+    };
     mockRepositorioPeliculas.recuperar.mockResolvedValue(pelicula);
+    mockMapperPeliculaDTO.PeliculaADTO.mockReturnValue(peliculaDTO);
+
     const idDTO: IdDTO = {
       id: id,
     };
@@ -39,7 +51,14 @@ describe("BuscarPeliculaPorIdComando", () => {
       const tituloActual: string = "pelicula" + i;
       const generoActual: string = "genero" + i;
       const pelicula: Pelicula = new Pelicula(idActual, tituloActual, generoActual);
+      const peliculaDTO: PeliculaDTO = {
+        id: idActual,
+        titulo: tituloActual,
+        genero: generoActual,
+      };
       mockRepositorioPeliculas.recuperar.mockResolvedValue(pelicula);
+      mockMapperPeliculaDTO.PeliculaADTO.mockReturnValue(peliculaDTO);
+
       const idDTO: IdDTO = {
         id: idActual,
       };

@@ -136,7 +136,10 @@ app.get("/peliculas/:id", async (req: Request, res: Response) => {
     const idDTO: IdDTO = {
       id: id,
     };
-    const obtenerPeliculaPorIdComando: BuscarPeliculaPorIdComando = new BuscarPeliculaPorIdComando(repositorioPelicula);
+    const obtenerPeliculaPorIdComando: BuscarPeliculaPorIdComando = new BuscarPeliculaPorIdComando(
+      repositorioPelicula,
+      mapperPeliculaDTO,
+    );
     const pelicula: PeliculaDTO = await obtenerPeliculaPorIdComando.ejecutar(idDTO);
     res.status(200).send(pelicula);
   } catch (error) {
