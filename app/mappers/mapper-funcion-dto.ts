@@ -1,5 +1,6 @@
 import Funcion from "../dominio/funcion";
 import FuncionDTO from "../dtos/funcion-dto";
+import ListaFuncionesDTO from "../dtos/lista-funciones-dto";
 import PeliculaDTO from "../dtos/pelicula-dto";
 import SalaDTO from "../dtos/sala-dto";
 import MapperFuncionDTOPuerto from "./mapper-funcion-dto-puerto";
@@ -22,5 +23,13 @@ export default class MapperFuncionDTO implements MapperFuncionDTOPuerto {
     };
 
     return funcionDTO;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public ListaFuncionesADTO(funciones: Funcion[]): ListaFuncionesDTO {
+    const listaFuncionesDTO: ListaFuncionesDTO = {
+      funciones: [],
+    };
+    return listaFuncionesDTO;
   }
 }

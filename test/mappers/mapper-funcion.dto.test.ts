@@ -2,6 +2,7 @@ import Funcion from "../../app/dominio/funcion";
 import Pelicula from "../../app/dominio/pelicula";
 import Sala from "../../app/dominio/sala";
 import FuncionDTO from "../../app/dtos/funcion-dto";
+import ListaFuncionesDTO from "../../app/dtos/lista-funciones-dto";
 import MapperFuncionDTO from "../../app/mappers/mapper-funcion-dto";
 import MapperPeliculaDTO from "../../app/mappers/mapper-pelicula-dto";
 import MapperSalaDTO from "../../app/mappers/mapper-sala-dto";
@@ -31,6 +32,15 @@ describe("MapperFuncionDTO", () => {
       expect(funcionDTO.id).toEqual(idFuncion);
       expect(funcionDTO.sala).toEqual(sala);
       expect(funcionDTO.pelicula).toEqual(pelicula);
+    });
+  });
+
+  describe("ListaFuncionesADTO", () => {
+    test("deberia devolver un dto con una lista vacia si se le pasa una lista vacia de funciones", () => {
+      const funciones: Funcion[] = [];
+      const funcionesDTO: ListaFuncionesDTO = mapperFuncionDTO.ListaFuncionesADTO(funciones);
+      expect(funcionesDTO.funciones.length).toEqual(0);
+      expect(funcionesDTO.funciones).toEqual([]);
     });
   });
 });
