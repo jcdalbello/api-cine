@@ -40,6 +40,8 @@ import MapperSalaDTO from './mappers/mapper-sala-dto';
 import MapperSalaDTOPuerto from './mappers/mapper-sala-dto-puerto';
 import MapperPeliculaDTOPuerto from './mappers/mapper-pelicula-dto-puerto';
 import MapperPeliculaDTO from './mappers/mapper-pelicula-dto';
+import MapperFuncionDTOPuerto from './mappers/mapper-funcion-dto-puerto';
+import MapperFuncionDTO from './mappers/mapper-funcion-dto';
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -75,6 +77,15 @@ function crearMapperPeliculaDTO(): MapperPeliculaDTOPuerto {
 
 const mapperSalaDTO: MapperSalaDTOPuerto = crearMapperSalaDTO();
 const mapperPeliculaDTO: MapperPeliculaDTOPuerto = crearMapperPeliculaDTO();
+
+function crearMapperFuncionDTO(): MapperFuncionDTOPuerto {
+  return new MapperFuncionDTO(
+    mapperSalaDTO,
+    mapperPeliculaDTO,
+  );
+}
+
+const mapperFuncionDTO: MapperFuncionDTOPuerto = crearMapperFuncionDTO();
 
 app.get("/", (req: Request, res: Response) => {
   res
@@ -288,6 +299,7 @@ app.post("/funciones", async (req: Request, res: Response) => {
       repositorioFuncion,
       mapperSalaDTO,
       mapperPeliculaDTO,
+      mapperFuncionDTO,
     );
     const funcion: FuncionDTO = await agregarFuncionComando.ejecutar(creacionFuncionDTO);
     res.status(201).json(funcion);

@@ -10,6 +10,7 @@ import SalaDTO from "../dtos/sala-dto";
 import Funcion from "../dominio/funcion";
 import MapperSalaDTOPuerto from "../mappers/mapper-sala-dto-puerto";
 import MapperPeliculaDTOPuerto from "../mappers/mapper-pelicula-dto-puerto";
+import MapperFuncionDTOPuerto from "../mappers/mapper-funcion-dto-puerto";
 
 export default class AgregarFuncionComando {
   constructor(
@@ -18,29 +19,20 @@ export default class AgregarFuncionComando {
     private readonly repositorioFuncion: RepositorioFuncion,
     private readonly mapperSala: MapperSalaDTOPuerto,
     private readonly mapperPelicula: MapperPeliculaDTOPuerto,
+    private readonly mapperFuncion: MapperFuncionDTOPuerto,
   ) {}
 
   public async ejecutar(creacionFuncionDTO: CreacionFuncionDTO): Promise<FuncionDTO> {
     const sala: Sala = await this.repositorioSala.recuperar(creacionFuncionDTO.idSala);
     const pelicula: Pelicula = await this.repositorioPelicula.recuperar(creacionFuncionDTO.idPelicula);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const salaDTO: SalaDTO = this.mapperSala.SalaADTO(sala);
-
-    /*
-    const peliculaDTO: PeliculaDTO = {
-      id: pelicula.obtenerId(),
-      titulo: pelicula.obtenerTitulo(),
-      genero: pelicula.obtenerGenero(),
-    };
-    */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const peliculaDTO: PeliculaDTO = this.mapperPelicula.PeliculaADTO(pelicula);
 
     const funcion: Funcion = await this.repositorioFuncion.guardar(new Funcion(0, sala, pelicula));
   
-    const funcionDTO: FuncionDTO = {
-      id: funcion.obtenerId(),
-      sala: salaDTO,
-      pelicula: peliculaDTO,
-    };
+    const funcionDTO: FuncionDTO = this.mapperFuncion.FuncionADTO(funcion);
 
     return funcionDTO;
   }
