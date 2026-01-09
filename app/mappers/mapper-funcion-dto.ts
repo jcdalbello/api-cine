@@ -11,6 +11,7 @@ export default class MapperFuncionDTO implements MapperFuncionDTOPuerto {
     private readonly mapperSala: MapperSalaDTOPuerto,
     private readonly mapperPelicula: MapperPeliculaDTOPuerto,
   ) {}
+  
   public FuncionADTO(funcion: Funcion): FuncionDTO {
     const salaDTO: SalaDTO = this.mapperSala.SalaADTO(funcion.obtenerSala());
     const peliculaDTO: PeliculaDTO = this.mapperPelicula.PeliculaADTO(funcion.obtenerPelicula());

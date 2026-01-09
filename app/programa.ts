@@ -398,7 +398,10 @@ app.get("/funciones/:id", async (req: Request, res: Response) => {
       id: idFuncion,
     };
 
-    const buscarFuncionPorIdComando: BuscarFuncionPorIdComando = new BuscarFuncionPorIdComando(repositorioFuncion);
+    const buscarFuncionPorIdComando: BuscarFuncionPorIdComando = new BuscarFuncionPorIdComando(
+      repositorioFuncion,
+      mapperFuncionDTO,
+    );
     const funcion: FuncionDTO = await buscarFuncionPorIdComando.ejecutar(idDTO);
     res.status(200).json(funcion);
   } catch (error) {
