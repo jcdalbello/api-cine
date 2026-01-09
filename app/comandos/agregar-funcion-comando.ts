@@ -20,7 +20,8 @@ export default class AgregarFuncionComando {
     const sala: Sala = await this.repositorioSala.recuperar(creacionFuncionDTO.idSala);
     const pelicula: Pelicula = await this.repositorioPelicula.recuperar(creacionFuncionDTO.idPelicula);
 
-    const funcion: Funcion = await this.repositorioFuncion.guardar(new Funcion(0, sala, pelicula));
+    const funcionParaGuardar: Funcion = new Funcion(0, sala, pelicula);
+    const funcion: Funcion = await this.repositorioFuncion.guardar(funcionParaGuardar);
     const funcionDTO: FuncionDTO = this.mapperFuncion.FuncionADTO(funcion);
 
     return funcionDTO;
