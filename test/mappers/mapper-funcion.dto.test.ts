@@ -42,5 +42,21 @@ describe("MapperFuncionDTO", () => {
       expect(funcionesDTO.funciones.length).toEqual(0);
       expect(funcionesDTO.funciones).toEqual([]);
     });
+
+    test("deberia devolver un dto con una lista de funciones", () => {
+      const idFuncion: number = 1;
+      const sala: Sala = new Sala(1, 50);
+      const pelicula: Pelicula = new Pelicula(1, "pelicula", "genero");
+      const funcion: Funcion = new Funcion(
+        idFuncion,
+        sala,
+        pelicula,
+      );
+      const funciones: Funcion[] = [funcion];
+
+      const funcionesDTO: ListaFuncionesDTO = mapperFuncionDTO.ListaFuncionesADTO(funciones);
+      expect(funcionesDTO.funciones.length).toEqual(1);
+      expect(funcionesDTO.funciones).toContainEqual(funcion);
+    });
   });
 });

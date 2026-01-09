@@ -25,11 +25,22 @@ export default class MapperFuncionDTO implements MapperFuncionDTOPuerto {
     return funcionDTO;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public ListaFuncionesADTO(funciones: Funcion[]): ListaFuncionesDTO {
+    const funcionesDTOs: FuncionDTO[] = funciones.map((funcion: Funcion) => {
+      const salaDTO: SalaDTO = this.mapperSala.SalaADTO(funcion.obtenerSala());
+      const peliculaDTO: PeliculaDTO = this.mapperPelicula.PeliculaADTO(funcion.obtenerPelicula());
+      
+      return {
+        id: funcion.id,
+        sala: salaDTO,
+        pelicula: peliculaDTO,
+      };
+    });
+
     const listaFuncionesDTO: ListaFuncionesDTO = {
-      funciones: [],
+      funciones: funcionesDTOs,
     };
+
     return listaFuncionesDTO;
   }
 }

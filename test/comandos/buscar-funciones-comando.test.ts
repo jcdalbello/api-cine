@@ -6,10 +6,18 @@ import Sala from "../../app/dominio/sala";
 import Pelicula from "../../app/dominio/pelicula";
 import Funcion from "../../app/dominio/funcion";
 import FiltrosBusquedaFuncionesDTO from "../../app/dtos/filtros-busqueda-funciones-dto";
+import MapperFuncionDTOPuerto from "../../app/mappers/mapper-funcion-dto-puerto";
+import FuncionDTO from "../../app/dtos/funcion-dto";
+import SalaDTO from "../../app/dtos/sala-dto";
+import PeliculaDTO from "../../app/dtos/pelicula-dto";
 
 describe("BuscarFuncionesComando", () => {
   const mockRepositorioFunciones: Mock<RepositorioFuncion> = mock<RepositorioFuncion>();
-  const buscarFuncionesComando: BuscarFuncionesComando = new BuscarFuncionesComando(mockRepositorioFunciones);
+  const mockMapperFuncion: Mock<MapperFuncionDTOPuerto> = mock<MapperFuncionDTOPuerto>();
+  const buscarFuncionesComando: BuscarFuncionesComando = new BuscarFuncionesComando(
+    mockRepositorioFunciones,
+    mockMapperFuncion,
+  );
 
   const idSala: number = 1;
   const capacidadSala: number = 50;
@@ -24,14 +32,35 @@ describe("BuscarFuncionesComando", () => {
   let pelicula: Pelicula;
   let funcion: Funcion;
 
+  let salaDTO: SalaDTO;
+  let peliculaDTO: PeliculaDTO;
+  let funcionDTO: FuncionDTO;
+
   beforeEach(() => {
     jest.clearAllMocks();
 
-    pelicula = new Pelicula(idPelicula, tituloPelicula, generoPelicula);
     sala = new Sala(idSala, capacidadSala);
-    funcion = new Funcion(idFuncion, sala, pelicula);
+    pelicula = new Pelicula(idPelicula, tituloPelicula, generoPelicula);
 
+    salaDTO = {
+      id: idSala,
+      capacidad: capacidadSala,
+    };
+    peliculaDTO = {
+      id: idPelicula,
+      titulo: tituloPelicula,
+      genero: generoPelicula,
+    };
+    
+    funcion = new Funcion(idFuncion, sala, pelicula);
+    funcionDTO = {
+      id: idFuncion,
+      sala: salaDTO,
+      pelicula: peliculaDTO
+    };
+    
     mockRepositorioFunciones.buscarFunciones.mockResolvedValue([funcion]);
+    mockMapperFuncion.ListaFuncionesADTO.mockReturnValue({ funciones: [funcionDTO] });
   });
 
   test("deberia crear un objeto BuscarFuncionesComando", () => {
@@ -40,12 +69,12 @@ describe("BuscarFuncionesComando", () => {
 
   test("deberia devolver una lista vacia si no hay funciones guardadas", async () => {
     mockRepositorioFunciones.buscarFunciones.mockResolvedValue([]);
+    mockMapperFuncion.ListaFuncionesADTO.mockReturnValue({ funciones: [] });
     const funciones: ListaFuncionesDTO = await buscarFuncionesComando.ejecutar({});
     expect(funciones.funciones.length).toEqual(0);
   });
 
   test("deberia devolver una lista con la unica funcion guardada sin pasar ningun parametro de busqueda", async () => {
-    
     const funciones: ListaFuncionesDTO = await buscarFuncionesComando.ejecutar({});
     expect(funciones.funciones).toContainEqual(funcion);
     expect(mockRepositorioFunciones.buscarFunciones).toHaveBeenCalled();    
@@ -53,7 +82,13 @@ describe("BuscarFuncionesComando", () => {
 
   test("deberia devolver una lista con todas las funciones si no se pasar ningun parametro de busqueda", async () => {
     const funcion2: Funcion = new Funcion(4, sala, pelicula);
+    const funcionDTO2: FuncionDTO = {
+      id: 4,
+      sala: salaDTO,
+      pelicula: peliculaDTO
+    };
     mockRepositorioFunciones.buscarFunciones.mockResolvedValue([funcion, funcion2]);
+    mockMapperFuncion.ListaFuncionesADTO.mockReturnValue({ funciones: [funcionDTO, funcionDTO2] });
     const funciones: ListaFuncionesDTO = await buscarFuncionesComando.ejecutar({});
     expect(funciones.funciones).toContainEqual(funcion);
     expect(funciones.funciones).toContainEqual(funcion2);

@@ -357,7 +357,10 @@ app.get("/funciones", async (req: Request, res: Response) => {
       idSala: idSala!,
       idPelicula: idPelicula!,
     };
-    const buscarFuncionesComando: BuscarFuncionesComando = new BuscarFuncionesComando(repositorioFuncion);
+    const buscarFuncionesComando: BuscarFuncionesComando = new BuscarFuncionesComando(
+      repositorioFuncion,
+      mapperFuncionDTO,
+    );
     const funciones: ListaFuncionesDTO = await buscarFuncionesComando.ejecutar(filtros);
     res.status(200).json(funciones.funciones);
   } catch (error) {
