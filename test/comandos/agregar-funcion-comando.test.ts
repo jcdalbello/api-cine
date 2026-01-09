@@ -11,8 +11,6 @@ import CreacionFuncionDTO from "../../app/dtos/creacion-funcion-dto";
 import SalaNoEncontradaError from "../../app/errores/sala-no-encontrada-error";
 import PeliculaNoEncontradaError from "../../app/errores/pelicula-no-encontrada-error";
 import SalaDTO from "../../app/dtos/sala-dto";
-import MapperPeliculaDTOPuerto from "../../app/mappers/mapper-pelicula-dto-puerto";
-import MapperSalaDTOPuerto from "../../app/mappers/mapper-sala-dto-puerto";
 import PeliculaDTO from "../../app/dtos/pelicula-dto";
 import MapperFuncionDTOPuerto from "../../app/mappers/mapper-funcion-dto-puerto";
 
@@ -20,15 +18,11 @@ describe("AgregarFuncionComando", () => {
   const mockRepositorioSala: Mock<RepositorioSala> = mock<RepositorioSala>();
   const mockRepositorioPelicula: Mock<RepositorioPelicula> = mock<RepositorioPelicula>();
   const mockRepositorioFuncion: Mock<RepositorioFuncion> = mock<RepositorioFuncion>();
-  const mockMapperSala: Mock<MapperSalaDTOPuerto> = mock<MapperSalaDTOPuerto>();
-  const mockMapperPelicula: Mock<MapperPeliculaDTOPuerto> = mock<MapperPeliculaDTOPuerto>();
   const mockMapperFuncion: Mock<MapperFuncionDTOPuerto> = mock<MapperFuncionDTOPuerto>();
   const agregarFuncionComando: AgregarFuncionComando = new AgregarFuncionComando(
     mockRepositorioSala,
     mockRepositorioPelicula,
     mockRepositorioFuncion,
-    mockMapperSala,
-    mockMapperPelicula,
     mockMapperFuncion,
   );
 
@@ -78,8 +72,6 @@ describe("AgregarFuncionComando", () => {
     mockRepositorioSala.recuperar.mockResolvedValue(mockSala);
     mockRepositorioPelicula.recuperar.mockResolvedValue(mockPelicula);
     mockRepositorioFuncion.guardar.mockResolvedValue(mockFuncion);
-    mockMapperSala.SalaADTO.mockReturnValue(mcokSalaDTO);
-    mockMapperPelicula.PeliculaADTO.mockReturnValue(mockPeliculaDTO);
     mockMapperFuncion.FuncionADTO.mockReturnValue(mockFuncionDTO);
     
     const funcionDTO: FuncionDTO = await agregarFuncionComando.ejecutar(creacionFuncionDTO);
@@ -122,8 +114,6 @@ describe("AgregarFuncionComando", () => {
       mockRepositorioSala.recuperar.mockResolvedValue(salaActual);
       mockRepositorioPelicula.recuperar.mockResolvedValue(peliculaActual);
       mockRepositorioFuncion.guardar.mockResolvedValue(funcionActual);
-      mockMapperSala.SalaADTO.mockReturnValue(salaDTOActual);
-      mockMapperPelicula.PeliculaADTO.mockReturnValue(peliculaDTOActual);
       mockMapperFuncion.FuncionADTO.mockReturnValue(funcionDTOActual);
 
       const creacionFuncionActualDTO: CreacionFuncionDTO = {
