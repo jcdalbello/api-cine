@@ -14,6 +14,7 @@ enum CodigosHTTP {
   CreacionExitosa = 201,
   DatosIncorrectos = 400,
   RecursoNoEncontrado = 404,
+  EliminacionExitosa = 204,
 }
 
 afterEach(async () => {
@@ -871,11 +872,26 @@ describe("GET /funciones/:id", () => {
 });
 
 describe("DELETE /peliculas", () => {
-  const urlPeliculas: string = "/peliculas/";
+  const urlPeliculas: string = "/peliculas";
+
+  const titulo: string = "pelicula1";
+  const genero: string = "genero1";
+
+  const datosCreacionPelicula: CreacionPeliculaDTO = {
+    titulo: titulo,
+    genero: genero,
+  }
 
   test("deberia devolver un codigo 404 si se intenta eliminar una pelicula que no existe", async () => {
     const idPeliculaNoExistente: string = "99999";
-    const respuesta = await requestWithSupertest.del(urlPeliculas + idPeliculaNoExistente);
+    const respuesta = await requestWithSupertest.del(urlPeliculas + "/" + idPeliculaNoExistente);
     expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
+  });
+
+  test("deberia devolver un codigo 204 si se elimina una pelicula de forma correcta", async () => {
+    const idPelicula: string = "1";
+    await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula);
+    const respuesta = await requestWithSupertest.del(urlPeliculas + "/" + idPelicula);
+    expect(respuesta.status).toEqual(CodigosHTTP.EliminacionExitosa);
   });
 });
