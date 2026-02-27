@@ -894,4 +894,11 @@ describe("DELETE /peliculas", () => {
     const respuesta = await requestWithSupertest.del(urlPeliculas + "/" + idPelicula);
     expect(respuesta.status).toEqual(CodigosHTTP.EliminacionExitosa);
   });
+
+  test("deberia devolver un cuerpo vacio en la respuesta", async () => {
+    const idPelicula: string = "1";
+    await requestWithSupertest.post(urlPeliculas).send(datosCreacionPelicula);
+    const respuesta = await requestWithSupertest.del(urlPeliculas + "/" + idPelicula);
+    expect(respuesta.body).toEqual({});
+  });
 });
