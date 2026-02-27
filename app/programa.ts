@@ -163,6 +163,10 @@ app.get("/peliculas/:id", async (req: Request, res: Response) => {
   }
 });
 
+app.delete("/peliculas/:id", (req: Request, res: Response) => {
+  res.status(400).json({"body": "fdksaljfdsa"});
+});
+
 function validarDatosVaciosDeSala(capacidad: number | undefined): void {
   const mensajes: MensajesDeErrorDeSala = {};
   if (capacidad === undefined) {

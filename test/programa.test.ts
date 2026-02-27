@@ -869,3 +869,13 @@ describe("GET /funciones/:id", () => {
     expect(respuesta.body.id).toEqual("El id de funcion debe ser un numero valido");
   });
 });
+
+describe("DELETE /peliculas", () => {
+  const urlPeliculas: string = "/peliculas/";
+
+  test("deberia devolver un codigo 404 si se intenta eliminar una pelicula que no existe", async () => {
+    const idPeliculaNoExistente: string = "99999";
+    const respuesta = await requestWithSupertest.del(urlPeliculas + idPeliculaNoExistente);
+    expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
+  });
+});

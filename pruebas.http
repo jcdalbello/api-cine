@@ -255,3 +255,9 @@ GET {{host}}/funciones/idNoNumerico
 Content-Type: application/json
 
 {}
+
+### Intentar eliminar una pelicula que no existe (400)
+DELETE {{host}}/peliculas/99999
+Content-Type: application/json
+
+{}
