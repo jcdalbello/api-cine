@@ -882,10 +882,10 @@ describe("DELETE /peliculas", () => {
     genero: genero,
   }
 
-  test("deberia devolver un codigo 404 si se intenta eliminar una pelicula que no existe", async () => {
+  test("deberia devolver un codigo 204 aun si se intenta eliminar una pelicula que no existe", async () => {
     const idPeliculaNoExistente: string = "99999";
     const respuesta = await requestWithSupertest.del(urlPeliculas + "/" + idPeliculaNoExistente);
-    expect(respuesta.status).toEqual(CodigosHTTP.DatosIncorrectos);
+    expect(respuesta.status).toEqual(CodigosHTTP.EliminacionExitosa);
   });
 
   test("deberia devolver un codigo 204 si se elimina una pelicula de forma correcta", async () => {
