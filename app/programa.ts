@@ -42,6 +42,7 @@ import MapperPeliculaDTOPuerto from './mappers/mapper-pelicula-dto-puerto';
 import MapperPeliculaDTO from './mappers/mapper-pelicula-dto';
 import MapperFuncionDTOPuerto from './mappers/mapper-funcion-dto-puerto';
 import MapperFuncionDTO from './mappers/mapper-funcion-dto';
+import EliminarPeliculaComando from "./comandos/elimininar-pelicula-comando";
 
 const app: Express = express();
 const puerto: number = 3000;
@@ -163,13 +164,41 @@ app.get("/peliculas/:id", async (req: Request, res: Response) => {
   }
 });
 
-app.delete("/peliculas/:id", (req: Request, res: Response) => {
-  const id: string = req.params.id!;
-  if (id === "1") {
-    res.status(204).json();
+function esUnNumeroValido(n: string | undefined): boolean {
+  return n !== undefined && !Number.isNaN(Number(n));
+}
+
+function validarIdNumericoDePelicula(id: string | undefined): void {
+  const mensajes: MensajesDeErrorDePelicula = {};
+
+  if (!esUnNumeroValido(id)) {
+    mensajes.id = "El id debe ser un numero valido";
   }
 
-  res.status(400).json();
+  if (Object.keys(mensajes).length > 0) {
+    throw new CampoIncorrectoPeliculaError(mensajes);
+  }
+}
+
+app.delete("/peliculas/:id", async (req: Request, res: Response) => {
+  const id: string | undefined = req.params.id;
+  try {
+    validarIdNumericoDePelicula(id);
+    const idDTO: IdDTO = {
+      id: Number(id),
+    }
+    const eliminarPeliculaComando: EliminarPeliculaComando = new EliminarPeliculaComando(
+      repositorioPelicula,
+    );
+
+    await eliminarPeliculaComando.ejecutar(idDTO);
+
+    res.status(204).json();
+  } catch (error) {
+    if (error instanceof CampoIncorrectoPeliculaError) {
+      res.status(400).json(error);
+    }
+  }
 });
 
 function validarDatosVaciosDeSala(capacidad: number | undefined): void {

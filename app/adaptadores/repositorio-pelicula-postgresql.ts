@@ -86,4 +86,15 @@ export default class RepositorioPeliculaPostgreSQL implements RepositorioPelicul
       generoRecuperado,
     );
   }
+
+  public async eliminar(id: number): Promise<void> {
+    const query: string = `
+        DELETE FROM peliculas
+        WHERE id = $1;
+    `;
+
+    const values: number[] = [id];
+
+    await this.pool.query(query, values);
+  }
 }

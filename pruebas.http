@@ -261,3 +261,15 @@ DELETE {{host}}/peliculas/99999
 Content-Type: application/json
 
 {}
+
+### Intentar eliminar una pelicula correctamente (asumiendo que existe una pelicula con ID 1) (204)
+DELETE {{host}}/peliculas/1
+Content-Type: application/json
+
+{}
+
+### Intentar eliminar una pelicula usando un ID no numerico (400)
+DELETE {{host}}/peliculas/idNoNumerico
+Content-Type: application/json
+
+{}
